@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "699561702353",
+    "project_id": "barber-management-97844",
+    "storage_bucket": "barber-management-97844.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699561702353:android:96ec25a48b927b0eb8e6f0",
+        "android_client_info": {
+          "package_name": "com.hadi.barber_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDedZiHYZMRgxtLfAV8iKVAu7fsc3-WkWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
