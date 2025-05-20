@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
+import '../../widgets/user/textfiled_password.dart';
 
 void main() {
   runApp(SginupUser());
@@ -14,10 +16,17 @@ class SginupUser extends StatefulWidget {
   State<SginupUser> createState() => _SginupUserState();
 }
 
-final TextEditingController _username = TextEditingController();
-final TextEditingController _emailaddres = TextEditingController();
-final TextEditingController _phone = TextEditingController();
-final TextEditingController _password = TextEditingController();
+final _username = TextEditingController();
+final _email = TextEditingController();
+final _phone = TextEditingController();
+final _password = TextEditingController();
+
+Future signup() async {
+  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    email: _email.text.trim(),
+    password: _password.text.trim(),
+  );
+}
 
 class _SginupUserState extends State<SginupUser> {
   @override
@@ -34,7 +43,7 @@ class _SginupUserState extends State<SginupUser> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Image.asset("images/face.png"),
+                    Image.asset("assets/images/face.png"),
                     SizedBox(height: 10),
                     Text(
                       "Sign Up",
@@ -51,11 +60,11 @@ class _SginupUserState extends State<SginupUser> {
                           _username,
                         ),
                         Textfiled(
-                          "Email Address :",
+                          "Email  :",
                           "123@gmail.com",
                           Color(0xffD6D4CA),
                           Colors.white,
-                          _emailaddres,
+                          _email,
                         ),
                         Textfiled(
                           "Phone Number :",
@@ -65,7 +74,7 @@ class _SginupUserState extends State<SginupUser> {
                           _phone,
                         ),
 
-                        Textfiled(
+                        textfiledPassword(
                           "Passowrd",
                           "password",
                           Color(0xffD6D4CA),
@@ -74,7 +83,7 @@ class _SginupUserState extends State<SginupUser> {
                         ),
 
                         SizedBox(height: 44),
-                        ButtonLoginUser(text: "Sign Up", onPressed: () {}),
+                        ButtonLoginUser(text: "Sign Up", onPressed: signup),
                         SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,

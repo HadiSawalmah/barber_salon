@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 
@@ -58,9 +59,12 @@ class DrawerAdmin extends StatelessWidget {
             // context.go("/ProfileAdmin");
           }),
           SizedBox(height: 30),
-
           textdrawer("Expences", () {
             // context.go("/ExpencesAdmin");
+          }),
+          SizedBox(height: 30),
+          textdrawer("Log out", () {
+            FirebaseAuth.instance.signOut();
           }),
         ],
       ),
