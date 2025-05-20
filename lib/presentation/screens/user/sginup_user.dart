@@ -4,20 +4,22 @@ import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
 
 void main() {
-  runApp(Loginuser());
+  runApp(SginupUser());
 }
 
-class Loginuser extends StatefulWidget {
-  const Loginuser({super.key});
+class SginupUser extends StatefulWidget {
+  const SginupUser({super.key});
 
   @override
-  State<Loginuser> createState() => _LoginState();
+  State<SginupUser> createState() => _SginupUserState();
 }
 
-final TextEditingController _idNumber = TextEditingController();
+final TextEditingController _username = TextEditingController();
+final TextEditingController _emailaddres = TextEditingController();
+final TextEditingController _phone = TextEditingController();
 final TextEditingController _password = TextEditingController();
 
-class _LoginState extends State<Loginuser> {
+class _SginupUserState extends State<SginupUser> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,19 +37,34 @@ class _LoginState extends State<Loginuser> {
                     Image.asset("images/face.png"),
                     SizedBox(height: 10),
                     Text(
-                      "Log In",
+                      "Sign Up",
                       style: TextStyle(color: Color(0xffD6D4CA), fontSize: 32),
                     ),
-                    SizedBox(height: 43),
+                    SizedBox(height: 28),
                     Column(
                       children: [
                         Textfiled(
-                          "ID Number :",
+                          "User Name :",
+                          "Full name",
+                          Color(0xffD6D4CA),
+                          Colors.white,
+                          _username,
+                        ),
+                        Textfiled(
+                          "Email Address :",
+                          "123@gmail.com",
+                          Color(0xffD6D4CA),
+                          Colors.white,
+                          _emailaddres,
+                        ),
+                        Textfiled(
+                          "Phone Number :",
                           "05********",
                           Color(0xffD6D4CA),
                           Colors.white,
-                          _idNumber,
+                          _phone,
                         ),
+
                         Textfiled(
                           "Passowrd",
                           "password",
@@ -55,8 +72,9 @@ class _LoginState extends State<Loginuser> {
                           Colors.white,
                           _password,
                         ),
+
                         SizedBox(height: 44),
-                        ButtonLoginUser(text: "Log In", onPressed: () {}),
+                        ButtonLoginUser(text: "Sign Up", onPressed: () {}),
                         SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -71,10 +89,28 @@ class _LoginState extends State<Loginuser> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 50),
-                        Text(
-                          "Just For Barber",
-                          style: TextStyle(fontSize: 28, color: Colors.white),
+                        SizedBox(height: 60),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Dont have an account ? ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: const Text(
+                                "Sign In",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
