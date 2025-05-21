@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/services_admin.dart';
+import '../../../data/models/admin/services_admin.dart';
 
 class ServicesCardAdmin extends StatelessWidget {
   final ServicesAdmin servicesAdmin;
@@ -25,7 +25,7 @@ class ServicesCardAdmin extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(height: 30),
-                Image.asset(servicesAdmin.image, height: 120),
+                Image.asset(servicesAdmin.imageUrl, height: 120),
                 Container(
                   width: double.infinity,
                   height: 45,

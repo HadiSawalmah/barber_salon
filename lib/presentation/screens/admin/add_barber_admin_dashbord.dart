@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/barber_model.dart';
+import '../../../data/models/admin/barber_model.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';
+import '../../widgets/alert_dialog.dart';
 
 void main() {
   runApp(AddBarber());
@@ -16,19 +17,19 @@ class AddBarber extends StatefulWidget {
 }
 
 class _AddBarberState extends State<AddBarber> {
-  final TextEditingController _username = TextEditingController();
+  final _username = TextEditingController();
 
-  final TextEditingController _email = TextEditingController();
+  final _email = TextEditingController();
 
-  final TextEditingController _phoneNumber = TextEditingController();
+  final _phoneNumber = TextEditingController();
 
-  final TextEditingController _country = TextEditingController();
+  final _country = TextEditingController();
 
-  final TextEditingController _facebookAccount = TextEditingController();
+  final _facebookAccount = TextEditingController();
 
-  final TextEditingController _age = TextEditingController();
+  final _age = TextEditingController();
 
-  final TextEditingController _uploadImage = TextEditingController();
+  final _uploadImage = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -94,36 +95,72 @@ class _AddBarberState extends State<AddBarber> {
                     final barberId =
                         DateTime.now().millisecondsSinceEpoch
                             .toString(); // id مميز
+                    if (_username.text.isNotEmpty &&
+                        _email.text.isNotEmpty &&
+                        _phoneNumber.text.isNotEmpty &&
+                        _country.text.isNotEmpty &&
+                        _uploadImage.text.isNotEmpty &&
+                        _facebookAccount.text.isNotEmpty &&
+                        _age.text.isNotEmpty) {
+                      BarberModel newBarber = BarberModel(
+                        barberId: barberId,
+                        barberName: _username.text,
+                        barberEmail: _email.text,
+                        barberPhone: _phoneNumber.text,
+                        barberCountry: _country.text,
+                        barberImage: _uploadImage.text,
+                        barberFacebook: _facebookAccount.text,
+                        barberAge: _age.text,
+                      );
 
-                    final newBarber = BarberModel(
-                      barberId: barberId,
-                      barberName: _username.text,
-                      barberEmail: _email.text,
-                      barberPhone: _phoneNumber.text,
-                      barberCountry: _country.text,
-                      barberImage:
-                          _uploadImage.text, // لاحقًا تستبدله ب upload حقيقي
-                      barberFacebook: _facebookAccount.text,
-                      barberAge: _age.text,
-                    );
+                      await FirebaseFirestore.instance
+                          .collection('barbers')
+                          .doc(barberId)
+                          .set(newBarber.toMap());
 
-                    await FirebaseFirestore.instance
-                        .collection('barbers')
-                        .doc(barberId)
-                        .set(newBarber.toMap());
+                      _username.clear();
+                      _email.clear();
+                      _phoneNumber.clear();
+                      _country.clear();
+                      _uploadImage.clear();
+                      _facebookAccount.clear();
+                      _age.clear();
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("تمت إضافة الحلاق بنجاح ✅")),
-                    );
-
-                    // مسح الحقول بعد الإدخال
-                    _username.clear();
-                    _email.clear();
-                    _phoneNumber.clear();
-                    _country.clear();
-                    _uploadImage.clear();
-                    _facebookAccount.clear();
-                    _age.clear();
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return CustomDialog(
+                            icon: Icons.check_circle,
+                            iconColor: Colors.green,
+                            title: "Added Successfully",
+                            description: "barber have been added successfully.",
+                            buttonText: "Ok",
+                            onButtonPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return CustomDialog(
+                            icon: Icons.error_outline,
+                            iconColor: Colors.red,
+                            title: "Failed Operation",
+                            description:
+                                "Something went wrong, please added all filed.",
+                            buttonText: "OK",
+                            onButtonPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               ],

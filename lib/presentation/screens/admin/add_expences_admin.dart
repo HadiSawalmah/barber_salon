@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../data/models/admin/expences_admin_model.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
+import '../../widgets/admin/categorydropdownfield.dart';
 import '../../widgets/admin/textfiled.dart';
+import '../../widgets/alert_dialog.dart';
 
 void main() {
   runApp(AddExpencesAdmin());
@@ -15,18 +19,10 @@ class AddExpencesAdmin extends StatefulWidget {
 }
 
 class _AddExpencesAdminState extends State<AddExpencesAdmin> {
-  final List<String> _categories = [
-    'Tools',
-    'Products',
-    'Maintenance',
-    'hadisa',
-    'Other',
-  ];
-
+  final _nameExpences = TextEditingController();
+  final _price = TextEditingController();
   String? _selectedCategory;
 
-  final TextEditingController _nameExpences = TextEditingController();
-  final TextEditingController _price = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,66 +45,75 @@ class _AddExpencesAdminState extends State<AddExpencesAdmin> {
               SizedBox(height: 4),
               Textfiled("Price :", "350", Colors.white, Colors.black, _price),
               SizedBox(height: 4),
-              categoryDropdownField(),
+              Categorydropdownfield(
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
+              ),
               SizedBox(height: 237),
-              ButtonAdd(text: "Add", onPressed: () {}),
+              ButtonAdd(
+                text: "Add",
+                onPressed: () async {
+                  if (_nameExpences.text.isNotEmpty &&
+                      _price.text.isNotEmpty &&
+                      _selectedCategory != null) {
+                    ExpencesAdminModel expencesAdminModel = ExpencesAdminModel(
+                      name: _nameExpences.text,
+                      price: double.parse(_price.text),
+                      category: _selectedCategory!,
+                      created: DateTime.now(),
+                    );
+                    await FirebaseFirestore.instance
+                        .collection('expences')
+                        .add(expencesAdminModel.myMap());
+
+                    _nameExpences.clear();
+                    _price.clear();
+                    setState(() {
+                      _selectedCategory;
+                    });
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return CustomDialog(
+                          icon: Icons.check_circle,
+                          iconColor: Colors.green,
+                          title: "Added Successfully",
+                          description: "Expenses have been added successfully.",
+                          buttonText: "Ok",
+                          onButtonPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return CustomDialog(
+                          icon: Icons.error_outline,
+                          iconColor: Colors.red,
+                          title: "Failed Operation",
+                          description:
+                              "Something went wrong, please added all filed.",
+                          buttonText: "OK",
+                          onButtonPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget categoryDropdownField() {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              SizedBox(width: 12),
-              Text(
-                "*",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
-              SizedBox(width: 4),
-              Text(
-                "Category :",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          DropdownButtonFormField<String>(
-            value: _selectedCategory,
-            hint: Text("Select category"),
-            onChanged: (value) {
-              setState(() {
-                _selectedCategory = value;
-              });
-            },
-            items:
-                _categories.map((category) {
-                  return DropdownMenuItem<String>(
-                    value: category,
-
-                    child: Text(category),
-                  );
-                }).toList(),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
