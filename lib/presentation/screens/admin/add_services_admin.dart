@@ -1,9 +1,16 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project_new/data/firebase/firebase_storage_service.dart';
+import 'package:project_new/data/models/admin/services_admin.dart';
 
 import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';
+import '../../widgets/alert_dialog.dart';
 
 void main() {
   runApp(AddServicesAdmin());
@@ -16,11 +23,12 @@ class AddServicesAdmin extends StatefulWidget {
   State<AddServicesAdmin> createState() => _AddServicesAdminState();
 }
 
-final TextEditingController _title = TextEditingController();
-final TextEditingController _price = TextEditingController();
-// final TextEditingController _image = TextEditingController();
+final _title = TextEditingController();
+final _price = TextEditingController();
 
 class _AddServicesAdminState extends State<AddServicesAdmin> {
+  File? _selectedImage;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,12 +51,69 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
 
               ImagePickerContainer(
                 onImagePicked: (imageFile) {
-                  // ممكن تخزن الصورة أو ترفعها مباشرة هون
-                  print("Selected image path: ${imageFile?.path}");
+                  setState(() {
+                    _selectedImage = imageFile;
+                  });
                 },
               ),
               SizedBox(height: 100),
-              ButtonAdd(text: "Add", onPressed: () {}),
+              ButtonAdd(
+                text: "Add",
+                onPressed: () async {
+                  if (_title.text.isNotEmpty &&
+                      _price.text.isNotEmpty &&
+                      _selectedImage != null) {
+                    String imageUrl = await uploadImageToCloudinary(
+                      _selectedImage!,
+                    );
+                    ServicesAdmin servicesAdmin = ServicesAdmin(
+                      title: _title.text,
+                      price: double.parse(_price.text),
+                      imageUrl: imageUrl,
+                    );
+                    await FirebaseFirestore.instance
+                        .collection('services')
+                        .add(servicesAdmin.toMap());
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => CustomDialog(
+                            icon: Icons.check_circle_outline,
+                            iconColor: Colors.green,
+                            title: "added Successfully",
+                            description:
+                                "service have been added successfully.",
+                            buttonText: "Ok",
+                            onButtonPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                    );
+
+                    _title.clear();
+                    _price.clear();
+                    setState(() {
+                      _selectedImage = null;
+                    });
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => CustomDialog(
+                            icon: Icons.error_outline,
+                            iconColor: Colors.red,
+                            title: "Failed Operation",
+                            description:
+                                "All fields must be completed and an image added before adding.",
+                            buttonText: "Ok",
+                            onButtonPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),

@@ -1,14 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/card_barber.dart';
+import 'package:project_new/data/models/admin/barber_model.dart';
 import 'percentages_admin.dart';
 
 class CardBarber extends StatelessWidget {
-  const CardBarber({super.key, required this.barber});
-
-  final Barber barber;
+  final BarberModel barber;
+  final VoidCallback onDeleted;
+  const CardBarber({super.key, required this.barber, required this.onDeleted});
 
   @override
   Widget build(BuildContext context) {
+    double monthPercent =
+        (barber.bookingCount ?? 0) > 0
+            ? ((barber.monthRevenue ?? 0) / (barber.bookingCount ?? 1)) * 100
+            : 0;
+
+    double yearPercent =
+        (barber.bookingCount ?? 0) > 0
+            ? ((barber.yearRevenue ?? 0) / (barber.bookingCount ?? 1)) * 100
+            : 0;
+    ;
+
     return Card(
       margin: EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
@@ -42,7 +54,7 @@ class CardBarber extends StatelessWidget {
 
                       children: [
                         Text(
-                          barber.name,
+                          barber.barberName,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -51,7 +63,29 @@ class CardBarber extends StatelessWidget {
                         Row(
                           children: [
                             iconbutton(Icon(Icons.edit, size: 26), () {}),
-                            iconbutton(Icon(Icons.delete, size: 26), () {}),
+                            iconbutton(Icon(Icons.delete, size: 26), () async {
+                              try {
+                                await FirebaseFirestore.instance
+                                    .collection('barbers')
+                                    .doc(barber.barberId)
+                                    .delete();
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Barber deleted successfully ✅",
+                                    ),
+                                  ),
+                                );
+                                onDeleted();
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Failed to delete barber ❌"),
+                                  ),
+                                );
+                              }
+                            }),
                           ],
                         ),
                       ],
@@ -62,15 +96,15 @@ class CardBarber extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        definition(barber.phone),
+                        definition(barber.barberPhone),
                         SizedBox(height: 25),
-                        definition(barber.city),
+                        definition(barber.barberCountry),
                         SizedBox(height: 25),
-                        definition("${barber.age} years"),
+                        definition("${barber.barberAge} years"),
                         SizedBox(height: 25),
-                        definition(barber.email),
+                        definition(barber.barberEmail),
                         SizedBox(height: 25),
-                        definition(barber.facebook),
+                        definition(barber.barberFacebook),
                       ],
                     ),
                   ),
@@ -113,10 +147,9 @@ class CardBarber extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Padding(padding: EdgeInsets.only(top: 20)),
-                      percentages("Month", barber.monthPercent),
+                      percentages("Month", monthPercent),
                       Divider(),
-
-                      percentages("Year", barber.yearPercent),
+                      percentages("Year", yearPercent),
                     ],
                   ),
                   Container(

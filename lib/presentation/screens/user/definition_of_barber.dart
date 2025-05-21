@@ -1,4 +1,3 @@
-
 import "package:flutter/material.dart";
 import '../../widgets/user/definition_of_barber.dart';
 
@@ -12,11 +11,11 @@ class DefinitionOfBarber extends StatefulWidget {
   State<DefinitionOfBarber> createState() => _DefinitionOfBarberState();
 }
 
-final TextEditingController _name = TextEditingController();
-final TextEditingController _email = TextEditingController();
-final TextEditingController _phone = TextEditingController();
-final TextEditingController _country = TextEditingController();
-final TextEditingController _facebook = TextEditingController();
+final _name = TextEditingController();
+final _email = TextEditingController();
+final _phone = TextEditingController();
+final _country = TextEditingController();
+final _facebook = TextEditingController();
 
 class _DefinitionOfBarberState extends State<DefinitionOfBarber> {
   @override
@@ -33,25 +32,29 @@ class _DefinitionOfBarberState extends State<DefinitionOfBarber> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 50),
-                    Image.asset("images/image 4.png", width: 260, height: 248),
+                    Image.asset(
+                      "assets/images/image 4.png",
+                      width: 260,
+                      height: 248,
+                    ),
                     SizedBox(height: 30),
                     label("Name :"),
                     //importanttt ****************
                     //casting hadi sawalmeh for _name nad casting in definitionofbarber TextEditingController for String
                     //In order for the design to be what you want, because we have not yet created the firebase and the design is not working on the interface
-                    definitionofbarber(_name),
+                    definitionofbarber("hadi sawalmeh"),
                     SizedBox(height: 10),
                     label("Email :"),
-                    definitionofbarber(_email),
+                    definitionofbarber("_email"),
                     SizedBox(height: 10),
                     label("Phone :"),
-                    definitionofbarber(_phone),
+                    definitionofbarber("_phone"),
                     SizedBox(height: 10),
                     label("Country :"),
-                    definitionofbarber(_country),
+                    definitionofbarber("_country"),
                     SizedBox(height: 10),
                     label("Facebook :"),
-                    definitionofbarber(_facebook),
+                    definitionofbarber("_facebook"),
                     SizedBox(height: 10),
                   ],
                 ),

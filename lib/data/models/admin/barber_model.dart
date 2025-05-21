@@ -7,6 +7,9 @@ class BarberModel {
   String barberImage;
   String barberFacebook;
   String barberAge;
+  double? monthRevenue;
+  double? yearRevenue;
+  int? bookingCount;
 
   BarberModel({
     required this.barberId,
@@ -17,9 +20,11 @@ class BarberModel {
     required this.barberImage,
     required this.barberFacebook,
     required this.barberAge,
+    this.monthRevenue,
+    this.yearRevenue,
+    this.bookingCount,
   });
 
-  // تحويل من كائن إلى خريطة (عشان نخزنها)
   Map<String, dynamic> toMap() {
     return {
       'barberId': barberId,
@@ -30,10 +35,12 @@ class BarberModel {
       'barberImage': barberImage,
       'barberFacebook': barberFacebook,
       'barberAge': barberAge,
+      'monthRevenue': monthRevenue,
+      'yearRevenue': yearRevenue,
+      'bookingCount': bookingCount,
     };
   }
 
-  // تحويل من خريطة إلى كائن (لما نجيب البيانات من Firestore)
   factory BarberModel.fromMap(Map<String, dynamic> map) {
     return BarberModel(
       barberId: map['barberId'],
@@ -44,6 +51,9 @@ class BarberModel {
       barberImage: map['barberImage'],
       barberFacebook: map['barberFacebook'],
       barberAge: map['barberAge'],
+      monthRevenue: (map['monthRevenue'] ?? 0).toDouble(),
+      yearRevenue: (map['yearRevenue'] ?? 0).toDouble(),
+      bookingCount: (map['bookingCount'] ?? 0),
     );
   }
 }
