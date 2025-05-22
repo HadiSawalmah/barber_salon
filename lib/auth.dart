@@ -60,9 +60,9 @@ class Auth extends StatelessWidget {
               } else if (role == 'barber') {
                 return const BarberDashboardHome();
               } else if (role == 'user') {
-                return const DefinitionOfBarber();
-              } else {
                 return const Openingpage();
+              } else {
+                return const DefinitionOfBarber();
               }
             },
           );
