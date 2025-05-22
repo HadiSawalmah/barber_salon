@@ -7,6 +7,7 @@ class BarberModel {
   String barberImage;
   String barberFacebook;
   String barberAge;
+  String role;
   double? monthRevenue;
   double? yearRevenue;
   int? bookingCount;
@@ -20,6 +21,7 @@ class BarberModel {
     required this.barberImage,
     required this.barberFacebook,
     required this.barberAge,
+    this.role = 'barber',
     this.monthRevenue,
     this.yearRevenue,
     this.bookingCount,
@@ -35,6 +37,7 @@ class BarberModel {
       'barberImage': barberImage,
       'barberFacebook': barberFacebook,
       'barberAge': barberAge,
+      'role': role,
       'monthRevenue': monthRevenue,
       'yearRevenue': yearRevenue,
       'bookingCount': bookingCount,
@@ -54,6 +57,7 @@ class BarberModel {
       monthRevenue: (map['monthRevenue'] ?? 0).toDouble(),
       yearRevenue: (map['yearRevenue'] ?? 0).toDouble(),
       bookingCount: (map['bookingCount'] ?? 0),
+      role: map['role'] ?? 'barber',
     );
   }
 }

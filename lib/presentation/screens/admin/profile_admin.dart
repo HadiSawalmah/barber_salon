@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../data/firebase/firebase_storage_service.dart';
 import '../../widgets/admin/drawer_admin.dart';
 import '../../widgets/admin/textfiled.dart';
 
@@ -14,13 +19,69 @@ class ProfileAdmin extends StatefulWidget {
   State<ProfileAdmin> createState() => _ProfileAdminState();
 }
 
-final TextEditingController _firstname = TextEditingController();
-final TextEditingController _lastname = TextEditingController();
-final TextEditingController _phone = TextEditingController();
-final TextEditingController _email = TextEditingController();
-final TextEditingController _dateOfBirth = TextEditingController();
+final _firstname = TextEditingController();
+final _lastname = TextEditingController();
+final _phone = TextEditingController();
+final _email = TextEditingController();
+final _dateOfBirth = TextEditingController();
+String? _imageUrl;
 
 class _ProfileAdminState extends State<ProfileAdmin> {
+  @override
+  void initState() {
+    super.initState();
+    loadAdminProfile();
+  }
+
+  Future<void> loadAdminProfile() async {
+    DocumentSnapshot documentSnapshot =
+        await FirebaseFirestore.instance
+            .collection('admins')
+            .doc('admin')
+            .get();
+
+    if (documentSnapshot.exists) {
+      final data = documentSnapshot.data() as Map<String, dynamic>;
+      _firstname.text = data['firstName'] ?? '';
+      _lastname.text = data['lastName'] ?? '';
+      _phone.text = data['phone'] ?? '';
+      _email.text = data['email'] ?? '';
+      _dateOfBirth.text = data['dateOfBirth'] ?? '';
+      setState(() {
+        _imageUrl = data['imageUrl'];
+      });
+    }
+  }
+
+  Future<void> updateAdminProfile() async {
+    await FirebaseFirestore.instance
+        .collection('admin')
+        .doc('Z8H2YWcUWUOv6yfM48Gt')
+        .update({
+          'firstName': _firstname.text,
+          'lastName': _lastname.text,
+          'phone': _phone.text,
+          'email': _email.text,
+          'dateOfBirth': _dateOfBirth.text,
+          'imageUrl': _imageUrl ?? '',
+        });
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
+  }
+
+  Future<void> pickAndUploadImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      File image = File(picked.path);
+      String url = await uploadImageToCloudinary(image); // أو Firebase
+      setState(() {
+        _imageUrl = url;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,18 +92,36 @@ class _ProfileAdminState extends State<ProfileAdmin> {
           backgroundColor: Colors.grey[300],
         ),
         drawer: DrawerAdmin(),
-        body: Padding(
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("images/face.png", height: 110),
+              SizedBox(height: 30),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 65,
+                    backgroundImage:
+                        _imageUrl != null
+                            ? NetworkImage(_imageUrl!)
+                            : AssetImage("assets/images/face.png")
+                                as ImageProvider,
+                  ),
+
+                  IconButton(
+                    icon: Icon(Icons.camera_alt, color: Colors.blue),
+                    onPressed: pickAndUploadImage,
+                  ),
+                ],
+              ),
               Text(
-                "Hadi sawalmeh",
+                '${_firstname.text}   ${_lastname.text}',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
               Text(
-                "hadisawa135@gmail.com",
+                _email.text,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
               SizedBox(height: 14),
@@ -88,7 +167,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 height: 55,
                 width: 260,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: updateAdminProfile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffFFBB4E),
                   ),

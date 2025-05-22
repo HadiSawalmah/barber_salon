@@ -59,7 +59,7 @@ class Openingpage extends StatelessWidget {
                     ButtonOpeningpage(
                       text: "Barber",
                       onPressed: () {
-                        context.go("/AdminDashbordHomepage");
+                        context.go("/Loginbarber");
                       },
                     ),
                   ],

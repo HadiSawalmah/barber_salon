@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,23 +18,53 @@ class Loginuser extends StatefulWidget {
   State<Loginuser> createState() => _LoginState();
 }
 
-Future signIn() async {
-  await FirebaseAuth.instance.signInWithEmailAndPassword(
-    email: _email.text.trim(),
-    password: _password.text.trim(),
-  );
-}
-
-final _email = TextEditingController();
-final _password = TextEditingController();
-
-@override
-void dispose() {
-  _email.dispose();
-  _password.dispose();
-}
-
 class _LoginState extends State<Loginuser> {
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  Future<void> signInUser() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _email.text.trim(),
+        password: _password.text.trim(),
+      );
+      final uid = credential.user!.uid;
+      final doc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (doc.exists) {
+        // context.go('/userDashboard');
+      } else {
+        setState(() {
+          _errorMessage = 'This user is not registered as a User.';
+        });
+        await FirebaseAuth.instance.signOut();
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +87,7 @@ class _LoginState extends State<Loginuser> {
                   Column(
                     children: [
                       Textfiled(
-                        "Phone Number :",
+                        "Email :",
                         "05********",
                         Color(0xffD6D4CA),
                         Colors.white,
@@ -70,7 +101,10 @@ class _LoginState extends State<Loginuser> {
                         _password,
                       ),
                       SizedBox(height: 44),
-                      ButtonLoginUser(text: "Log In", onPressed: signIn),
+                      ButtonLoginUser(
+                        text: _isLoading ? 'Loading...' : 'Log In',
+                        onPressed: signInUser,
+                      ),
                       SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,

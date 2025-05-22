@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/admin/barber_model.dart';
 import '../../widgets/admin/appbar_admin.dart';
@@ -30,6 +31,8 @@ class _AddBarberState extends State<AddBarber> {
   final _age = TextEditingController();
 
   final _uploadImage = TextEditingController();
+
+  final _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +84,13 @@ class _AddBarberState extends State<AddBarber> {
                 ),
                 Textfiled("Age :", "18", Colors.white, Colors.black, _age),
                 Textfiled(
+                  "password :",
+                  "",
+                  Colors.white,
+                  Colors.black,
+                  _password,
+                ),
+                Textfiled(
                   "Upload Photo :",
                   "Upload Image",
                   Colors.white,
@@ -101,7 +111,8 @@ class _AddBarberState extends State<AddBarber> {
                         _country.text.isNotEmpty &&
                         _uploadImage.text.isNotEmpty &&
                         _facebookAccount.text.isNotEmpty &&
-                        _age.text.isNotEmpty) {
+                        _age.text.isNotEmpty &&
+                        _password.text.isNotEmpty) {
                       BarberModel newBarber = BarberModel(
                         barberId: barberId,
                         barberName: _username.text,
@@ -112,6 +123,11 @@ class _AddBarberState extends State<AddBarber> {
                         barberFacebook: _facebookAccount.text,
                         barberAge: _age.text,
                       );
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                            email: _email.text.trim(),
+                            password: _password.text.trim(),
+                          );
 
                       await FirebaseFirestore.instance
                           .collection('barbers')
@@ -125,7 +141,6 @@ class _AddBarberState extends State<AddBarber> {
                       _uploadImage.clear();
                       _facebookAccount.clear();
                       _age.clear();
-
                       showDialog(
                         context: context,
                         barrierDismissible: false,
