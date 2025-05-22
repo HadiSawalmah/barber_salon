@@ -19,16 +19,22 @@ class ServicesCardAdmin extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
+        elevation: 30,
         child: Stack(
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(height: 30),
-                Image.asset(servicesAdmin.imageUrl, height: 120),
+                Image.network(
+                  servicesAdmin.imageUrl,
+                  height: 155,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
                 Container(
                   width: double.infinity,
-                  height: 45,
+                  height: 40,
                   decoration: BoxDecoration(color: Color(0xffFFBB4E)),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -47,7 +53,7 @@ class ServicesCardAdmin extends StatelessWidget {
             ),
             Positioned(
               left: 68,
-
+              bottom: 185,
               child: Row(
                 children: [
                   IconButton(
@@ -55,7 +61,7 @@ class ServicesCardAdmin extends StatelessWidget {
                     icon: Icon(Icons.edit, color: Colors.blue, size: 30),
                   ),
                   IconButton(
-                    onPressed: onEdit,
+                    onPressed: onDelete,
                     icon: Icon(Icons.delete, color: Colors.red, size: 30),
                   ),
                 ],

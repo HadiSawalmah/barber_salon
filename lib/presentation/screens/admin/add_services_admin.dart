@@ -28,6 +28,7 @@ final _price = TextEditingController();
 
 class _AddServicesAdminState extends State<AddServicesAdmin> {
   File? _selectedImage;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,7 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
               SizedBox(height: 5),
 
               ImagePickerContainer(
+                selectedImage: _selectedImage,
                 onImagePicked: (imageFile) {
                   setState(() {
                     _selectedImage = imageFile;
@@ -57,63 +59,65 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
                 },
               ),
               SizedBox(height: 100),
-              ButtonAdd(
-                text: "Add",
-                onPressed: () async {
-                  if (_title.text.isNotEmpty &&
-                      _price.text.isNotEmpty &&
-                      _selectedImage != null) {
-                    String imageUrl = await uploadImageToCloudinary(
-                      _selectedImage!,
-                    );
-                    ServicesAdmin servicesAdmin = ServicesAdmin(
-                      title: _title.text,
-                      price: double.parse(_price.text),
-                      imageUrl: imageUrl,
-                    );
-                    await FirebaseFirestore.instance
-                        .collection('services')
-                        .add(servicesAdmin.toMap());
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => CustomDialog(
-                            icon: Icons.check_circle_outline,
-                            iconColor: Colors.green,
-                            title: "added Successfully",
-                            description:
-                                "service have been added successfully.",
-                            buttonText: "Ok",
-                            onButtonPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                    );
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : ButtonAdd(
+                    text: "Add",
+                    onPressed: () async {
+                      if (_title.text.isNotEmpty &&
+                          _price.text.isNotEmpty &&
+                          _selectedImage != null) {
+                        String imageUrl = await uploadImageToCloudinary(
+                          _selectedImage!,
+                        );
+                        ServicesAdmin servicesAdmin = ServicesAdmin(
+                          title: _title.text,
+                          price: double.parse(_price.text),
+                          imageUrl: imageUrl,
+                        );
+                        await FirebaseFirestore.instance
+                            .collection('services')
+                            .add(servicesAdmin.toMap());
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => CustomDialog(
+                                icon: Icons.check_circle_outline,
+                                iconColor: Colors.green,
+                                title: "added Successfully",
+                                description:
+                                    "service have been added successfully.",
+                                buttonText: "Ok",
+                                onButtonPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                        );
 
-                    _title.clear();
-                    _price.clear();
-                    setState(() {
-                      _selectedImage = null;
-                    });
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => CustomDialog(
-                            icon: Icons.error_outline,
-                            iconColor: Colors.red,
-                            title: "Failed Operation",
-                            description:
-                                "All fields must be completed and an image added before adding.",
-                            buttonText: "Ok",
-                            onButtonPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                    );
-                  }
-                },
-              ),
+                        _title.clear();
+                        _price.clear();
+                        setState(() {
+                          _selectedImage = null;
+                        });
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => CustomDialog(
+                                icon: Icons.error_outline,
+                                iconColor: Colors.red,
+                                title: "Failed Operation",
+                                description:
+                                    "All fields must be completed and an image added before adding.",
+                                buttonText: "Ok",
+                                onButtonPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                        );
+                      }
+                    },
+                  ),
             ],
           ),
         ),

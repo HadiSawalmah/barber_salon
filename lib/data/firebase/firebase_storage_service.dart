@@ -5,7 +5,7 @@ Future<String> uploadImageToCloudinary(File imageFile) async {
   String cloudName = 'dzxgs7oxa';
   String uploadPreset = 'unsigned_preset';
 
-  String uploadUrl = 'https://api.cloudinary.com/v1_1/dzxgs7oxa/image/upload';
+  String uploadUrl = 'https://api.cloudinary.com/v1_1/$cloudName/image/upload';
 
   try {
     FormData formData = FormData.fromMap({

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import '../../auth.dart';
 import '../screens/admin/add_barber_admin_dashbord.dart';
 import '../screens/admin/add_expences_admin.dart';
 import '../screens/admin/add_services_admin.dart';
@@ -11,6 +12,7 @@ import '../screens/admin/services_page_admin.dart';
 import '../screens/barber/all_notification_barber.dart';
 import '../screens/barber/availability_time.dart';
 import '../screens/barber/barber_dashboard_home.dart';
+import '../screens/barber/login_barber.dart';
 import '../screens/barber/notification_barber.dart';
 import '../screens/barber/profile_page.dart';
 import '../screens/barber/upcoming_barber.dart';
@@ -21,9 +23,11 @@ import '../screens/user/opening_page.dart';
 import '../screens/user/sginup_user.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: "/Openingpage",
+  initialLocation: "/Auth",
   routes: [
     GoRoute(path: '/AddBarber', builder: (context, state) => AddBarber()),
+    GoRoute(path: '/Auth', builder: (context, state) => Auth()),
+
     GoRoute(
       path: '/AddExpencesAdmin',
       builder: (context, state) => AddExpencesAdmin(),
@@ -71,6 +75,7 @@ final GoRouter appRouter = GoRouter(
       path: '/AvailabilityTime',
       builder: (context, state) => AvailabilityTime(),
     ),
+    GoRoute(path: '/Loginbarber', builder: (context, state) => Loginbarber()),
     GoRoute(
       path: '/BarberDashboardHome',
       builder: (context, state) => BarberDashboardHome(),
