@@ -7,7 +7,11 @@ class BarberService {
 
   Future<List<BarberModel>> getBarbers() async {
     try {
-      QuerySnapshot snapshot = await _firestore.collection('barbers').get();
+      QuerySnapshot snapshot =
+          await _firestore
+              .collection('users')
+              .where('role', isEqualTo: 'barber')
+              .get();
 
       return snapshot.docs.map((doc) {
         return BarberModel.fromMap(doc.data() as Map<String, dynamic>);

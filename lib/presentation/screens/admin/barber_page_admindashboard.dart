@@ -60,7 +60,11 @@ class _BarberPageAdmindashboardState extends State<BarberPageAdmindashboard> {
                   IconCircleAdmin(
                     icon: Icon(Icons.add_circle_outline_outlined, size: 52),
                     onpress: () {
-                      context.push("/AddBarber");
+                      context.push("/AddBarber").then((value) {
+                        if (value == true) {
+                          fetchBarbers();
+                        }
+                      });
                     },
                   ),
                   SizedBox(height: 12),

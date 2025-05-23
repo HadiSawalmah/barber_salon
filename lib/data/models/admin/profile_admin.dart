@@ -1,25 +1,26 @@
-class Admin {
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String email;
+import 'package:project_new/data/models/admin/user_model.dart';
+
+class Admin extends UserModel {
   final String dateOfBirth;
   final String? imageUrl;
 
   Admin({
-    required this.firstName,
-    required this.lastName,
-    required this.phone,
-    required this.email,
+    required super.id,
+    required super.name,
+    required super.phone,
+    required super.email,
+    required super.role,
     required this.dateOfBirth,
     this.imageUrl,
   });
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'phone': phone,
+      'id': id,
+      'name': name,
       'email': email,
+      'phone': phone,
+      'role': role,
       'dateOfBirth': dateOfBirth,
       'imageUrl': imageUrl,
     };
@@ -27,12 +28,13 @@ class Admin {
 
   factory Admin.fromMap(Map<String, dynamic> map) {
     return Admin(
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'] ?? '',
-      phone: map['phone'] ?? '',
-      email: map['email'] ?? '',
-      dateOfBirth: map['dateOfBirth'] ?? '',
-      imageUrl: map['imageUrl'] ?? '',
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      phone: map['phone'],
+      role: map['role'],
+      dateOfBirth: map['dateOfBirth'],
+      imageUrl: map['imageUrl'],
     );
   }
 }

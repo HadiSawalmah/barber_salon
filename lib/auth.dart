@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/screens/admin/admin_dashbord_homepage.dart';
+import 'presentation/screens/admin/services_page_admin.dart';
 import 'presentation/screens/barber/barber_dashboard_home.dart';
-import 'presentation/screens/user/definition_of_barber.dart';
-import 'presentation/screens/user/login_user.dart';
 import 'presentation/screens/user/opening_page.dart';
 
 class Auth extends StatelessWidget {
@@ -13,19 +12,13 @@ class Auth extends StatelessWidget {
 
   Future<String?> getUserRole(String uid) async {
     try {
-      final barberDoc =
-          await FirebaseFirestore.instance.collection('barbers').doc(uid).get();
-      if (barberDoc.exists) return 'barber';
-
-      final adminDoc =
-          await FirebaseFirestore.instance.collection('admins').doc(uid).get();
-      if (adminDoc.exists) return 'admin';
-
-      final userDoc =
+      final doc =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (userDoc.exists) return 'user';
+      if (doc.exists) {
+        return doc.data()?['role'] as String?;
+      }
     } catch (e) {
-      print('Error getting user role: $e');
+      debugPrint('Error getting user role: $e');
     }
     return null;
   }
@@ -35,14 +28,14 @@ class Auth extends StatelessWidget {
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, authSnapshot) {
+          if (authSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (!snapshot.hasData) {
+          if (!authSnapshot.hasData || authSnapshot.data == null) {
             return const Openingpage();
           }
-          final uid = snapshot.data!.uid;
+          final uid = authSnapshot.data!.uid;
           return FutureBuilder<String?>(
             future: getUserRole(uid),
             builder: (context, roleSnapshot) {
@@ -50,19 +43,18 @@ class Auth extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (roleSnapshot.hasError || roleSnapshot.data == null) {
-                return const Center(child: Text('Error loading user data'));
-              }
-
-              final role = roleSnapshot.data;
-
-              if (role == 'admin') {
-                return const AdminDashbordHomepage();
-              } else if (role == 'barber') {
-                return const BarberDashboardHome();
-              } else if (role == 'user') {
                 return const Openingpage();
-              } else {
-                return const DefinitionOfBarber();
+              }
+              final role = roleSnapshot.data;
+              switch (role) {
+                case 'admin':
+                  return const AdminDashbordHomepage();
+                case 'barber':
+                  return const BarberDashboardHome();
+                case 'user':
+                  return const ServicesScreen();
+                default:
+                  return const Openingpage();
               }
             },
           );

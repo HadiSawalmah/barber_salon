@@ -26,13 +26,7 @@ class CustomDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
+          Align(alignment: Alignment.topLeft),
           const SizedBox(height: 119),
           Text(
             title,

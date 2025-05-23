@@ -15,9 +15,9 @@ class DrawerAdmin extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 100,
+            height: 85,
             width: double.infinity,
-            padding: EdgeInsets.only(top: 60),
+            padding: EdgeInsets.only(top: 40),
             color: Colors.grey[300],
             child: Row(
               children: [
@@ -65,6 +65,7 @@ class DrawerAdmin extends StatelessWidget {
           SizedBox(height: 30),
           textdrawer("Log out", () {
             FirebaseAuth.instance.signOut();
+            context.go('/Loginuser');
           }),
         ],
       ),

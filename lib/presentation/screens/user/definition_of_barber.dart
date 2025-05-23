@@ -11,12 +11,6 @@ class DefinitionOfBarber extends StatefulWidget {
   State<DefinitionOfBarber> createState() => _DefinitionOfBarberState();
 }
 
-final _name = TextEditingController();
-final _email = TextEditingController();
-final _phone = TextEditingController();
-final _country = TextEditingController();
-final _facebook = TextEditingController();
-
 class _DefinitionOfBarberState extends State<DefinitionOfBarber> {
   @override
   Widget build(BuildContext context) {
