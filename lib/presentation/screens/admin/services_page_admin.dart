@@ -77,7 +77,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               .delete();
                         },
                         onEdit: () {
-                          context.push("/EditServiceAdmin/${service.id}");
+                          context.push("/EditServicesAdmin/${service.id}");
                         },
                       );
                     },

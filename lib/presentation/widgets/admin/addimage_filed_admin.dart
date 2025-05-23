@@ -10,6 +10,7 @@ class ImagePickerContainer extends StatefulWidget {
     super.key,
     required this.onImagePicked,
     required this.selectedImage,
+    String? existingImageUrl,
   });
 
   @override

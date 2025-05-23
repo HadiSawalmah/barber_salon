@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/admin/barber_model.dart';
+import 'package:project_new/providers/add_barber_provider.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';
-import '../../widgets/alert_dialog.dart';
 
 void main() {
   runApp(AddBarber());
@@ -36,6 +34,8 @@ class _AddBarberState extends State<AddBarber> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AddBarberProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -85,7 +85,7 @@ class _AddBarberState extends State<AddBarber> {
                 Textfiled("Age :", "18", Colors.white, Colors.black, _age),
                 Textfiled(
                   "password :",
-                  "",
+                  "password",
                   Colors.white,
                   Colors.black,
                   _password,
@@ -100,82 +100,19 @@ class _AddBarberState extends State<AddBarber> {
 
                 SizedBox(height: 56),
                 ButtonAdd(
-                  text: "Add",
+                  text: provider.isLoading ? "Adding..." : "Add",
                   onPressed: () async {
-                    final barberId =
-                        DateTime.now().millisecondsSinceEpoch
-                            .toString(); // id مميز
-                    if (_username.text.isNotEmpty &&
-                        _email.text.isNotEmpty &&
-                        _phoneNumber.text.isNotEmpty &&
-                        _country.text.isNotEmpty &&
-                        _uploadImage.text.isNotEmpty &&
-                        _facebookAccount.text.isNotEmpty &&
-                        _age.text.isNotEmpty &&
-                        _password.text.isNotEmpty) {
-                      BarberModel newBarber = BarberModel(
-                        barberId: barberId,
-                        barberName: _username.text,
-                        barberEmail: _email.text,
-                        barberPhone: _phoneNumber.text,
-                        barberCountry: _country.text,
-                        barberImage: _uploadImage.text,
-                        barberFacebook: _facebookAccount.text,
-                        barberAge: _age.text,
-                      );
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                            email: _email.text.trim(),
-                            password: _password.text.trim(),
-                          );
-
-                      await FirebaseFirestore.instance
-                          .collection('barbers')
-                          .doc(barberId)
-                          .set(newBarber.toMap());
-
-                      _username.clear();
-                      _email.clear();
-                      _phoneNumber.clear();
-                      _country.clear();
-                      _uploadImage.clear();
-                      _facebookAccount.clear();
-                      _age.clear();
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return CustomDialog(
-                            icon: Icons.check_circle,
-                            iconColor: Colors.green,
-                            title: "Added Successfully",
-                            description: "barber have been added successfully.",
-                            buttonText: "Ok",
-                            onButtonPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        },
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return CustomDialog(
-                            icon: Icons.error_outline,
-                            iconColor: Colors.red,
-                            title: "Failed Operation",
-                            description:
-                                "Something went wrong, please added all filed.",
-                            buttonText: "OK",
-                            onButtonPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        },
-                      );
-                    }
+                    await provider.addBarber(
+                      context: context,
+                      username: _username,
+                      email: _email,
+                      phoneNumber: _phoneNumber,
+                      country: _country,
+                      uploadImage: _uploadImage,
+                      facebookAccount: _facebookAccount,
+                      age: _age,
+                      password: _password,
+                    );
                   },
                 ),
               ],

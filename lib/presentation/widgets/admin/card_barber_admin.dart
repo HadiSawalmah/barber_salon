@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project_new/data/models/admin/barber_model.dart';
 import 'percentages_admin.dart';
 
@@ -19,7 +20,6 @@ class CardBarber extends StatelessWidget {
         (barber.bookingCount ?? 0) > 0
             ? ((barber.yearRevenue ?? 0) / (barber.bookingCount ?? 1)) * 100
             : 0;
-    ;
 
     return Card(
       margin: EdgeInsets.all(15),
@@ -54,7 +54,7 @@ class CardBarber extends StatelessWidget {
 
                       children: [
                         Text(
-                          barber.barberName,
+                          barber.name,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -62,12 +62,22 @@ class CardBarber extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            iconbutton(Icon(Icons.edit, size: 26), () {}),
+                            iconbutton(Icon(Icons.edit, size: 26), () {
+                              {
+                                context.push("/EditBarber", extra: barber).then(
+                                  (value) {
+                                    if (value == true) {
+                                      onDeleted();
+                                    }
+                                  },
+                                );
+                              }
+                            }),
                             iconbutton(Icon(Icons.delete, size: 26), () async {
                               try {
                                 await FirebaseFirestore.instance
-                                    .collection('barbers')
-                                    .doc(barber.barberId)
+                                    .collection('users')
+                                    .doc(barber.id)
                                     .delete();
 
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -96,13 +106,13 @@ class CardBarber extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        definition(barber.barberPhone),
+                        definition(barber.phone),
                         SizedBox(height: 25),
                         definition(barber.barberCountry),
                         SizedBox(height: 25),
                         definition("${barber.barberAge} years"),
                         SizedBox(height: 25),
-                        definition(barber.barberEmail),
+                        definition(barber.email),
                         SizedBox(height: 25),
                         definition(barber.barberFacebook),
                       ],

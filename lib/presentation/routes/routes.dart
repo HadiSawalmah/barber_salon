@@ -1,11 +1,19 @@
+import 'dart:math';
+
 import 'package:go_router/go_router.dart';
+import 'package:project_new/data/models/admin/expences_admin_model.dart';
 import '../../auth.dart';
+import '../../data/models/admin/barber_model.dart';
 import '../screens/admin/add_barber_admin_dashbord.dart';
 import '../screens/admin/add_expences_admin.dart';
 import '../screens/admin/add_services_admin.dart';
 import '../screens/admin/admin_dashbord_homepage.dart';
 import '../screens/admin/barber_page_admindashboard.dart';
+import '../screens/admin/edit_barber_admin.dart';
+import '../screens/admin/edit_expences_admin.dart';
+import '../screens/admin/edit_services_admin.dart';
 import '../screens/admin/expences_admin.dart';
+import '../screens/admin/notification_admin.dart';
 import '../screens/admin/notification_page_barber.dart';
 import '../screens/admin/profile_admin.dart';
 import '../screens/admin/services_page_admin.dart';
@@ -43,6 +51,29 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/BarberPageAdmindashboard',
       builder: (context, state) => BarberPageAdmindashboard(),
+    ),
+    GoRoute(
+      path: "/EditBarber",
+      builder: (context, state) {
+        final barber = state.extra as BarberModel;
+        return EditBarber(barber: barber);
+      },
+    ),
+    GoRoute(
+      path: '/EditServicesAdmin/:id',
+
+      builder: (context, state) {
+        final serviceId = state.pathParameters['id']!;
+        return EditServicesAdmin(serviceId: serviceId);
+      },
+    ),
+    GoRoute(
+      path: '/EditServicesAdmin/:id',
+
+      builder: (context, state) {
+        final serviceId = state.pathParameters['id']!;
+        return EditServicesAdmin(serviceId: serviceId);
+      },
     ),
     GoRoute(
       path: '/DefinitionOfBarber',

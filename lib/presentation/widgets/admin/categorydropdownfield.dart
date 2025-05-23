@@ -10,8 +10,13 @@ final List<String> _categories = [
 
 class Categorydropdownfield extends StatefulWidget {
   final Function(String?) onChanged;
+  final String? initialValue;
 
-  const Categorydropdownfield({super.key, required this.onChanged});
+  const Categorydropdownfield({
+    super.key,
+    required this.onChanged,
+    required this.initialValue,
+  });
 
   @override
   State<Categorydropdownfield> createState() => _CategorydropdownfieldState();

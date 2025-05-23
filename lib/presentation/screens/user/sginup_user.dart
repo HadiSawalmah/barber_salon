@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../../data/models/admin/user_model.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
@@ -27,20 +25,34 @@ class _SginupUserState extends State<SginupUser> {
       _isLoading = true;
     });
     try {
+      if (_username.text.isEmpty ||
+          _email.text.isEmpty ||
+          _password.text.isEmpty ||
+          _phone.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Please fill in all fields")));
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
       UserCredential credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: _email.text.trim(),
             password: _password.text.trim(),
           );
       final userModel = UserModel(
-        userId: credential.user!.uid,
-        userName: _username.text.trim(),
-        userEmail: _email.text.trim(),
-        userPhone: _phone.text.trim(),
+        id: credential.user!.uid,
+        name: _username.text.trim(),
+        email: _email.text.trim(),
+        phone: _phone.text.trim(),
+        role: 'user',
       );
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userModel.userId)
+          .doc(userModel.id)
           .set(userModel.toMap());
 
       _username.clear();
@@ -56,10 +68,11 @@ class _SginupUserState extends State<SginupUser> {
           ),
         ),
       );
+      await Future.delayed(Duration(seconds: 1));
 
-      Future.delayed(Duration(seconds: 2), () {
-        context.go("/Loginuser");
-      });
+      if (context.mounted) {
+        GoRouter.of(context).go("/Loginuser");
+      }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

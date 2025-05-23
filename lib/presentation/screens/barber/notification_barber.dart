@@ -5,11 +5,11 @@ import '../../widgets/barber/notification_header.dart';
 import '../../widgets/notification_item.dart';
 
 void main() {
-  runApp(NotificationAdmin());
+  runApp(NotificationBarber());
 }
 
-class NotificationAdmin extends StatelessWidget {
-  NotificationAdmin({super.key});
+class NotificationBarber extends StatelessWidget {
+  NotificationBarber({super.key});
 
   final List<String> barberNotifications = [
     "📅 New Booking: 'You have a new appointment with [Customer Name] on [Date] at [Time].'",

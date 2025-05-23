@@ -40,17 +40,45 @@ class _LoginState extends State<Loginuser> {
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (doc.exists) {
-        // context.go('/userDashboard');
+        final role = doc.data()?['role'];
+
+        switch (role) {
+          case 'admin':
+            context.go('/AdminDashbordHomepage');
+            break;
+          case 'barber':
+            context.go('/BarberDashboardHome');
+            break;
+          case 'user':
+            context.go('/ServicesScreen');
+            break;
+          default:
+            setState(() {
+              _errorMessage = "no defined role";
+            });
+            await FirebaseAuth.instance.signOut();
+        }
       } else {
         setState(() {
-          _errorMessage = 'This user is not registered as a User.';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("This user does not have an account")),
+          );
         });
         await FirebaseAuth.instance.signOut();
       }
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message;
-      });
+      String message = "An error occurred. Please try again";
+      if (e.code == 'user-not-found') {
+        message = "This user does not have an account";
+      } else if (e.code == 'wrong-password') {
+        message = "Incorrect password. Please try again";
+      } else if (e.code == 'invalid-email') {
+        message = "Invalid email address format";
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       setState(() {
         _isLoading = false;

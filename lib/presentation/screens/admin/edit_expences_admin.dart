@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:project_new/data/models/admin/expences_admin_model.dart';
 import 'package:project_new/providers/add_expences_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
@@ -6,21 +8,35 @@ import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/categorydropdownfield.dart';
 import '../../widgets/admin/textfiled.dart';
 
-void main() {
-  runApp(AddExpencesAdmin());
-}
-
-class AddExpencesAdmin extends StatefulWidget {
-  const AddExpencesAdmin({super.key});
+class EditExpenseAdmin extends StatefulWidget {
+  const EditExpenseAdmin({
+    super.key,
+    required this.expencesAdminModel,
+    required this.expenseId,
+  });
+  final ExpencesAdminModel expencesAdminModel;
+  final String expenseId;
 
   @override
-  State<AddExpencesAdmin> createState() => _AddExpencesAdminState();
+  State<EditExpenseAdmin> createState() => _EditExpenseAdminState();
 }
 
-class _AddExpencesAdminState extends State<AddExpencesAdmin> {
-  final _nameExpences = TextEditingController();
-  final _price = TextEditingController();
+class _EditExpenseAdminState extends State<EditExpenseAdmin> {
+  late TextEditingController _nameController;
+  late TextEditingController _priceController;
   String? _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(
+      text: widget.expencesAdminModel.name,
+    );
+    _priceController = TextEditingController(
+      text: widget.expencesAdminModel.price.toString(),
+    );
+    _selectedCategory = widget.expencesAdminModel.category;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +46,7 @@ class _AddExpencesAdminState extends State<AddExpencesAdmin> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBarAdmin(title: "Add Expences"),
+        appBar: AppBarAdmin(title: "Edit Expences"),
         body: Padding(
           padding: const EdgeInsets.all(12.0),
           child: ListView(
@@ -41,10 +57,16 @@ class _AddExpencesAdminState extends State<AddExpencesAdmin> {
                 "buy machine",
                 Colors.white,
                 Colors.black,
-                _nameExpences,
+                _nameController,
               ),
               SizedBox(height: 4),
-              Textfiled("Price :", "350", Colors.white, Colors.black, _price),
+              Textfiled(
+                "Price :",
+                "350",
+                Colors.white,
+                Colors.black,
+                _priceController,
+              ),
               SizedBox(height: 4),
               Categorydropdownfield(
                 initialValue: _selectedCategory,
@@ -56,19 +78,16 @@ class _AddExpencesAdminState extends State<AddExpencesAdmin> {
               ),
               SizedBox(height: 237),
               ButtonAdd(
-                text: provider.isLoading ? "Loading..." : "Add",
+                text: provider.isLoading ? "updating..." : "update",
                 onPressed: () {
-                  provider.addExpense(
+                  provider.updateExpences(
                     context: context,
-                    name: _nameExpences.text,
-                    price: _price.text,
+                    docId: widget.expencesAdminModel.id!,
+                    name: _nameController.text,
+                    price: _priceController.text,
                     category: _selectedCategory!,
                     onSuccess: () {
-                      _nameExpences.clear();
-                      _price.clear();
-                      setState(() {
-                        _selectedCategory = null;
-                      });
+                      context.pop();
                     },
                   );
                 },

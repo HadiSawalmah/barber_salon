@@ -21,7 +21,6 @@ class ExpencesAdmin extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text("Expences"),
-          toolbarHeight: 89,
           backgroundColor: Colors.grey[300],
         ),
         drawer: DrawerAdmin(),
@@ -33,14 +32,14 @@ class ExpencesAdmin extends StatelessWidget {
               IconCircleAdmin(
                 icon: Icon(Icons.add_circle_outline_outlined, size: 52),
                 onpress: () {
-                  context.push("/AddServicesAdmin");
+                  context.push("/AddExpencesAdmin");
                 },
               ),
               SizedBox(height: 50),
               Row(
                 children: [
                   Text("Expences Name", style: TextStyle(fontSize: 20)),
-                  SizedBox(width: 50),
+                  SizedBox(width: 40),
                   Text("Price", style: TextStyle(fontSize: 20)),
                 ],
               ),
@@ -72,7 +71,7 @@ class ExpencesAdmin extends StatelessWidget {
                           (context, index) => SizedBox(height: 10),
                       itemBuilder: (context, index) {
                         final exp = expences[index];
-                        String date = DateFormat.yMMMd().format(exp.created);
+                        DateFormat.yMMMd().format(exp.created);
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
@@ -94,7 +93,6 @@ class ExpencesAdmin extends StatelessWidget {
                                     overflow: TextOverflow.visible,
                                   ),
                                 ),
-                                SizedBox(width: 0),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Color(0xffFFBB4E),
@@ -108,11 +106,15 @@ class ExpencesAdmin extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 14),
+                                Spacer(),
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.push(
+                                          '/EditExpensesAdmin/${exp.id}',
+                                        );
+                                      },
                                       icon: Icon(
                                         Icons.edit,
                                         size: 25,

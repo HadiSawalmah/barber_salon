@@ -15,12 +15,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final TextEditingController _firstname = TextEditingController();
-  final TextEditingController _lastname = TextEditingController();
-  final TextEditingController _phone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _image = TextEditingController();
-  final TextEditingController _social = TextEditingController();
+  final _firstname = TextEditingController();
+  final _lastname = TextEditingController();
+  final _phone = TextEditingController();
+  final _email = TextEditingController();
+  final _image = TextEditingController();
+  final _social = TextEditingController();
 
   @override
   void dispose() {

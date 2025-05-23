@@ -1,38 +1,36 @@
-class BarberModel {
-  String barberId;
-  String barberName;
-  String barberEmail;
-  String barberPhone;
+import 'package:project_new/data/models/admin/user_model.dart';
+
+class BarberModel extends UserModel {
   String barberCountry;
   String barberImage;
   String barberFacebook;
   String barberAge;
-  String role;
   double? monthRevenue;
   double? yearRevenue;
   int? bookingCount;
 
   BarberModel({
-    required this.barberId,
-    required this.barberName,
-    required this.barberEmail,
-    required this.barberPhone,
+    required super.id,
+    required super.name,
+    required super.email,
+    required super.phone,
+    required super.role,
     required this.barberCountry,
     required this.barberImage,
     required this.barberFacebook,
     required this.barberAge,
-    this.role = 'barber',
     this.monthRevenue,
     this.yearRevenue,
     this.bookingCount,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'barberId': barberId,
-      'barberName': barberName,
-      'barberEmail': barberEmail,
-      'barberPhone': barberPhone,
+      'barberId': id,
+      'barberName': name,
+      'barberEmail': email,
+      'barberPhone': phone,
       'barberCountry': barberCountry,
       'barberImage': barberImage,
       'barberFacebook': barberFacebook,
@@ -46,10 +44,10 @@ class BarberModel {
 
   factory BarberModel.fromMap(Map<String, dynamic> map) {
     return BarberModel(
-      barberId: map['barberId'],
-      barberName: map['barberName'],
-      barberEmail: map['barberEmail'],
-      barberPhone: map['barberPhone'],
+      id: map['barberId'],
+      name: map['barberName'],
+      email: map['barberEmail'],
+      phone: map['barberPhone'],
       barberCountry: map['barberCountry'],
       barberImage: map['barberImage'],
       barberFacebook: map['barberFacebook'],

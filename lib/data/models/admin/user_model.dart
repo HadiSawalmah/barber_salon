@@ -1,32 +1,32 @@
 class UserModel {
-  String userId;
-  String userName;
-  String userEmail;
-  String userPhone;
+  String id;
+  String name;
+  String email;
+  String phone;
   String role;
   UserModel({
-    required this.userId,
-    required this.userName,
-    required this.userEmail,
-    required this.userPhone,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
     this.role = 'user',
   });
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
-      'userName': userName,
-      'userEmail': userEmail,
-      'userPhone': userPhone,
+      'userId': id,
+      'userName': name,
+      'userEmail': email,
+      'userPhone': phone,
       'role': role,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      userId: map['userId'],
-      userName: map['userName'],
-      userEmail: map['userEmail'],
-      userPhone: map['userPhone'],
+      id: map['userId'],
+      name: map['userName'],
+      email: map['userEmail'],
+      phone: map['userPhone'],
       role: map['role'] ?? 'user',
     );
   }
