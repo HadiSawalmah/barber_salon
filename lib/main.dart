@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_new/data/firebase/firebase_options.dart';
 import 'package:project_new/presentation/routes/routes.dart';
+import 'package:project_new/services/local_norification_service.dart';
+import 'package:project_new/services/push_notification_service.dart';
+
 import 'package:provider/provider.dart';
 
 import 'providers/add_barber_provider.dart';
@@ -12,6 +15,8 @@ import 'providers/dashboard_admin_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  PushNotificationService.init();
+  LocalNotificationService.init();
   runApp(const MyApp());
 }
 
