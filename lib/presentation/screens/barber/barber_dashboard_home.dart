@@ -33,8 +33,7 @@ class BarberDashboardHome extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: GestureDetector(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Row(
                       children: [
                         SizedBox(width: 20),
@@ -100,8 +99,7 @@ class BarberDashboardHome extends StatelessWidget {
             if (index == 0) {
             } else if (index == 1) {
             } else if (index == 2) {
-            } else if (index == 3) {
-            }
+            } else if (index == 3) {}
           },
         ),
       ),

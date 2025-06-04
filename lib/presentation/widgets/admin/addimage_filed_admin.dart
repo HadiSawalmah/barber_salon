@@ -4,8 +4,14 @@ import 'dart:io';
 
 class ImagePickerContainer extends StatefulWidget {
   final void Function(File?) onImagePicked;
+  final File? selectedImage;
 
-  const ImagePickerContainer({super.key, required this.onImagePicked});
+  const ImagePickerContainer({
+    super.key,
+    required this.onImagePicked,
+    required this.selectedImage,
+    String? existingImageUrl,
+  });
 
   @override
   State<ImagePickerContainer> createState() => _ImagePickerContainerState();
@@ -31,7 +37,7 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
     return GestureDetector(
       onTap: _pickImage,
       child: Container(
-        height: 150,
+        height: 200,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black),

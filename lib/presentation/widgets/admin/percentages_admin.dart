@@ -11,13 +11,13 @@ Widget percentages(String title, double date) {
           alignment: Alignment.center,
           children: [
             CircularProgressIndicator(
-              value: date,
+              value: date / 100,
               strokeAlign: 3,
               strokeWidth: 7,
               backgroundColor: Colors.grey[300],
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
             ),
-            Text("${(date * 100).toInt()}%"),
+            Text("${date.toStringAsFixed(1)}%"),
           ],
         ),
       ),
