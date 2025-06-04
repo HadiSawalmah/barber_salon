@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class StatisticsAdminDashboard extends StatelessWidget {
   final String titles;
-  final int value;
+  final num value;
 
   const StatisticsAdminDashboard({
     super.key,

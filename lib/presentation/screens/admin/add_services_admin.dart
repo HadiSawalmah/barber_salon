@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:project_new/providers/add_services_provider.dart';
 
 import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
@@ -16,11 +19,13 @@ class AddServicesAdmin extends StatefulWidget {
   State<AddServicesAdmin> createState() => _AddServicesAdminState();
 }
 
-final TextEditingController _title = TextEditingController();
-final TextEditingController _price = TextEditingController();
-// final TextEditingController _image = TextEditingController();
+final _title = TextEditingController();
+final _price = TextEditingController();
 
 class _AddServicesAdminState extends State<AddServicesAdmin> {
+  File? _selectedImage;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,13 +47,34 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
               SizedBox(height: 5),
 
               ImagePickerContainer(
+                selectedImage: _selectedImage,
                 onImagePicked: (imageFile) {
-                  // ممكن تخزن الصورة أو ترفعها مباشرة هون
-                  print("Selected image path: ${imageFile?.path}");
+                  setState(() {
+                    _selectedImage = imageFile;
+                  });
                 },
               ),
               SizedBox(height: 100),
-              ButtonAdd(text: "Add", onPressed: () {}),
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : ButtonAdd(
+                    text: "Add",
+                    onPressed: () async {
+                      AddServicesProvider.addService(
+                        context: context,
+                        title: _title.text,
+                        price: _price.text,
+                        image: _selectedImage!,
+                        onSuccess: () {
+                          _title.clear();
+                          _price.clear();
+                          setState(() {
+                            _selectedImage = null;
+                          });
+                        },
+                      );
+                    },
+                  ),
             ],
           ),
         ),

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
- Widget textfiled(
+Widget textfiledPassword(
   String label,
   String hint,
   Color color,
   Color textcolor,
   TextEditingController controller, {
   String? Function(String?)? validator,
-}) {
-  return Padding(
+}) => Padding(
     padding: const EdgeInsets.all(4.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,8 +36,9 @@ import 'package:flutter/material.dart';
         ),
         TextFormField(
           controller: controller,
+          obscureText: true,
           style: const TextStyle(color: Colors.black),
-          validator: validator ,
+          validator: validator,
 
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -51,4 +51,3 @@ import 'package:flutter/material.dart';
       ],
     ),
   );
-}

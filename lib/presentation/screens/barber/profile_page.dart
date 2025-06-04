@@ -15,12 +15,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final TextEditingController _firstname = TextEditingController();
-  final TextEditingController _lastname = TextEditingController();
-  final TextEditingController _phone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _image = TextEditingController();
-  final TextEditingController _social = TextEditingController();
+  final _firstname = TextEditingController();
+  final _lastname = TextEditingController();
+  final _phone = TextEditingController();
+  final _email = TextEditingController();
+  final _image = TextEditingController();
+  final _social = TextEditingController();
 
   @override
   void dispose() {
@@ -57,42 +57,42 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 14),
 
-              Textfiled(
+              textfiled(
                 "First Name:",
                 "whats your first name?",
                 Colors.white,
                 Colors.white,
                 _firstname,
               ),
-              Textfiled(
+              textfiled(
                 "Last Name:",
                 "and your last name?",
                 Colors.white,
                 Colors.white,
                 _lastname,
               ),
-              Textfiled(
+              textfiled(
                 "Phone :",
                 "phone number",
                 Colors.white,
                 Colors.white,
                 _phone,
               ),
-              Textfiled(
+              textfiled(
                 "Email :",
                 "blabla@gmail.com",
                 Colors.white,
                 Colors.white,
                 _email,
               ),
-              Textfiled(
+              textfiled(
                 "Photo :",
                 "your photo",
                 Colors.white,
                 Colors.white,
                 _image,
               ),
-              Textfiled(
+              textfiled(
                 "Social Account:",
                 "facebook",
                 Colors.white,

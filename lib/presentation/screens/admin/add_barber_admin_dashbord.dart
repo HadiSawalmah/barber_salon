@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../data/models/barber_model.dart';
+import 'package:project_new/providers/add_barber_provider.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';
@@ -16,22 +16,26 @@ class AddBarber extends StatefulWidget {
 }
 
 class _AddBarberState extends State<AddBarber> {
-  final TextEditingController _username = TextEditingController();
+  final _username = TextEditingController();
 
-  final TextEditingController _email = TextEditingController();
+  final _email = TextEditingController();
 
-  final TextEditingController _phoneNumber = TextEditingController();
+  final _phoneNumber = TextEditingController();
 
-  final TextEditingController _country = TextEditingController();
+  final _country = TextEditingController();
 
-  final TextEditingController _facebookAccount = TextEditingController();
+  final _facebookAccount = TextEditingController();
 
-  final TextEditingController _age = TextEditingController();
+  final _age = TextEditingController();
 
-  final TextEditingController _uploadImage = TextEditingController();
+  final _uploadImage = TextEditingController();
+
+  final _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AddBarberProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -80,6 +84,13 @@ class _AddBarberState extends State<AddBarber> {
                 ),
                 Textfiled("Age :", "18", Colors.white, Colors.black, _age),
                 Textfiled(
+                  "password :",
+                  "password",
+                  Colors.white,
+                  Colors.black,
+                  _password,
+                ),
+                Textfiled(
                   "Upload Photo :",
                   "Upload Image",
                   Colors.white,
@@ -89,41 +100,19 @@ class _AddBarberState extends State<AddBarber> {
 
                 SizedBox(height: 56),
                 ButtonAdd(
-                  text: "Add",
+                  text: provider.isLoading ? "Adding..." : "Add",
                   onPressed: () async {
-                    final barberId =
-                        DateTime.now().millisecondsSinceEpoch
-                            .toString(); // id مميز
-
-                    final newBarber = BarberModel(
-                      barberId: barberId,
-                      barberName: _username.text,
-                      barberEmail: _email.text,
-                      barberPhone: _phoneNumber.text,
-                      barberCountry: _country.text,
-                      barberImage:
-                          _uploadImage.text, // لاحقًا تستبدله ب upload حقيقي
-                      barberFacebook: _facebookAccount.text,
-                      barberAge: _age.text,
+                    await provider.addBarber(
+                      context: context,
+                      username: _username,
+                      email: _email,
+                      phoneNumber: _phoneNumber,
+                      country: _country,
+                      uploadImage: _uploadImage,
+                      facebookAccount: _facebookAccount,
+                      age: _age,
+                      password: _password,
                     );
-
-                    await FirebaseFirestore.instance
-                        .collection('barbers')
-                        .doc(barberId)
-                        .set(newBarber.toMap());
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("تمت إضافة الحلاق بنجاح ✅")),
-                    );
-
-                    // مسح الحقول بعد الإدخال
-                    _username.clear();
-                    _email.clear();
-                    _phoneNumber.clear();
-                    _country.clear();
-                    _uploadImage.clear();
-                    _facebookAccount.clear();
-                    _age.clear();
                   },
                 ),
               ],

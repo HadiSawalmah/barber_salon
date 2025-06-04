@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget definitionofbarber(TextEditingController controller) {
+Widget definitionofbarber(String controller) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4),
     child: Column(

@@ -1,23 +1,68 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
 
 void main() {
-  runApp(Loginuser());
+  runApp(Loginbarber());
 }
 
-class Loginuser extends StatefulWidget {
-  const Loginuser({super.key});
+class Loginbarber extends StatefulWidget {
+  const Loginbarber({super.key});
 
   @override
-  State<Loginuser> createState() => _LoginState();
+  State<Loginbarber> createState() => _LoginState();
 }
 
-final TextEditingController _idNumber = TextEditingController();
+final TextEditingController _email = TextEditingController();
 final TextEditingController _password = TextEditingController();
+bool _isLoading = false;
+String? _errorMessage;
 
-class _LoginState extends State<Loginuser> {
+class _LoginState extends State<Loginbarber> {
+  Future signInBarber() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      UserCredential credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: _email.text.trim(),
+            password: _password.text.trim(),
+          );
+      final uid = credential.user!.uid;
+      final doc =
+          await FirebaseFirestore.instance.collection('barbers').doc(uid).get();
+
+      if (doc.exists) {
+        // context.go('/barberDashboard');
+      } else {
+        setState(() {
+          _errorMessage = 'This user is not registered as a Barber.';
+        });
+        await FirebaseAuth.instance.signOut();
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,14 +86,14 @@ class _LoginState extends State<Loginuser> {
                     SizedBox(height: 43),
                     Column(
                       children: [
-                        Textfiled(
-                          "ID Number :",
+                        textfiled(
+                          "Email :",
                           "05********",
                           Color(0xffD6D4CA),
                           Colors.white,
-                          _idNumber,
+                          _email,
                         ),
-                        Textfiled(
+                        textfiled(
                           "Passowrd",
                           "password",
                           Color(0xffD6D4CA),
@@ -56,7 +101,10 @@ class _LoginState extends State<Loginuser> {
                           _password,
                         ),
                         SizedBox(height: 44),
-                        ButtonLoginUser(text: "Log In", onPressed: () {}),
+                        ButtonLoginUser(
+                          text: _isLoading ? 'Loading...' : 'Log In',
+                          onPressed: signInBarber,
+                        ),
                         SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
