@@ -86,14 +86,14 @@ class _LoginState extends State<Loginbarber> {
                     SizedBox(height: 43),
                     Column(
                       children: [
-                        Textfiled(
+                        textfiled(
                           "Email :",
                           "05********",
                           Color(0xffD6D4CA),
                           Colors.white,
                           _email,
                         ),
-                        Textfiled(
+                        textfiled(
                           "Passowrd",
                           "password",
                           Color(0xffD6D4CA),
