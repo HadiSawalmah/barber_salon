@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-Widget Textfiled(
+ Widget textfiled(
   String label,
   String hint,
   Color color,
   Color textcolor,
-  TextEditingController controller,
-) {
+  TextEditingController controller, {
+  String? Function(String?)? validator,
+}) {
   return Padding(
     padding: const EdgeInsets.all(4.0),
     child: Column(
@@ -34,9 +35,11 @@ Widget Textfiled(
             ),
           ],
         ),
-        TextField(
+        TextFormField(
           controller: controller,
           style: const TextStyle(color: Colors.black),
+          validator: validator ,
+
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
             hintText: hint,

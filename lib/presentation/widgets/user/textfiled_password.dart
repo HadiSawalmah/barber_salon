@@ -5,9 +5,9 @@ Widget textfiledPassword(
   String hint,
   Color color,
   Color textcolor,
-  TextEditingController controller,
-) {
-  return Padding(
+  TextEditingController controller, {
+  String? Function(String?)? validator,
+}) => Padding(
     padding: const EdgeInsets.all(4.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,10 +34,12 @@ Widget textfiledPassword(
             ),
           ],
         ),
-        TextField(
+        TextFormField(
           controller: controller,
           obscureText: true,
           style: const TextStyle(color: Colors.black),
+          validator: validator,
+
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
             hintText: hint,
@@ -49,4 +51,3 @@ Widget textfiledPassword(
       ],
     ),
   );
-}
