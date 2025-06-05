@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:project_new/providers/add_barber_provider.dart';
+import 'package:project_new/providers/admin/add_barber_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
 import 'package:project_new/presentation/widgets/validators.dart';
 import '../../widgets/textfiled_password.dart';
-
-void main() {
-  runApp(AddBarber());
-}
 
 class AddBarber extends StatefulWidget {
   const AddBarber({super.key});
@@ -38,13 +34,11 @@ class _AddBarberState extends State<AddBarber> {
   Widget build(BuildContext context) {
     final provider = Provider.of<AddBarberProvider>(context);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBarAdmin(title: "Add Barber"),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBarAdmin(title: "Add Barber"),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
 
           child: SingleChildScrollView(
             child: Column(
@@ -120,25 +114,24 @@ class _AddBarberState extends State<AddBarber> {
                   controller: _uploadImage,
                 ),
 
-                SizedBox(height: 56),
-                ButtonAdd(
-                  text: provider.isLoading ? "Adding..." : "Add",
-                  onPressed: () async {
-                    await provider.addBarber(
-                      context: context,
-                      username: _username,
-                      email: _email,
-                      phoneNumber: _phoneNumber,
-                      country: _country,
-                      uploadImage: _uploadImage,
-                      facebookAccount: _facebookAccount,
-                      age: _age,
-                      password: _password,
-                    );
-                  },
-                ),
-              ],
-            ),
+
+              SizedBox(height: 56),
+              ButtonAdd(
+                text: provider.isLoading ? "Adding..." : "Add",
+                onPressed: () async {
+                  await provider.addBarber(
+                    context: context,
+                    username: _username,
+                    email: _email,
+                    phoneNumber: _phoneNumber,
+                    country: _country,
+                    facebookAccount: _facebookAccount,
+                    age: _age,
+                    password: _password,
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

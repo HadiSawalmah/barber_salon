@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_new/data/models/admin/expences_admin_model.dart';
-import 'package:project_new/providers/add_expences_provider.dart';
+import 'package:project_new/providers/admin/add_expences_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
@@ -10,12 +9,7 @@ import '../../widgets/textfiled.dart';
 import 'package:project_new/presentation/widgets/validators.dart';
 
 class EditExpenseAdmin extends StatefulWidget {
-  const EditExpenseAdmin({
-    super.key,
-    required this.expencesAdminModel,
-    required this.expenseId,
-  });
-  final ExpencesAdminModel expencesAdminModel;
+  const EditExpenseAdmin({super.key, required this.expenseId});
   final String expenseId;
 
   @override
@@ -26,17 +20,29 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
   late TextEditingController _nameController;
   late TextEditingController _priceController;
   String? _selectedCategory;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(
-      text: widget.expencesAdminModel.name,
-    );
-    _priceController = TextEditingController(
-      text: widget.expencesAdminModel.price.toString(),
-    );
-    _selectedCategory = widget.expencesAdminModel.category;
+    _nameController = TextEditingController();
+    _priceController = TextEditingController();
+    fetchExpenseData();
+  }
+
+  void fetchExpenseData() async {
+    final provider = Provider.of<AddExpensesProvider>(context, listen: false);
+    final model = await provider.getExpenseById(widget.expenseId);
+
+    if (model != null) {
+      _nameController.text = model.name;
+      _priceController.text = model.price.toString();
+      _selectedCategory = model.category;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -83,17 +89,21 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
                 },
               ),
               SizedBox(height: 237),
-              ButtonAdd(
-                text: provider.isLoading ? "updating..." : "update",
-                onPressed: () {
-                  provider.updateExpences(
-                    context: context,
-                    docId: widget.expencesAdminModel.id!,
-                    name: _nameController.text,
-                    price: _priceController.text,
-                    category: _selectedCategory!,
-                    onSuccess: () {
-                      context.pop();
+              Consumer<AddExpensesProvider>(
+                builder: (context, prov, child) {
+                  return ButtonAdd(
+                    text: prov.isLoading ? "updating..." : "update",
+                    onPressed: () {
+                      prov.updateExpences(
+                        context: context,
+                        docId: widget.expenseId,
+                        name: _nameController.text,
+                        price: _priceController.text,
+                        category: _selectedCategory!,
+                        onSuccess: () {
+                          context.pop();
+                        },
+                      );
                     },
                   );
                 },

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:project_new/providers/add_expences_provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:project_new/providers/admin/add_expences_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/categorydropdownfield.dart';
 import '../../widgets/textfiled.dart';
 import 'package:project_new/presentation/widgets/validators.dart';
+
 
 class AddExpencesAdmin extends StatefulWidget {
   const AddExpencesAdmin({super.key});
@@ -76,6 +78,7 @@ class _AddExpencesAdminState extends State<AddExpencesAdmin> {
                       _price.clear();
                       setState(() {
                         _selectedCategory = null;
+                        context.pop();
                       });
                     },
                   );

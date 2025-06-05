@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/admin_profile_provider.dart';
 import '../../widgets/admin/drawer_admin.dart';
 import '../../widgets/textfiled.dart';
-import 'package:project_new/presentation/widgets/validators.dart';
-import '../../widgets/textfiled_password.dart';
+
 
 class ProfileAdmin extends StatefulWidget {
   const ProfileAdmin({super.key});
@@ -18,7 +17,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
   @override
   void initState() {
     super.initState();
-    // استدعاء تحميل بيانات البروفايل بعد بناء الصفحة
+    // Call to load profile data after building the page
     Future.microtask(
       () =>
           Provider.of<AdminProfileProvider>(
@@ -111,6 +110,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
               textColor: Colors.black,
               controller: provider.password,
               validator: Validators.password,
+
             ),
           
              CustomTextField(
