@@ -106,7 +106,11 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TitleWithUnderline(title: "Add Availability", width: 130),
+                  TitleWithUnderline(
+                    title: "Add Availability",
+                    width: 130,
+                    size: 18,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey,
@@ -148,7 +152,11 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TitleWithUnderline(title: "Available Time", width: 124),
+                  TitleWithUnderline(
+                    title: "Available Time",
+                    width: 124,
+                    size: 18,
+                  ),
                   Textbutton(title: "remove all", onprees: clearAll),
                 ],
               ),
@@ -160,7 +168,11 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
                 textColor: Colors.black,
               ),
               SizedBox(height: 16),
-              TitleWithUnderline(title: "Un Available Time", width: 150),
+              TitleWithUnderline(
+                title: "Un Available Time",
+                width: 150,
+                size: 18,
+              ),
               SizedBox(height: 10),
               ChooseTime(
                 times: unavailableTimes,
@@ -177,4 +189,3 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
     );
   }
 }
-
