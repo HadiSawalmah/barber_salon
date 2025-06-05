@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/barber/barber_model.dart';
-import '../../../providers/add_barber_provider.dart';
+import '../../../providers/admin/add_barber_provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
 
 class EditBarber extends StatefulWidget {
   final BarberModel barber;
@@ -49,37 +49,37 @@ class _EditBarberState extends State<EditBarber> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Textfiled(
+              textfiled(
                 "User Name :",
                 "User Name",
                 Colors.white,
                 Colors.black,
                 _username,
               ),
-              Textfiled("Email :", "Email", Colors.white, Colors.black, _email),
-              Textfiled(
+              textfiled("Email :", "Email", Colors.white, Colors.black, _email),
+              textfiled(
                 "Phone Number :",
                 "Phone Number",
                 Colors.white,
                 Colors.black,
                 _phoneNumber,
               ),
-              Textfiled(
+              textfiled(
                 "City :",
                 "Nablus",
                 Colors.white,
                 Colors.black,
                 _country,
               ),
-              Textfiled(
+              textfiled(
                 "Facebook Account :",
                 "Facebook",
                 Colors.white,
                 Colors.black,
                 _facebookAccount,
               ),
-              Textfiled("Age :", "18", Colors.white, Colors.black, _age),
-              Textfiled(
+              textfiled("Age :", "18", Colors.white, Colors.black, _age),
+              textfiled(
                 "Upload Image :",
                 "Image URL",
                 Colors.white,

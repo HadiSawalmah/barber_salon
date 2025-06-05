@@ -85,14 +85,14 @@ class _LoginState extends State<Loginbarber> {
                       children: [
                         textfiled(
                           "Email :",
-                          "05********",
+                          "Your email",
                           Color(0xffD6D4CA),
                           Colors.white,
                           _email,
                         ),
                         textfiled(
                           "Passowrd",
-                          "password",
+                          "Your password",
                           Color(0xffD6D4CA),
                           Colors.white,
                           _password,

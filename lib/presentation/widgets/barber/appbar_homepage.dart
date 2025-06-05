@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:provider/provider.dart';
+import '../../../providers/profile_barber_provider.dart';
 
 class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
- const AppbarHomepage({super.key});
+  const AppbarHomepage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -13,11 +17,20 @@ class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
         children: [
           IconButton(
             onPressed: () {
-               context.push('/AllNotificationBarber');
+              context.push('/AllNotificationBarber');
             },
             icon: Icon(Icons.notifications_none, size: 35, color: Colors.white),
           ),
-           IconButton(
+          Consumer<ProfileBarberProvider>(
+            builder: (context, prov, child) {
+              final username = prov.barber?.name ?? 'Welcome';
+              return Text(
+                username,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              );
+            },
+          ),
+          IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
               context.go('/Loginuser');
@@ -26,6 +39,7 @@ class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+
       centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(2.0),

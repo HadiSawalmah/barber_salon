@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'presentation/screens/admin/admin_dashbord_homepage.dart';
 import 'presentation/screens/admin/services_page_admin.dart';
 import 'presentation/screens/barber/barber_dashboard_home.dart';
+import 'presentation/screens/user/home_page_user.dart';
 import 'presentation/screens/user/opening_page.dart';
 
 class Auth extends StatelessWidget {
@@ -52,7 +52,7 @@ class Auth extends StatelessWidget {
                 case 'barber':
                   return const BarberDashboardHome();
                 case 'user':
-                  return const ServicesScreen();
+                  return const HomePageUser();
                 default:
                   return const Openingpage();
               }

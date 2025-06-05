@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../widgets/auth_layout.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
-import '../../widgets/user/textfiled_password.dart';
+import '../../widgets/textfiled_password.dart';
 import '../../widgets/validators.dart';
 
 class Loginuser extends StatefulWidget {
@@ -51,7 +51,7 @@ class _LoginState extends State<Loginuser> {
             context.go('/BarberDashboardHome');
             break;
           case 'user':
-            context.go('/ServicesScreen');
+            context.go('/HomePageUser');
             break;
           default:
             setState(() {
@@ -105,9 +105,9 @@ class _LoginState extends State<Loginuser> {
             SizedBox(height: 24),
             textfiled(
               "Email :",
-              "Enter your email",
-              Color(0xffD6D4CA),
-              Colors.white,
+             "Enter your email",
+               Color(0xffD6D4CA),
+               Colors.white,
               _email,
               validator: Validators.email,
             ),

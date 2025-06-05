@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_new/presentation/widgets/validators.dart';
-import '../../../data/models/admin/user_model.dart';
+import '../../../data/models/user/user_model.dart';
 import '../../widgets/auth_layout.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
-import '../../widgets/user/textfiled_password.dart';
+import '../../widgets/textfiled_password.dart';
 
 class SginupUser extends StatefulWidget {
   const SginupUser({super.key});
