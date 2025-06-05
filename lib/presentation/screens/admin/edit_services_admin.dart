@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:project_new/providers/add_services_provider.dart';
+import 'package:project_new/providers/admin/add_services_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
@@ -55,8 +56,8 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
     setState(() {
       isLoading = true;
     });
-
-    await AddServicesProvider.updateService(
+    final provider = Provider.of<AddServicesProvider>(context, listen: false);
+    await provider.updateService(
       context: context,
       serviceId: widget.serviceId,
       title: _title.text,
@@ -112,9 +113,16 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                         },
                       ),
                       SizedBox(height: 100),
-                      isLoading
-                          ? Center(child: CircularProgressIndicator())
-                          : ButtonAdd(text: "Update", onPressed: updateService),
+                      Consumer<AddServicesProvider>(
+                        builder: (context, provider, child) {
+                          return provider.isLoading
+                              ? Center(child: CircularProgressIndicator())
+                              : ButtonAdd(
+                                text: "Update",
+                                onPressed: updateService,
+                              );
+                        },
+                      ),
                     ],
                   ),
                 ),
