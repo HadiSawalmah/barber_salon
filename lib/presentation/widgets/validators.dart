@@ -1,6 +1,3 @@
-
-
-
 class Validators {
   static String? email(String? value) {
    if (value == null || value.trim().isEmpty) {
@@ -33,26 +30,39 @@ class Validators {
 
   static String? phone(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Phone number is required';
+      return 'number is required';
     }
     if (!RegExp(r'^\d+$').hasMatch(value.trim())) {
-      return 'Phone number must contain only digits';
+      return 'number must contain only digits';
     }
     if (value.trim().length != 10) {
-      return 'Phone number must be 10 digits';
+      return 'number must be 10 digits';
     }
 
     return null;
   }
 
-  static String? username(String? value) {
+  static String? text(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Username is required';
+      return 'is required';
     }
     if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(value.trim())) {
-      return 'Username must contain only letters and spaces';
+      return 'must contain only letters and spaces';
     }
 
     return null;
   }
+
+  static String? facebookUrl(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return 'Facebook URL is required';
+  }
+   if (!RegExp(r'^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$').hasMatch(value.trim())) {
+      return 'Enter a valid Facebook profile URL';
+    }
+
+    return null;
+
+}
+
 }

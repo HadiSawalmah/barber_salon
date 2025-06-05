@@ -10,6 +10,10 @@ import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
 
+import 'package:project_new/presentation/widgets/validators.dart';
+
+
+
 class AddServicesAdmin extends StatefulWidget {
   const AddServicesAdmin({super.key});
 
@@ -38,10 +42,26 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
             children: [
               SizedBox(height: 80),
 
-              textfiled("Title :", "Title", Colors.white, Colors.black, _title),
+              CustomTextField(
+                label: "Title :",
+                hint: "add title",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _title,
+                validator: Validators.text,
+              ),
               SizedBox(height: 5),
 
-              textfiled("Price :", "Price", Colors.white, Colors.black, _price),
+              CustomTextField(
+                label: "Price :",
+                hint: "add price",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _price,
+
+                validator: Validators.phone,
+              ),
+
               SizedBox(height: 5),
 
               ImagePickerContainer(

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
-
+import '../../widgets/textfiled_password.dart';
+import 'package:project_new/presentation/widgets/validators.dart';
 
 class Loginbarber extends StatefulWidget {
   const Loginbarber({super.key});
@@ -83,19 +84,23 @@ class _LoginState extends State<Loginbarber> {
                     SizedBox(height: 43),
                     Column(
                       children: [
-                        textfiled(
-                          "Email :",
-                          "Your email",
-                          Color(0xffD6D4CA),
-                          Colors.white,
-                          _email,
+
+                        CustomTextField(
+                          label: "Email :",
+                          hint: "Enter your email",
+                          color: Color(0xffD6D4CA),
+                          textColor: Colors.white,
+                          controller: _email,
+
+                          validator: Validators.email,
                         ),
-                        textfiled(
-                          "Passowrd",
-                          "Your password",
-                          Color(0xffD6D4CA),
-                          Colors.white,
-                          _password,
+                        PasswordTextField(
+                          label: " Password:",
+                          hint: "Enter password",
+                          color: Color(0xffD6D4CA),
+                          textColor: Colors.white,
+                          controller: _password,
+                          validator: Validators.password,
                         ),
                         SizedBox(height: 44),
                         ButtonLoginUser(

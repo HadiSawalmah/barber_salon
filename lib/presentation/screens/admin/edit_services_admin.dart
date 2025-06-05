@@ -87,21 +87,24 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                   child: ListView(
                     children: [
                       SizedBox(height: 80),
-                      textfiled(
-                        "Title :",
-                        "Title",
-                        Colors.white,
-                        Colors.black,
-                        _title,
+                      CustomTextField(
+                        label: "Title :",
+                        hint: "Title",
+                        color: Colors.white,
+                        textColor: Colors.white,
+                        controller: _title,
+                        validator: Validators.text,
                       ),
                       SizedBox(height: 5),
-                      textfiled(
-                        "Price :",
-                        "Price",
-                        Colors.white,
-                        Colors.black,
-                        _price,
+                      CustomTextField(
+                        label: "Price :",
+                        hint: "Price",
+                        color: Colors.white,
+                        textColor: Colors.white,
+                        controller: _price,
+                        validator: Validators.phone,
                       ),
+
                       SizedBox(height: 5),
                       ImagePickerContainer(
                         selectedImage: _selectedImage,
