@@ -15,10 +15,9 @@ class _ProfilePageState extends State<ProfileUser> {
   final _phone = TextEditingController();
   final _email = TextEditingController();
   final _image = TextEditingController();
-@override
+  @override
   void initState() {
     super.initState();
-   
   }
 
   @override
@@ -46,16 +45,12 @@ class _ProfilePageState extends State<ProfileUser> {
                 children: [
                   CircleAvatar(
                     radius: 80,
-                    backgroundImage:
-                         AssetImage("assets/images/face.png")
-                               
+                    backgroundImage: AssetImage("assets/images/face.png"),
                   ),
 
                   IconButton(
                     icon: Icon(Icons.camera_alt, color: Colors.blue),
-                    onPressed:() {
-                      
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -98,7 +93,6 @@ class _ProfilePageState extends State<ProfileUser> {
                 width: 260,
                 child: ElevatedButton(
                   onPressed: () async {
-                  
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(

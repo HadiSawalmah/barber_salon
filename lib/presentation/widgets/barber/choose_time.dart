@@ -18,7 +18,7 @@ class ChooseTime extends StatelessWidget {
     return Container(
       color: Color(0x33D9D9D9),
       child: Wrap(
-        spacing: 25,
+        spacing: 24,
         runSpacing: 4,
         children:
             times

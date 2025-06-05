@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/textfiled.dart';
 
-void main() {
-  runApp(ProfilePage());
-}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/notification_item.dart';
 
-void main() {
-  runApp(CustomerNotificationsPage(notifications: []));
-}
 
 class CustomerNotificationsPage extends StatelessWidget {
   final List<String> notifications;

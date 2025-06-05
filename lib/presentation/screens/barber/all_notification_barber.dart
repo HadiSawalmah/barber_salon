@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/notification_item.dart';
 
-void main() {
-  runApp(AllNotificationBarber(notifications: []));
-}
 
 class AllNotificationBarber extends StatelessWidget {
   final List<String> notifications;
