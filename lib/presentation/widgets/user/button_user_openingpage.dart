@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 
 class ButtonOpeningpage extends StatelessWidget {
   final String text;
+  final double width;
   final VoidCallback onPressed;
 
   const ButtonOpeningpage({
     super.key,
     required this.text,
     required this.onPressed,
+    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 207,
+      width: width,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/firebase/getbarber_firestor.dart';
-import '../../../data/models/admin/barber_model.dart';
+import '../../../data/models/barber/barber_model.dart';
 import '../../widgets/admin/card_barber_admin.dart';
 import '../../widgets/admin/drawer_admin.dart';
 import '../../widgets/admin/icon_circle_admin.dart';

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/admin/barber_model.dart';
+import '../models/barber/barber_model.dart';
 
 class BarberService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
