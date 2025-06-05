@@ -6,9 +6,7 @@ import '../../widgets/admin/card_barber_admin.dart';
 import '../../widgets/admin/drawer_admin.dart';
 import '../../widgets/admin/icon_circle_admin.dart';
 
-void main() {
-  runApp(BarberPageAdmindashboard());
-}
+
 
 class BarberPageAdmindashboard extends StatefulWidget {
   const BarberPageAdmindashboard({super.key});
