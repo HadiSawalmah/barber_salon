@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/barber/barber_model.dart';
-import '../../../providers/add_barber_provider.dart';
+import '../../../providers/admin/add_barber_provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';

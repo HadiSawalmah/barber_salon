@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../data/models/admin/expences_admin_model.dart';
-import '../presentation/widgets/alert_dialog.dart';
+import '../../data/models/admin/expences_admin_model.dart';
+import '../../presentation/widgets/alert_dialog.dart';
 
 class AddExpensesProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -56,6 +56,28 @@ class AddExpensesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<ExpencesAdminModel?> getExpenseById(String docId) async {
+    try {
+      DocumentSnapshot snapshot =
+          await FirebaseFirestore.instance
+              .collection('expences')
+              .doc(docId)
+              .get();
+
+      if (snapshot.exists) {
+        return ExpencesAdminModel.fromMap(
+          snapshot.data() as Map<String, dynamic>,
+          snapshot.id,
+        );
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching expense: $e");
+      return null;
+    }
+  }
+
   Future<void> addExpense({
     required BuildContext context,
     required String name,
@@ -90,7 +112,6 @@ class AddExpensesProvider with ChangeNotifier {
               description: "Expenses have been added successfully.",
               buttonText: "OK",
               onButtonPressed: () {
-                context.pop();
                 context.pop();
               },
             ),
