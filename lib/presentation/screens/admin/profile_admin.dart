@@ -5,6 +5,7 @@ import '../../../providers/admin_profile_provider.dart';
 import '../../widgets/admin/drawer_admin.dart';
 import '../../widgets/textfiled.dart';
 
+
 class ProfileAdmin extends StatefulWidget {
   const ProfileAdmin({super.key});
 
@@ -67,48 +68,62 @@ class _ProfileAdminState extends State<ProfileAdmin> {
             ),
             SizedBox(height: 14),
 
-            textfiled(
-              "First Name:",
-              "whats your first name?",
-              Colors.white,
-              Colors.black,
-              provider.firstName,
+            CustomTextField(
+              label: "First Name:",
+              hint: "whats your first name?",
+              color: Colors.white,
+              textColor: Colors.black,
+              controller: provider.firstName,
+              validator: Validators.text,
             ),
-            textfiled(
-              "Last Name:",
-              "whats your last name?",
-              Colors.white,
-              Colors.black,
-              provider.lastName,
+            CustomTextField(
+              label: "Last Name:",
+              hint: "whats your last name?",
+              color: Colors.white,
+              textColor: Colors.black,
+              controller: provider.lastName,
+              validator: Validators.text,
             ),
-            textfiled(
-              "Phone :",
-              "phone number",
-              Colors.white,
-              Colors.black,
-              provider.phone,
+         CustomTextField(
+              label: "Phone Name:",
+              hint: "phone number",
+              color: Colors.white,
+              textColor: Colors.black,
+              controller: provider.phone,
+              validator: Validators.phone,
             ),
-            textfiled(
-              "Email :",
-              "blabla@gmail.com",
-              Colors.white,
-              Colors.black,
-              provider.email,
+ CustomTextField(
+                label: "Email :",
+                hint: "email",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller:  provider.email,
+
+                validator: Validators.email,
+              ),
+          
+           
+              PasswordTextField(
+              label: " Password:",
+              hint: "Enter password",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.black,
+              controller: provider.password,
+              validator: Validators.password,
+
             ),
-            textfiled(
-              "Password :",
-              "Enter your password",
-              Colors.white,
-              Colors.black,
-              provider.password,
-            ),
-            textfiled(
-              "Date Of Birth :",
-              "2003",
-              Colors.white,
-              Colors.black,
-              provider.dateOfBirth,
-            ),
+          
+             CustomTextField(
+                label: "Date Of Birth : :",
+                hint: "Date Of Birth ",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: provider.dateOfBirth,
+
+                validator: Validators.text,
+              ),
+          
+           
 
             SizedBox(height: 33),
             SizedBox(
