@@ -2,38 +2,48 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_new/data/firebase/firebase_options.dart';
 import 'package:project_new/presentation/routes/routes.dart';
-import 'package:project_new/services/local_norification_service.dart';
-import 'package:project_new/services/push_notification_service.dart';
-
 import 'package:provider/provider.dart';
 
-import 'providers/add_barber_provider.dart';
-import 'providers/add_expences_provider.dart';
+import 'providers/admin/add_barber_provider.dart';
+import 'providers/admin/add_expences_provider.dart';
+import 'providers/admin/add_services_provider.dart';
 import 'providers/admin_profile_provider.dart';
+import 'providers/barber/barber_provider.dart';
 import 'providers/dashboard_admin_provider.dart';
+import 'providers/barber/availability_barber_provider.dart';
+import 'providers/profile_barber_provider.dart';
+import 'providers/user/reservation_provider_user.dart';
+import 'providers/user/services_fetch.dart';
+import 'providers/user/user_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  PushNotificationService.init();
-  LocalNotificationService.init();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AddBarberProvider()),
-        ChangeNotifierProvider(create: (_) => AddExpensesProvider()),
-        ChangeNotifierProvider(create: (_) => AdminProfileProvider()),
-        ChangeNotifierProvider(create: (_) => DashboardAdminProvider()),
+        ChangeNotifierProvider(create: (context) => AddBarberProvider()),
+        ChangeNotifierProvider(create: (context) => AddExpensesProvider()),
+        ChangeNotifierProvider(create: (context) => AdminProfileProvider()),
+        ChangeNotifierProvider(create: (context) => DashboardAdminProvider()),
+        ChangeNotifierProvider(create: (context) => BarberProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ServicesFetchProvider()),
+        ChangeNotifierProvider(create: (context) => ReservationProviderUser()),
 
-        // AddServicesProvider is static, so you don't need ChangeNotifierProvider for it.
+        ChangeNotifierProvider(
+          create: (context) => BarberAvailabilityProvider(),
+        ),
+        ChangeNotifierProvider(create: (context) => ProfileBarberProvider()),
+        ChangeNotifierProvider(create: (context) => AddServicesProvider()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
