@@ -1,8 +1,8 @@
-import 'package:project_new/data/models/admin/user_model.dart';
+import 'package:project_new/data/models/user/user_model.dart';
 
 class BarberModel extends UserModel {
   String barberCountry;
-  String barberImage;
+  String? barberImage;
   String barberFacebook;
   String barberAge;
   double? monthRevenue;
@@ -14,9 +14,10 @@ class BarberModel extends UserModel {
     required super.name,
     required super.email,
     required super.phone,
+    super.userimage,
     required super.role,
     required this.barberCountry,
-    required this.barberImage,
+    this.barberImage,
     required this.barberFacebook,
     required this.barberAge,
     this.monthRevenue,

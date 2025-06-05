@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  const AppbarHomepage({super.key, required this.title});
-
+ const AppbarHomepage({super.key});
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -11,11 +11,18 @@ class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(color: Colors.white, fontSize: 24)),
           IconButton(
             onPressed: () {
+               context.push('/AllNotificationBarber');
             },
             icon: Icon(Icons.notifications_none, size: 35, color: Colors.white),
+          ),
+           IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              context.go('/Loginuser');
+            },
+            icon: Icon(Icons.logout, size: 30, color: Colors.white),
           ),
         ],
       ),

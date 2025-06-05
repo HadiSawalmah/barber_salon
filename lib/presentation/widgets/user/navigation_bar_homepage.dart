@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ButtomNavigation extends StatelessWidget {
+
+class NavigationBarHomepage extends StatelessWidget {
   final int currentPageIndex;
 
-  const ButtomNavigation({super.key, required this.currentPageIndex});
+  const NavigationBarHomepage({super.key, required this.currentPageIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +17,22 @@ class ButtomNavigation extends StatelessWidget {
         if (index == currentPageIndex) return;
         switch (index) {
           case 0:
-            context.go("/BarberDashboardHome");
+            context.go("/HomePageUser");
             break;
           case 1:
-            context.go("/AvailabilityTime");
+            context.go("/AllServices");
             break;
           case 2:
-            context.go("/UpcomingBarber");
+            context.go("/BookingUser");
             break;
           case 3:
-            context.go("/ProfilePage");
+            context.go("/ProfileUser");
             break;
         }
       },
       destinations: [
         NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        NavigationDestination(icon: Icon(Icons.add), label: 'available'),
+        NavigationDestination(icon: Icon(Icons.add), label: 'Services'),
         NavigationDestination(
           icon: Icon(Icons.calendar_month),
           label: 'Booking',

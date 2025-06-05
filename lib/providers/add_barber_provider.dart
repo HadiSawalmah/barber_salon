@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/models/admin/barber_model.dart';
+import '../../../data/models/barber/barber_model.dart';
 import '../presentation/widgets/alert_dialog.dart';
 
 class AddBarberProvider with ChangeNotifier {

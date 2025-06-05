@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
 
-void main() {
-  runApp(Loginbarber());
-}
 
 class Loginbarber extends StatefulWidget {
   const Loginbarber({super.key});

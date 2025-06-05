@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../widgets/barber/buttom_navigation.dart';
 import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/barber/choose_time.dart';
 import '../../widgets/barber/pick_day.dart';
@@ -8,9 +9,6 @@ import '../../widgets/textbutton.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/login/button_login_user.dart';
 
-void main() {
-  runApp(AvailabilityTime());
-}
 
 class AvailabilityTime extends StatefulWidget {
   const AvailabilityTime({super.key});
@@ -92,89 +90,117 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppbarBarber(title: "Time availability"),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TitleWithUnderline(title: "Add Availability", width: 130),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        DateFormat("MMMM yyyy").format(selectedDate),
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              PickDay(
-                daysOfWeek: daysOfWeek,
-                selectedDate: selectedDate,
-                onDateSelected: selectDate,
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 39,
+    final barberId = FirebaseAuth.instance.currentUser!.uid;
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppbarBarber(title: "Time availability"),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleWithUnderline(
+                  title: "Add Availability",
+                  width: 130,
+                  size: 18,
+                ),
+                Container(
                   decoration: BoxDecoration(
-                    color: Color(0XFF680306),
-                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      "Click on the date you are not available on!! ",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      DateFormat("MMMM yyyy").format(selectedDate),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
+              ],
+            ),
+            PickDay(
+              daysOfWeek: daysOfWeek,
+              selectedDate: selectedDate,
+              onDateSelected: selectDate,
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 39,
+                decoration: BoxDecoration(
+                  color: Color(0XFF680306),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Center(
+                  child: Text(
+                    "Click on the date you are not available on!! ",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
               ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TitleWithUnderline(title: "Available Time", width: 124),
-                  Textbutton(title: "remove all", onprees: clearAll),
-                ],
-              ),
-              SizedBox(height: 10),
-              ChooseTime(
-                times: availableTimes,
-                onTimePressed: moveToUnavailabilityTime,
-                color: Colors.white,
-                textColor: Colors.black,
-              ),
-              SizedBox(height: 16),
-              TitleWithUnderline(title: "Un Available Time", width: 150),
-              SizedBox(height: 10),
-              ChooseTime(
-                times: unavailableTimes,
-                onTimePressed: moveToAvailabilityTime,
-                color: Color.fromARGB(255, 164, 36, 27),
-                textColor: Colors.white,
-              ),
-              SizedBox(height: 70),
-              ButtonLoginUser(text: "Confirm", onPressed: () {}),
-            ],
-          ),
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleWithUnderline(
+                  title: "Available Time",
+                  width: 124,
+                  size: 18,
+                ),
+                Textbutton(title: "remove all", onprees: clearAll),
+              ],
+            ),
+            SizedBox(height: 10),
+            ChooseTime(
+              times: availableTimes,
+              onTimePressed: moveToUnavailabilityTime,
+              color: Colors.white,
+              textColor: Colors.black,
+            ),
+            SizedBox(height: 16),
+            TitleWithUnderline(
+              title: "Un Available Time",
+              width: 150,
+              size: 18,
+            ),
+            SizedBox(height: 10),
+            ChooseTime(
+              times: unavailableTimes,
+              onTimePressed: moveToAvailabilityTime,
+              color: Color.fromARGB(255, 164, 36, 27),
+              textColor: Colors.white,
+            ),
+            SizedBox(height: 50),
+            ButtonLoginUser(
+              text: "Confirm",
+              onPressed: () async {
+                barberId:
+                barberId;
+                date:
+                DateFormat('yyyy-MM-dd').format(selectedDate);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Availability saved!",
+                      style: TextStyle(fontSize: 18, color: Colors.green),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
+      bottomNavigationBar: ButtomNavigation(currentPageIndex: 1),
     );
   }
 }
-
