@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../data/models/barber/barber_model.dart';
-import '../presentation/widgets/alert_dialog.dart';
+import '../../data/models/barber/barber_model.dart';
+import '../../presentation/widgets/alert_dialog.dart';
 
 class AddBarberProvider with ChangeNotifier {
   bool isLoading = false;
   Future<void> editBarber({
-    required BuildContext context,
+    required context,
     required String barberId,
     required TextEditingController username,
     required TextEditingController email,
@@ -111,7 +111,6 @@ class AddBarberProvider with ChangeNotifier {
     required TextEditingController email,
     required TextEditingController phoneNumber,
     required TextEditingController country,
-    required TextEditingController uploadImage,
     required TextEditingController facebookAccount,
     required TextEditingController age,
     required TextEditingController password,
@@ -123,7 +122,6 @@ class AddBarberProvider with ChangeNotifier {
         email.text.isNotEmpty &&
         phoneNumber.text.isNotEmpty &&
         country.text.isNotEmpty &&
-        uploadImage.text.isNotEmpty &&
         facebookAccount.text.isNotEmpty &&
         age.text.isNotEmpty &&
         password.text.isNotEmpty) {
@@ -141,7 +139,6 @@ class AddBarberProvider with ChangeNotifier {
           email: email.text,
           phone: phoneNumber.text,
           barberCountry: country.text,
-          barberImage: uploadImage.text,
           barberFacebook: facebookAccount.text,
           barberAge: age.text,
           role: "barber",
@@ -159,7 +156,6 @@ class AddBarberProvider with ChangeNotifier {
         email.clear();
         phoneNumber.clear();
         country.clear();
-        uploadImage.clear();
         facebookAccount.clear();
         age.clear();
         password.clear();

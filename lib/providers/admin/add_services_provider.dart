@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../data/firebase/firebase_storage_service.dart';
-import '../../../data/models/admin/services_admin.dart';
-import '../presentation/widgets/alert_dialog.dart';
+import '../../data/firebase/firebase_storage_service.dart';
+import '../../data/models/admin/services_admin.dart';
+import '../../presentation/widgets/alert_dialog.dart';
 
-class AddServicesProvider {
-  static Future<void> updateService({
+class AddServicesProvider extends ChangeNotifier {
+  bool isLoading = false;
+
+  Future<void> updateService({
     required BuildContext context,
     required String serviceId,
     required String title,
@@ -15,6 +17,9 @@ class AddServicesProvider {
     required String oldImageUrl,
   }) async {
     try {
+      isLoading = true;
+      notifyListeners();
+
       String imageUrl = oldImageUrl;
 
       if (newImage != null) {
@@ -31,7 +36,7 @@ class AddServicesProvider {
           });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             "Service updated successfully",
             style: TextStyle(color: Colors.green),
@@ -40,17 +45,20 @@ class AddServicesProvider {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             "Failed to update service",
             style: TextStyle(color: Colors.red),
           ),
         ),
       );
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  static Future<void> addService({
+  Future<void> addService({
     required BuildContext context,
     required String title,
     required String price,
@@ -58,32 +66,49 @@ class AddServicesProvider {
     required VoidCallback onSuccess,
   }) async {
     if (title.isNotEmpty && price.isNotEmpty && image != null) {
-      String imageUrl = await uploadImageToCloudinary(image);
+      try {
+        isLoading = true;
+        notifyListeners();
 
-      ServicesAdmin service = ServicesAdmin(
-        title: title,
-        price: double.parse(price),
-        imageUrl: imageUrl,
-      );
+        String imageUrl = await uploadImageToCloudinary(image);
 
-      await FirebaseFirestore.instance
-          .collection('services')
-          .add(service.toMap());
+        ServicesAdmin service = ServicesAdmin(
+          title: title,
+          price: double.parse(price),
+          imageUrl: imageUrl,
+        );
 
-      onSuccess();
+        await FirebaseFirestore.instance
+            .collection('services')
+            .add(service.toMap());
 
-      showDialog(
-        context: context,
-        builder:
-            (context) => CustomDialog(
-              icon: Icons.check_circle_outline,
-              iconColor: Colors.green,
-              title: "Added Successfully",
-              description: "Service has been added successfully.",
-              buttonText: "OK",
-              onButtonPressed: () => Navigator.of(context).pop(),
+        onSuccess();
+
+        showDialog(
+          context: context,
+          builder:
+              (context) => CustomDialog(
+                icon: Icons.check_circle_outline,
+                iconColor: Colors.green,
+                title: "Added Successfully",
+                description: "Service has been added successfully.",
+                buttonText: "OK",
+                onButtonPressed: () => Navigator.of(context).pop(),
+              ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Failed to add service",
+              style: TextStyle(color: Colors.red),
             ),
-      );
+          ),
+        );
+      } finally {
+        isLoading = false;
+        notifyListeners();
+      }
     } else {
       showDialog(
         context: context,

@@ -1,16 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:project_new/providers/add_services_provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:project_new/providers/admin/add_services_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/textfiled.dart';
-
-void main() {
-  runApp(AddServicesAdmin());
-}
 
 class AddServicesAdmin extends StatefulWidget {
   const AddServicesAdmin({super.key});
@@ -57,20 +55,28 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
               SizedBox(height: 100),
               isLoading
                   ? Center(child: CircularProgressIndicator())
-                  : ButtonAdd(
-                    text: "Add",
-                    onPressed: () async {
-                      AddServicesProvider.addService(
-                        context: context,
-                        title: _title.text,
-                        price: _price.text,
-                        image: _selectedImage!,
-                        onSuccess: () {
-                          _title.clear();
-                          _price.clear();
-                          setState(() {
-                            _selectedImage = null;
-                          });
+                  : Consumer<AddServicesProvider>(
+                    builder: (context, provider, child) {
+                      return ButtonAdd(
+                        text:
+                            provider.isLoading
+                                ? "Adding Service..."
+                                : "Add Service",
+                        onPressed: () async {
+                          provider.addService(
+                            context: context,
+                            title: _title.text,
+                            price: _price.text,
+                            image: _selectedImage!,
+                            onSuccess: () {
+                              _title.clear();
+                              _price.clear();
+                              setState(() {
+                                _selectedImage = null;
+                              });
+                              context.pop();
+                            },
+                          );
                         },
                       );
                     },

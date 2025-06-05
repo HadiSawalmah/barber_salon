@@ -28,7 +28,10 @@ class ExpencesAdminModel {
     return ExpencesAdminModel(
       id: id,
       name: map['name'],
-      price: (map['price'] ?? 0).toDouble(),
+      price:
+          map['price'] is String
+              ? double.parse(map['price'])
+              : (map['price'] ?? 0).toDouble(),
       category: map['category'],
       created: (map['created'] as Timestamp).toDate(),
     );

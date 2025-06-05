@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/admin_profile_provider.dart';
 import '../../widgets/admin/drawer_admin.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
 
 class ProfileAdmin extends StatefulWidget {
   const ProfileAdmin({super.key});
@@ -16,7 +16,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
   @override
   void initState() {
     super.initState();
-    // استدعاء تحميل بيانات البروفايل بعد بناء الصفحة
+    // Call to load profile data after building the page
     Future.microtask(
       () =>
           Provider.of<AdminProfileProvider>(
@@ -67,42 +67,42 @@ class _ProfileAdminState extends State<ProfileAdmin> {
             ),
             SizedBox(height: 14),
 
-            Textfiled(
+            textfiled(
               "First Name:",
               "whats your first name?",
               Colors.white,
               Colors.black,
               provider.firstName,
             ),
-            Textfiled(
+            textfiled(
               "Last Name:",
               "whats your last name?",
               Colors.white,
               Colors.black,
               provider.lastName,
             ),
-            Textfiled(
+            textfiled(
               "Phone :",
               "phone number",
               Colors.white,
               Colors.black,
               provider.phone,
             ),
-            Textfiled(
+            textfiled(
               "Email :",
               "blabla@gmail.com",
               Colors.white,
               Colors.black,
               provider.email,
             ),
-            Textfiled(
+            textfiled(
               "Password :",
               "Enter your password",
               Colors.white,
               Colors.black,
               provider.password,
             ),
-            Textfiled(
+            textfiled(
               "Date Of Birth :",
               "2003",
               Colors.white,

@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
+import '../textbutton.dart';
 
-import '../../screens/admin/admin_dashbord_homepage.dart';
-
-class RevenueReportCard extends StatelessWidget {
-  final Map<String, double> dataMap;
-  final Function(int) onTabSelected;
+class RevenueReportSection extends StatelessWidget {
   final int selected;
+  final Map<String, double> todayData;
+  final Map<String, double> monthData;
+  final Map<String, double> yearData;
+  final Function(int) onChangeSelected;
 
-  const RevenueReportCard({
+  const RevenueReportSection({
     super.key,
-    required this.dataMap,
-    required this.onTabSelected,
     required this.selected,
+    required this.todayData,
+    required this.monthData,
+    required this.yearData,
+    required this.onChangeSelected,
   });
+
+  Map<String, double> getSelectedData() {
+    switch (selected) {
+      case 0:
+        return todayData;
+      case 1:
+        return monthData;
+      case 2:
+        return yearData;
+      default:
+        return todayData;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +51,21 @@ class RevenueReportCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Textbutton(title: "Today", onprees: () => onTabSelected(0)),
-                Textbutton(title: "Month", onprees: () => onTabSelected(1)),
-                Textbutton(title: "Year", onprees: () => onTabSelected(2)),
+                Textbutton(
+                  title: "Today",
+                  onprees: () => onChangeSelected(0),
+                  isSelected: selected == 0,
+                ),
+                Textbutton(
+                  title: "Month",
+                  onprees: () => onChangeSelected(1),
+                  isSelected: selected == 1,
+                ),
+                Textbutton(
+                  title: "Year",
+                  onprees: () => onChangeSelected(2),
+                  isSelected: selected == 2,
+                ),
               ],
             ),
           ),
@@ -47,16 +75,16 @@ class RevenueReportCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${dataMap["Income"] ?? 0}\$",
+                  "250  \$",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Overall Revenue",
+                  "Overall Revenue ",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 SizedBox(height: 10),
                 PieChart(
-                  dataMap: dataMap,
+                  dataMap: getSelectedData(),
                   chartType: ChartType.ring,
                   chartRadius: 120,
                   chartValuesOptions: const ChartValuesOptions(

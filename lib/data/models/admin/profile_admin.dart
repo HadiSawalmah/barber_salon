@@ -1,4 +1,4 @@
-import 'package:project_new/data/models/admin/user_model.dart';
+import 'package:project_new/data/models/user/user_model.dart';
 
 class Admin extends UserModel {
   final String dateOfBirth;
@@ -10,6 +10,7 @@ class Admin extends UserModel {
     required super.phone,
     required super.email,
     required super.role,
+    super.userimage,
     required this.dateOfBirth,
     this.imageUrl,
   });
