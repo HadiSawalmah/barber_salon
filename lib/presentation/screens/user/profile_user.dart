@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project_new/presentation/widgets/user/appbar_user.dart';
 import 'package:project_new/presentation/widgets/user/navigation_bar_homepage.dart';
+import 'package:project_new/providers/user/user_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/textfiled.dart';
 
 class ProfileUser extends StatefulWidget {
@@ -18,6 +22,18 @@ class _ProfilePageState extends State<ProfileUser> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<UserProvider>(context, listen: false);
+      provider.fetchUserData().then((_) {
+        final user = provider.user;
+        if (user != null) {
+          _firstname.text = user.name;
+          _phone.text = user.phone;
+          _email.text = user.email;
+          _image.text = user.userimage ?? '';
+        }
+      });
+    });
   }
 
   @override
@@ -31,6 +47,7 @@ class _ProfilePageState extends State<ProfileUser> {
 
   @override
   Widget build(BuildContext context) {
+    final userprov = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppbarUser(title: "Profile"),
@@ -45,12 +62,16 @@ class _ProfilePageState extends State<ProfileUser> {
                 children: [
                   CircleAvatar(
                     radius: 80,
-                    backgroundImage: AssetImage("assets/images/face.png"),
+                    backgroundImage:
+                        userprov.imageUrl != null
+                            ? NetworkImage(userprov.imageUrl!)
+                            : AssetImage("assets/images/face.png")
+                                as ImageProvider,
                   ),
 
                   IconButton(
                     icon: Icon(Icons.camera_alt, color: Colors.blue),
-                    onPressed: () {},
+                    onPressed: userprov.pickAndUploadImage,
                   ),
                 ],
               ),
@@ -93,6 +114,12 @@ class _ProfilePageState extends State<ProfileUser> {
                 width: 260,
                 child: ElevatedButton(
                   onPressed: () async {
+                    await userprov.updateUserData(
+                      name: _firstname.text,
+                      phone: _phone.text,
+                      email: _email.text,
+                    );
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(

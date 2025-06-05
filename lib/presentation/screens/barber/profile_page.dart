@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project_new/providers/profile_barber_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/barber/appbar_barber.dart';
+import '../../widgets/barber/buttom_navigation.dart';
 import '../../widgets/textfiled.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,44 +14,53 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final _firstname = TextEditingController();
-  final _lastname = TextEditingController();
-  final _phone = TextEditingController();
-  final _email = TextEditingController();
-  final _image = TextEditingController();
-  final _social = TextEditingController();
-
   @override
-  void dispose() {
-    _firstname.dispose();
-    _lastname.dispose();
-    _phone.dispose();
-    _email.dispose();
-    _image.dispose();
-    _social.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () =>
+          Provider.of<ProfileBarberProvider>(
+            context,
+            listen: false,
+          ).fetchBarberData(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppbarBarber(title: "Profile"),
-        body: Padding(
-          padding: EdgeInsets.all(8),
+    final provider = Provider.of<ProfileBarberProvider>(context);
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppbarBarber(title: "Profile"),
+      body: Padding(
+        padding: EdgeInsets.all(8),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("assets/images/image.png", height: 110),
-              // asset("images/image4.png", height: 110),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 80,
+                    backgroundImage:
+                        provider.imageUrl != null
+                            ? NetworkImage(provider.imageUrl!)
+                            : AssetImage("assets/images/face.png")
+                                as ImageProvider,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.camera_alt, color: Colors.blue),
+                    onPressed: provider.pickAndUploadImage,
+                  ),
+                ],
+              ),
               Text(
-                "Hadi sawalmeh",
+                provider.firstname.text,
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
-                "hadisawa135@gmail.com",
+                provider.email.text,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
               SizedBox(height: 14),
@@ -59,49 +70,60 @@ class _ProfilePageState extends State<ProfilePage> {
                 "whats your first name?",
                 Colors.white,
                 Colors.white,
-                _firstname,
+                provider.firstname,
               ),
-              textfiled(
-                "Last Name:",
-                "and your last name?",
-                Colors.white,
-                Colors.white,
-                _lastname,
-              ),
+
               textfiled(
                 "Phone :",
                 "phone number",
                 Colors.white,
                 Colors.white,
-                _phone,
+                provider.phone,
               ),
               textfiled(
                 "Email :",
                 "blabla@gmail.com",
                 Colors.white,
                 Colors.white,
-                _email,
+                provider.email,
               ),
               textfiled(
-                "Photo :",
-                "your photo",
+                "age :",
+                "18",
                 Colors.white,
                 Colors.white,
-                _image,
+                provider.age,
               ),
               textfiled(
                 "Social Account:",
                 "facebook",
                 Colors.white,
                 Colors.white,
-                _social,
+                provider.social,
               ),
               SizedBox(height: 33),
               SizedBox(
                 height: 46,
                 width: 260,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await provider.updateBarberProfile(
+                      name: provider.firstname.text,
+                      phone: provider.phone.text,
+                      email: provider.email.text,
+                      image: provider.image.text,
+                      facebook: provider.social.text,
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Profile updated successfully!",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffC77218),
                   ),
@@ -115,6 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
+      bottomNavigationBar: ButtomNavigation(currentPageIndex: 3),
     );
   }
 }

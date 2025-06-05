@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_user.dart';
 import '../../widgets/user/button_user_openingpage.dart';
@@ -44,21 +44,21 @@ class _ConfirmDataState extends State<ConfirmData> {
                 SizedBox(height: 10),
                 Column(
                   children: [
-                    Textfiled(
+                    textfiled(
                       "User Name :",
                       "User Name",
                       Color(0xffD6D4CA),
                       Colors.white,
                       _username,
                     ),
-                    Textfiled(
+                    textfiled(
                       "Email :",
                       "...@gmail.com",
                       Color(0xffD6D4CA),
                       Colors.white,
                       _email,
                     ),
-                    Textfiled(
+                    textfiled(
                       "Phone Number :",
                       "05........",
                       Color(0xffD6D4CA),

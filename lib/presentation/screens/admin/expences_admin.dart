@@ -70,7 +70,12 @@ class ExpencesAdmin extends StatelessWidget {
                       separatorBuilder:
                           (context, index) => SizedBox(height: 10),
                       itemBuilder: (context, index) {
-                        final exp = expences[index];
+                        final exp = ExpencesAdminModel.fromMap(
+                          snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>,
+                          snapshot.data!.docs[index].id,
+                        );
+
                         DateFormat.yMMMd().format(exp.created);
                         return Container(
                           decoration: BoxDecoration(
@@ -112,7 +117,7 @@ class ExpencesAdmin extends StatelessWidget {
                                     IconButton(
                                       onPressed: () {
                                         context.push(
-                                          '/EditExpensesAdmin/${exp.id}',
+                                          '/EditExpenseAdmin/${exp.id}',
                                         );
                                       },
                                       icon: Icon(

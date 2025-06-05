@@ -19,6 +19,7 @@ class ServicesCardAdmin extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
+        color: Colors.grey[200],
         elevation: 30,
         child: Stack(
           children: [
@@ -28,7 +29,7 @@ class ServicesCardAdmin extends StatelessWidget {
                 SizedBox(height: 30),
                 Image.network(
                   servicesAdmin.imageUrl,
-                  height: 155,
+                  height: 173,
                   width: double.infinity,
                   fit: BoxFit.fill,
                 ),
@@ -53,7 +54,7 @@ class ServicesCardAdmin extends StatelessWidget {
             ),
             Positioned(
               left: 68,
-              bottom: 185,
+              bottom: 202,
               child: Row(
                 children: [
                   IconButton(
