@@ -3,7 +3,9 @@ import 'package:project_new/providers/add_barber_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
+import 'package:project_new/presentation/widgets/validators.dart';
+import '../../widgets/textfiled_password.dart';
 
 void main() {
   runApp(AddBarber());
@@ -47,55 +49,75 @@ class _AddBarberState extends State<AddBarber> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Textfiled(
-                  "User Name :",
-                  "User Name",
-                  Colors.white,
-                  Colors.black,
-                  _username,
+                CustomTextField(
+                  label: "User Name :",
+                  hint: "User Name",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _username,
+
+                  validator: Validators.text,
                 ),
-                Textfiled(
-                  "Email :",
-                  "Email",
-                  Colors.white,
-                  Colors.black,
-                  _email,
+                CustomTextField(
+                  label: "Email :",
+                  hint: "Email ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _email,
+
+                  validator: Validators.email,
                 ),
-                Textfiled(
-                  "Phone Number :",
-                  "Phone Number",
-                  Colors.white,
-                  Colors.black,
-                  _phoneNumber,
+                CustomTextField(
+                  label: "Phone Number :",
+                  hint: "Phone Number ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _phoneNumber,
+
+                  validator: Validators.phone,
                 ),
-                Textfiled(
-                  "City :",
-                  "Nablus",
-                  Colors.white,
-                  Colors.black,
-                  _country,
+                CustomTextField(
+                  label: "City :",
+                  hint: "City ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _country,
+
+                  validator: Validators.text,
                 ),
-                Textfiled(
-                  "Facebook A ccount :",
-                  "https://www.facebook.com/hadi.sawalmeh.147",
-                  Colors.white,
-                  Colors.black,
-                  _facebookAccount,
+
+                CustomTextField(
+                  label: " Facebook Account:",
+                  hint: "facebook",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _facebookAccount,
+                  validator: Validators.facebookUrl,
                 ),
-                Textfiled("Age :", "18", Colors.white, Colors.black, _age),
-                Textfiled(
-                  "password :",
-                  "password",
-                  Colors.white,
-                  Colors.black,
-                  _password,
+
+                CustomTextField(
+                  label: " Age :",
+                  hint: "Age",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _age,
+                  validator: Validators.phone,
                 ),
-                Textfiled(
-                  "Upload Photo :",
-                  "Upload Image",
-                  Colors.white,
-                  Colors.black,
-                  _uploadImage,
+                PasswordTextField(
+                  label: " Password:",
+                  hint: "Enter password",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _password,
+                  validator: Validators.password,
+                ),
+
+                CustomTextField(
+                  label: "Photo :",
+                  hint: "your photo",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _uploadImage,
                 ),
 
                 SizedBox(height: 56),

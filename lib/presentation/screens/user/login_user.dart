@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../widgets/auth_layout.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
-import '../../widgets/user/textfiled_password.dart';
+import '../../widgets/textfiled_password.dart';
 import '../../widgets/validators.dart';
 
 class Loginuser extends StatefulWidget {
@@ -103,22 +103,24 @@ class _LoginState extends State<Loginuser> {
         child: Column(
           children: [
             SizedBox(height: 24),
-            textfiled(
-              "Email :",
-              "Enter your email",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _email,
+            CustomTextField(
+              label: "Email :",
+              hint: "Enter your email",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _email,
+
               validator: Validators.email,
             ),
-            textfiledPassword(
-              "Password ",
-              "Enter your Password  ",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _password,
+            PasswordTextField(
+              label: "Password",
+              hint: "Enter your Password",
+              color: const Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _password,
               validator: Validators.password,
             ),
+
             SizedBox(height: 44),
             ButtonLoginUser(
               text: _isLoading ? 'Loading...' : 'Log In',

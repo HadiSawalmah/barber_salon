@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_new/providers/add_services_provider.dart';
+import 'package:project_new/presentation/widgets/validators.dart';
 
 import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
 
 class EditServicesAdmin extends StatefulWidget {
   final String serviceId;
@@ -86,21 +87,27 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                   child: ListView(
                     children: [
                       SizedBox(height: 80),
-                      Textfiled(
-                        "Title :",
-                        "Title",
-                        Colors.white,
-                        Colors.black,
-                        _title,
+
+                      CustomTextField(
+                        label: "Title :",
+                        hint: "Title",
+                        color: Colors.white,
+                        textColor: Colors.white,
+                        controller: _title,
+                        validator: Validators.text,
                       ),
                       SizedBox(height: 5),
-                      Textfiled(
-                        "Price :",
-                        "Price",
-                        Colors.white,
-                        Colors.black,
-                        _price,
+
+                      CustomTextField(
+                        label: "Price :",
+                        hint: "Price",
+                        color: Colors.white,
+                        textColor: Colors.white,
+                        controller: _price,
+
+                        validator: Validators.phone,
                       ),
+
                       SizedBox(height: 5),
                       ImagePickerContainer(
                         selectedImage: _selectedImage,
