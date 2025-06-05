@@ -6,6 +6,8 @@ import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
 
+import 'package:project_new/presentation/widgets/validators.dart';
+
 class EditBarber extends StatefulWidget {
   final BarberModel barber;
   const EditBarber({super.key, required this.barber});
@@ -49,43 +51,71 @@ class _EditBarberState extends State<EditBarber> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              textfiled(
-                "User Name :",
-                "User Name",
-                Colors.white,
-                Colors.black,
-                _username,
-              ),
-              textfiled("Email :", "Email", Colors.white, Colors.black, _email),
-              textfiled(
-                "Phone Number :",
-                "Phone Number",
-                Colors.white,
-                Colors.black,
-                _phoneNumber,
-              ),
-              textfiled(
-                "City :",
-                "Nablus",
-                Colors.white,
-                Colors.black,
-                _country,
-              ),
-              textfiled(
-                "Facebook Account :",
-                "Facebook",
-                Colors.white,
-                Colors.black,
-                _facebookAccount,
-              ),
-              textfiled("Age :", "18", Colors.white, Colors.black, _age),
-              textfiled(
-                "Upload Image :",
-                "Image URL",
-                Colors.white,
-                Colors.black,
-                _uploadImage,
-              ),
+
+             CustomTextField(
+                  label: "User Name :",
+                  hint: "User Name",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _username,
+
+                  validator: Validators.text,
+                ),
+                CustomTextField(
+                  label: "Email :",
+                  hint: "Email ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _email,
+
+                  validator: Validators.email,
+                ),
+                CustomTextField(
+                  label: "Phone Number :",
+                  hint: "Phone Number ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _phoneNumber,
+
+                  validator: Validators.phone,
+                ),
+                CustomTextField(
+                  label: "City :",
+                  hint: "City ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _country,
+
+                  validator: Validators.text,
+                ),
+
+                CustomTextField(
+                  label: " Facebook Account:",
+                  hint: "facebook",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _facebookAccount,
+                  validator: Validators.facebookUrl,
+                ),
+
+                CustomTextField(
+                  label: " Age :",
+                  hint: "Age",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _age,
+                  validator: Validators.phone,
+                ),
+              
+
+                CustomTextField(
+                  label: "Photo :",
+                  hint: "your photo",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _uploadImage,
+                ),
+
               SizedBox(height: 56),
               ButtonAdd(
                 text: provider.isLoading ? "Saving..." : "Save Changes",

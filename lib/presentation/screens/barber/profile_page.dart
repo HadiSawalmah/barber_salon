@@ -6,6 +6,8 @@ import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/barber/buttom_navigation.dart';
 import '../../widgets/textfiled.dart';
 
+import 'package:project_new/presentation/widgets/validators.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -65,42 +67,50 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 14),
 
-              textfiled(
-                "First Name:",
-                "whats your first name?",
-                Colors.white,
-                Colors.white,
-                provider.firstname,
+              CustomTextField(
+                label: "Name:",
+                hint: "whats your  name?",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _firstname,
+                validator: Validators.text,
               ),
 
-              textfiled(
-                "Phone :",
-                "phone number",
-                Colors.white,
-                Colors.white,
-                provider.phone,
+              CustomTextField(
+                label: "Phone Number :",
+                hint: "phone number",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _phone,
+
+                validator: Validators.phone,
               ),
-              textfiled(
-                "Email :",
-                "blabla@gmail.com",
-                Colors.white,
-                Colors.white,
-                provider.email,
+
+              CustomTextField(
+                label: "Email :",
+                hint: "email",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _email,
+
+                validator: Validators.email,
               ),
-              textfiled(
-                "age :",
-                "18",
-                Colors.white,
-                Colors.white,
-                provider.age,
+              CustomTextField(
+                label: "Photo :",
+                hint: "your photo",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _image,
               ),
-              textfiled(
-                "Social Account:",
-                "facebook",
-                Colors.white,
-                Colors.white,
-                provider.social,
+              CustomTextField(
+                label: " Facebook Account:",
+                hint: "facebook",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _social,
+                validator: Validators.facebookUrl,
               ),
+
               SizedBox(height: 33),
               SizedBox(
                 height: 46,
