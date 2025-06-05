@@ -7,7 +7,7 @@ import '../../../data/models/user/user_model.dart';
 import '../../widgets/auth_layout.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
-import '../../widgets/user/textfiled_password.dart';
+import '../../widgets/textfiled_password.dart';
 
 class SginupUser extends StatefulWidget {
   const SginupUser({super.key});
@@ -95,47 +95,48 @@ class _SginupUserState extends State<SginupUser> {
         key: _formKey,
         child: Column(
           children: [
-            textfiled(
-              "User Name :",
-              "Enter your name",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _username,
-              validator:
-                  Validators.username,
+            CustomTextField(
+              label: "User Name :",
+              hint: "Enter your name",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _username,
+
+              validator: Validators.text,
             ),
-            textfiled(
-              "Email :",
-              "Enter your email",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _email,
+            CustomTextField(
+              label: "Email :",
+              hint: "Enter your email",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _email,
+
               validator: Validators.email,
             ),
-            textfiled(
-              "Phone Number :",
-              "Enter your phone number",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _phone,
+            CustomTextField(
+              label: "Phone Number :",
+              hint: "Enter your phone number",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _phone,
+
               validator: Validators.phone,
             ),
-            textfiledPassword(
-              "Password",
-              "Enter password",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _password,
+            PasswordTextField(
+              label: " Password:",
+              hint: "Enter password",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _password,
               validator: Validators.password,
             ),
-            textfiledPassword(
-              "Confirm Password",
-              "Confirm password",
-              Color(0xffD6D4CA),
-              Colors.white,
-              _confirmPassword,
-              validator:
-                  _validateConfirmPassword, 
+            PasswordTextField(
+              label: " Confirm Password :",
+              hint: "Confirm password",
+              color: Color(0xffD6D4CA),
+              textColor: Colors.white,
+              controller: _confirmPassword,
+              validator: _validateConfirmPassword,
             ),
             const SizedBox(height: 44),
             ButtonLoginUser(

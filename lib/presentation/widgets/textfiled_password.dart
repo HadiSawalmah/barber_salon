@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class PasswordTextField extends StatelessWidget {
   final String label;
   final String hint;
   final Color color;
@@ -8,7 +8,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
 
-  const CustomTextField({
+  const PasswordTextField({
     super.key,
     required this.label,
     required this.hint,
@@ -49,6 +49,7 @@ class CustomTextField extends StatelessWidget {
           ),
           TextFormField(
             controller: controller,
+            obscureText: true,
             style: const TextStyle(color: Colors.black),
             validator: validator,
             decoration: InputDecoration(
