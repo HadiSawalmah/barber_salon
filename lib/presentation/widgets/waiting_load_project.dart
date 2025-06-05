@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 
-import "../../widgets/user/button_user_openingpage.dart";
+void main() {
+  runApp(WaitingLoadProject());
+}
 
-class Openingpage extends StatelessWidget {
-  const Openingpage({super.key});
+class WaitingLoadProject extends StatelessWidget {
+  const WaitingLoadProject({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +21,15 @@ class Openingpage extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
-                      SizedBox(height: 100),
+                      SizedBox(height: 150),
                       CircleAvatar(
                         backgroundImage: AssetImage("assets/images/face.png"),
                         radius: 90,
                         backgroundColor: Color(0xff1F1F1F),
                       ),
-                      SizedBox(height: 53),
+                      SizedBox(height: 63),
                       Text(
-                        "Salon AL_Basha",
+                        "barber shop",
                         style: TextStyle(
                           color: Color(0xffD6D4CA),
                           fontSize: 40,
@@ -44,14 +45,15 @@ class Openingpage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
-                      SizedBox(height: 93),
-                      ButtonOpeningpage(
-                        width: 207,
-                        text: "User",
-                        onPressed: () {
-                          context.go("/Loginuser");
-                        },
+                      SizedBox(height: 40),
+                      Text(
+                        "Salon Al_Basha",
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 40,
+                          fontFamily: "Tuffy",
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),

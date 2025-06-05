@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-
-import '../../widgets/barber/appbar_barber.dart';
-import '../../widgets/barber/buttom_navigation.dart';
+import 'package:project_new/presentation/widgets/user/appbar_user.dart';
+import 'package:project_new/presentation/widgets/user/navigation_bar_homepage.dart';
 import '../../widgets/barber/upcoming_booking_section.dart';
 
-class UpcomingBarber extends StatelessWidget {
-  const UpcomingBarber({super.key});
+class BookingUser extends StatelessWidget {
+  const BookingUser({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppbarBarber(title: "Booking"),
+      appBar: AppbarUser(title: "Booking"),
       body: Padding(
         padding: EdgeInsets.all(8),
 
         child: SingleChildScrollView(child: UpcomingBookingSection()),
       ),
-      bottomNavigationBar: ButtomNavigation(currentPageIndex: 2),
+      bottomNavigationBar: NavigationBarHomepage(currentPageIndex: 2),
     );
   }
 }

@@ -4,9 +4,7 @@ import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/barber/notification_header.dart';
 import '../../widgets/notification_item.dart';
 
-void main() {
-  runApp(NotificationBarber());
-}
+
 
 class NotificationBarber extends StatelessWidget {
   NotificationBarber({super.key});

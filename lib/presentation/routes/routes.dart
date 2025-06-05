@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:go_router/go_router.dart';
-import 'package:project_new/data/models/admin/expences_admin_model.dart';
 import '../../auth.dart';
-import '../../data/models/admin/barber_model.dart';
+import '../../data/models/admin/services_admin.dart';
+import '../../data/models/barber/barber_model.dart';
 import '../screens/admin/add_barber_admin_dashbord.dart';
 import '../screens/admin/add_expences_admin.dart';
 import '../screens/admin/add_services_admin.dart';
@@ -21,14 +19,18 @@ import '../screens/barber/all_notification_barber.dart';
 import '../screens/barber/availability_time.dart';
 import '../screens/barber/barber_dashboard_home.dart';
 import '../screens/barber/login_barber.dart';
-import '../screens/barber/notification_barber.dart';
 import '../screens/barber/profile_page.dart';
 import '../screens/barber/upcoming_barber.dart';
+import '../screens/user/all_services.dart';
+import '../screens/user/booking_user.dart';
 import '../screens/user/definition_of_barber.dart';
+import '../screens/user/home_page_user.dart';
 import '../screens/user/login_user.dart';
 import '../screens/user/notification_page_customer.dart';
 import '../screens/user/opening_page.dart';
+import '../screens/user/profile_user.dart';
 import '../screens/user/sginup_user.dart';
+import '../widgets/waiting_load_project.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: "/Auth",
@@ -36,10 +38,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/AddBarber', builder: (context, state) => AddBarber()),
     GoRoute(path: '/Auth', builder: (context, state) => Auth()),
 
-    GoRoute(
-      path: '/AddExpencesAdmin',
-      builder: (context, state) => AddExpencesAdmin(),
-    ),
     GoRoute(
       path: '/AddServicesAdmin',
       builder: (context, state) => AddServicesAdmin(),
@@ -66,6 +64,11 @@ final GoRouter appRouter = GoRouter(
         final serviceId = state.pathParameters['id']!;
         return EditServicesAdmin(serviceId: serviceId);
       },
+    ),
+
+    GoRoute(
+      path: '/AddExpencesAdmin',
+      builder: (context, state) => AddExpencesAdmin(),
     ),
     GoRoute(
       path: '/EditServicesAdmin/:id',
@@ -122,6 +125,17 @@ final GoRouter appRouter = GoRouter(
     ),
     // ************user
     GoRoute(path: '/Openingpage', builder: (context, state) => Openingpage()),
+    GoRoute(
+      path: '/WaitingLoadProject',
+      builder: (context, state) => WaitingLoadProject(),
+    ),
+
+    GoRoute(path: '/AllServices', builder: (context, state) => AllServices()),
+    GoRoute(path: '/BookingUser', builder: (context, state) => BookingUser()),
+
+    GoRoute(path: '/ProfileUser', builder: (context, state) => ProfileUser()),
+
+    GoRoute(path: '/HomePageUser', builder: (context, state) => HomePageUser()),
     GoRoute(path: '/Loginuser', builder: (context, state) => Loginuser()),
     GoRoute(path: '/SginupUser', builder: (context, state) => SginupUser()),
   ],

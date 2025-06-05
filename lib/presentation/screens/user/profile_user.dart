@@ -1,55 +1,65 @@
 import 'package:flutter/material.dart';
-
-import '../../widgets/barber/appbar_barber.dart';
+import 'package:project_new/presentation/widgets/user/appbar_user.dart';
+import 'package:project_new/presentation/widgets/user/navigation_bar_homepage.dart';
 import '../../widgets/textfiled.dart';
 
-
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class ProfileUser extends StatefulWidget {
+  const ProfileUser({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileUser> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfileUser> {
   final _firstname = TextEditingController();
-  final _lastname = TextEditingController();
   final _phone = TextEditingController();
   final _email = TextEditingController();
   final _image = TextEditingController();
-  final _social = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
     _firstname.dispose();
-    _lastname.dispose();
     _phone.dispose();
     _email.dispose();
     _image.dispose();
-    _social.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppbarBarber(title: "Profile"),
-        body: Padding(
-          padding: EdgeInsets.all(8),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppbarUser(title: "Profile"),
+      body: Padding(
+        padding: EdgeInsets.all(8),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("assets/images/image.png", height: 110),
-              // asset("images/image4.png", height: 110),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 80,
+                    backgroundImage: AssetImage("assets/images/face.png"),
+                  ),
+
+                  IconButton(
+                    icon: Icon(Icons.camera_alt, color: Colors.blue),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
               Text(
-                "Hadi sawalmeh",
+                _firstname.text,
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
-                "hadisawa135@gmail.com",
+                _email.text,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
               SizedBox(height: 14),
@@ -61,13 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Colors.white,
                 _firstname,
               ),
-              textfiled(
-                "Last Name:",
-                "and your last name?",
-                Colors.white,
-                Colors.white,
-                _lastname,
-              ),
+
               textfiled(
                 "Phone :",
                 "phone number",
@@ -82,26 +86,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 Colors.white,
                 _email,
               ),
-              textfiled(
-                "Photo :",
-                "your photo",
-                Colors.white,
-                Colors.white,
-                _image,
-              ),
-              textfiled(
-                "Social Account:",
-                "facebook",
-                Colors.white,
-                Colors.white,
-                _social,
-              ),
+
               SizedBox(height: 33),
               SizedBox(
                 height: 46,
                 width: 260,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Profile updated successfully!",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xffC77218),
                   ),
@@ -115,6 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
+      bottomNavigationBar: NavigationBarHomepage(currentPageIndex: 3),
     );
   }
 }
