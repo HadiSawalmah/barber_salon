@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_new/presentation/widgets/user/appbar_user.dart';
 import 'package:project_new/presentation/widgets/user/navigation_bar_homepage.dart';
 import '../../widgets/textfiled.dart';
+import 'package:project_new/presentation/widgets/validators.dart';
 
 class ProfileUser extends StatefulWidget {
   const ProfileUser({super.key});
@@ -64,28 +65,34 @@ class _ProfilePageState extends State<ProfileUser> {
               ),
               SizedBox(height: 14),
 
-              textfiled(
-                "First Name:",
-                "whats your first name?",
-                Colors.white,
-                Colors.white,
-                _firstname,
+              CustomTextField(
+                label: "First Name:",
+                hint: "whats your first name?",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _firstname,
+                validator: Validators.text,
+              ),
+              CustomTextField(
+                label: "Phone Number :",
+                hint: "phone number",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _phone,
+
+                validator: Validators.phone,
+              ),
+                CustomTextField(
+                label: "Email :",
+                hint: "email",
+                color: Colors.white,
+                textColor: Colors.white,
+                controller: _email,
+
+                validator: Validators.email,
               ),
 
-              textfiled(
-                "Phone :",
-                "phone number",
-                Colors.white,
-                Colors.white,
-                _phone,
-              ),
-              textfiled(
-                "Email :",
-                "blabla@gmail.com",
-                Colors.white,
-                Colors.white,
-                _email,
-              ),
+            
 
               SizedBox(height: 33),
               SizedBox(

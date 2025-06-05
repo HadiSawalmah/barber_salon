@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../widgets/admin/textfiled.dart';
+import '../../widgets/textfiled.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_user.dart';
 import '../../widgets/user/button_user_openingpage.dart';
 import '../../widgets/user/details_card.dart';
-
 
 class ConfirmData extends StatefulWidget {
   const ConfirmData({super.key});
@@ -44,26 +43,26 @@ class _ConfirmDataState extends State<ConfirmData> {
                 SizedBox(height: 10),
                 Column(
                   children: [
-                    Textfiled(
-                      "User Name :",
-                      "User Name",
-                      Color(0xffD6D4CA),
-                      Colors.white,
-                      _username,
+                    CustomTextField(
+                      label: "User Name :",
+                      hint: "User Name",
+                      color: Color(0xffD6D4CA),
+                      textColor: Colors.white,
+                      controller: _username,
                     ),
-                    Textfiled(
-                      "Email :",
-                      "...@gmail.com",
-                      Color(0xffD6D4CA),
-                      Colors.white,
-                      _email,
+                    CustomTextField(
+                      label: "Email :",
+                      hint: "...@gmail.com",
+                      color: Color(0xffD6D4CA),
+                      textColor: Colors.white,
+                      controller: _email,
                     ),
-                    Textfiled(
-                      "Phone Number :",
-                      "05........",
-                      Color(0xffD6D4CA),
-                      Colors.white,
-                      _phone,
+                    CustomTextField(
+                      label: "Phone Number :",
+                      hint: "05........",
+                      color: Color(0xffD6D4CA),
+                      textColor: Colors.white,
+                      controller: _phone,
                     ),
                   ],
                 ),
