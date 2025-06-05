@@ -87,7 +87,6 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                   child: ListView(
                     children: [
                       SizedBox(height: 80),
-
                       CustomTextField(
                         label: "Title :",
                         hint: "Title",
@@ -97,14 +96,12 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                         validator: Validators.text,
                       ),
                       SizedBox(height: 5),
-
                       CustomTextField(
                         label: "Price :",
                         hint: "Price",
                         color: Colors.white,
                         textColor: Colors.white,
                         controller: _price,
-
                         validator: Validators.phone,
                       ),
 

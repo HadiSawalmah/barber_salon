@@ -5,6 +5,7 @@ import '../../../providers/admin/add_barber_provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
+
 import 'package:project_new/presentation/widgets/validators.dart';
 
 class EditBarber extends StatefulWidget {
@@ -50,6 +51,7 @@ class _EditBarberState extends State<EditBarber> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+
              CustomTextField(
                   label: "User Name :",
                   hint: "User Name",

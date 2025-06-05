@@ -1,21 +1,21 @@
 import "package:flutter/material.dart";
+import 'package:project_new/data/models/barber/barber_model.dart';
+
+import '../../widgets/user/appbar_witharrowback.dart';
 import '../../widgets/user/definition_of_barber.dart';
 
+class DefinitionOfBarber extends StatelessWidget {
+  final BarberModel barber;
+  const DefinitionOfBarber({super.key, required this.barber});
 
-class DefinitionOfBarber extends StatefulWidget {
-  const DefinitionOfBarber({super.key});
-  @override
-  State<DefinitionOfBarber> createState() => _DefinitionOfBarberState();
-}
-
-class _DefinitionOfBarberState extends State<DefinitionOfBarber> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xff1F1F1F),
+    return Scaffold(
+      backgroundColor: Color(0xff1F1F1F),
+      appBar: AppbarWitharrowback(title: "Definition of Barber"),
 
-        body: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Center(
@@ -23,27 +23,36 @@ class _DefinitionOfBarberState extends State<DefinitionOfBarber> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 50),
-                    Image.asset(
-                      "assets/images/image 4.png",
+                    Image.network(
+                      barber.barberImage ?? '',
                       width: 260,
                       height: 248,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/images/image 4.png",
+                          width: 260,
+                          height: 248,
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
                     SizedBox(height: 30),
                     label("Name :"),
-                   definitionofbarber("hadi sawalmeh"),
-                    SizedBox(height: 10),
+                    definitionofbarber(barber.name),
+                    SizedBox(height: 15),
                     label("Email :"),
-                    definitionofbarber("_email"),
-                    SizedBox(height: 10),
+                    definitionofbarber(barber.email),
+                    SizedBox(height: 15),
                     label("Phone :"),
-                    definitionofbarber("_phone"),
-                    SizedBox(height: 10),
+                    definitionofbarber(barber.phone),
+                    SizedBox(height: 15),
                     label("Country :"),
-                    definitionofbarber("_country"),
-                    SizedBox(height: 10),
+                    definitionofbarber(barber.barberCountry),
+                    SizedBox(height: 15),
                     label("Facebook :"),
-                    definitionofbarber("_facebook"),
-                    SizedBox(height: 10),
+                    definitionofbarber(barber.barberFacebook),
+                    SizedBox(height: 15),
                   ],
                 ),
               ),

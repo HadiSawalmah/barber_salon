@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
+
 import 'package:project_new/presentation/widgets/validators.dart';
 import '../../widgets/textfiled_password.dart';
+
 
 class AddBarber extends StatefulWidget {
   const AddBarber({super.key});

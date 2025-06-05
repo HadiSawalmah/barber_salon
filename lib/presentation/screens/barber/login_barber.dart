@@ -84,6 +84,7 @@ class _LoginState extends State<Loginbarber> {
                     SizedBox(height: 43),
                     Column(
                       children: [
+
                         CustomTextField(
                           label: "Email :",
                           hint: "Enter your email",

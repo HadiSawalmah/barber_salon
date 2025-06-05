@@ -68,6 +68,8 @@ class _ProfileAdminState extends State<ProfileAdmin> {
             ),
             SizedBox(height: 14),
 
+
+
             CustomTextField(
               label: "First Name:",
               hint: "whats your first name?",
@@ -92,25 +94,23 @@ class _ProfileAdminState extends State<ProfileAdmin> {
               controller: provider.phone,
               validator: Validators.phone,
             ),
- CustomTextField(
+ 
+            CustomTextField(
                 label: "Email :",
                 hint: "email",
                 color: Colors.white,
                 textColor: Colors.black,
                 controller:  provider.email,
-
                 validator: Validators.email,
               ),
-          
-           
-              PasswordTextField(
+ 
+            PasswordTextField(
               label: " Password:",
               hint: "Enter password",
               color: Color(0xffD6D4CA),
               textColor: Colors.black,
               controller: provider.password,
               validator: Validators.password,
-
             ),
           
              CustomTextField(
@@ -119,7 +119,6 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 color: Colors.white,
                 textColor: Colors.black,
                 controller: provider.dateOfBirth,
-
                 validator: Validators.text,
               ),
           
