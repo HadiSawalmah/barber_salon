@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user/user_provider.dart';
 
 class AppbarHomepageUser extends StatelessWidget
     implements PreferredSizeWidget {
@@ -20,7 +22,15 @@ class AppbarHomepageUser extends StatelessWidget
             },
             icon: Icon(Icons.notifications_none, size: 35, color: Colors.white),
           ),
-         
+          Consumer<UserProvider>(
+            builder: (context, prov, child) {
+              final username = prov.user?.name ?? 'welcome';
+              return Text(
+                username,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              );
+            },
+          ),
           IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();

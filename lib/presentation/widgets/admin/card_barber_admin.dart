@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../data/models/barber/barber_model.dart';
+import 'package:project_new/data/models/barber/barber_model.dart';
 import 'percentages_admin.dart';
 
 class CardBarber extends StatelessWidget {

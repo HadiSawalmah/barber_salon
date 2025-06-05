@@ -51,7 +51,7 @@ class _LoginState extends State<Loginuser> {
             context.go('/BarberDashboardHome');
             break;
           case 'user':
-            context.go('/ServicesScreen');
+            context.go('/HomePageUser');
             break;
           default:
             setState(() {
@@ -103,13 +103,13 @@ class _LoginState extends State<Loginuser> {
         child: Column(
           children: [
             SizedBox(height: 24),
+
             CustomTextField(
               label: "Email :",
               hint: "Enter your email",
               color: Color(0xffD6D4CA),
               textColor: Colors.white,
               controller: _email,
-
               validator: Validators.email,
             ),
             PasswordTextField(

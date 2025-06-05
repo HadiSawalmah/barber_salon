@@ -6,7 +6,9 @@ import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/admin/categorydropdownfield.dart';
 import '../../widgets/textfiled.dart';
+
 import 'package:project_new/presentation/widgets/validators.dart';
+
 
 class EditExpenseAdmin extends StatefulWidget {
   const EditExpenseAdmin({super.key, required this.expenseId});
@@ -59,7 +61,6 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
           child: ListView(
             children: [
               SizedBox(height: 136),
-
               CustomTextField(
                 label: "Expences Name :",
                 hint: "add expences",
@@ -69,14 +70,12 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
                 validator: Validators.text,
               ),
               SizedBox(height: 4),
-
               CustomTextField(
                 label: "Price :",
                 hint: "add price",
                 color: Colors.white,
                 textColor: Colors.black,
                 controller: _priceController,
-
                 validator: Validators.phone,
               ),
               SizedBox(height: 4),
