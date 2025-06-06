@@ -24,6 +24,12 @@ class Categorydropdownfield extends StatefulWidget {
 
 class _CategorydropdownfieldState extends State<Categorydropdownfield> {
   String? _selectedCategory;
+  
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,7 @@ class _CategorydropdownfieldState extends State<Categorydropdownfield> {
             ],
           ),
           DropdownButtonFormField<String>(
-            value: _selectedCategory,
+            value: _selectedCategory ?? widget.initialValue,
             hint: Text("Select category"),
             onChanged: (value) {
               setState(() {

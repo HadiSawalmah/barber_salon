@@ -118,7 +118,6 @@ class _LoginState extends State<Loginuser> {
               color: const Color(0xffD6D4CA),
               textColor: Colors.white,
               controller: _password,
-              validator: Validators.password,
             ),
 
             SizedBox(height: 44),

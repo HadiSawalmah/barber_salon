@@ -9,6 +9,7 @@ import '../../widgets/admin/addimage_filed_admin.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/admin/button_add_admin.dart';
 import '../../widgets/textfiled.dart';
+import 'package:project_new/presentation/widgets/validators.dart';
 
 class EditServicesAdmin extends StatefulWidget {
   final String serviceId;
@@ -105,7 +106,7 @@ class _EditServicesAdminState extends State<EditServicesAdmin> {
                         validator: Validators.phone,
                       ),
 
-                      SizedBox(height: 5),
+                      SizedBox(height: 18),
                       ImagePickerContainer(
                         selectedImage: _selectedImage,
                         existingImageUrl: existingImageUrl,

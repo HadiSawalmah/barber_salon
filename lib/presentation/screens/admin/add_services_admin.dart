@@ -12,8 +12,6 @@ import '../../widgets/textfiled.dart';
 
 import 'package:project_new/presentation/widgets/validators.dart';
 
-
-
 class AddServicesAdmin extends StatefulWidget {
   const AddServicesAdmin({super.key});
 
@@ -83,6 +81,19 @@ class _AddServicesAdminState extends State<AddServicesAdmin> {
                                 ? "Adding Service..."
                                 : "Add Service",
                         onPressed: () async {
+                          if (_title.text.isEmpty ||
+                              _price.text.isEmpty ||
+                              _selectedImage == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Please fill in all fields and select an image.",
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
                           provider.addService(
                             context: context,
                             title: _title.text,
