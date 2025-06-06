@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 hint: "whats your  name?",
                 color: Colors.white,
                 textColor: Colors.white,
-                controller: _firstname,
+                controller: provider.firstname,
                 validator: Validators.text,
               ),
 
@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 hint: "phone number",
                 color: Colors.white,
                 textColor: Colors.white,
-                controller: _phone,
+                controller: provider.phone,
 
                 validator: Validators.phone,
               ),
@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 hint: "email",
                 color: Colors.white,
                 textColor: Colors.white,
-                controller: _email,
+                controller: provider.email,
 
                 validator: Validators.email,
               ),
@@ -100,14 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 hint: "your photo",
                 color: Colors.white,
                 textColor: Colors.white,
-                controller: _image,
+                controller:provider.image,
               ),
               CustomTextField(
                 label: " Facebook Account:",
                 hint: "facebook",
                 color: Colors.white,
                 textColor: Colors.white,
-                controller: _social,
+                controller: provider.social,
                 validator: Validators.facebookUrl,
               ),
 
