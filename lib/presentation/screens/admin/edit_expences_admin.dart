@@ -69,7 +69,7 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
                 controller: _nameController,
                 validator: Validators.text,
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 12),
               CustomTextField(
                 label: "Price :",
                 hint: "add price",
@@ -78,7 +78,7 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
                 controller: _priceController,
                 validator: Validators.phone,
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 12),
               Categorydropdownfield(
                 initialValue: _selectedCategory,
                 onChanged: (value) {

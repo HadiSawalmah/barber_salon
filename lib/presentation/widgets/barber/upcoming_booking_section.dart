@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project_new/auth.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user/reservation_provider_user.dart';

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../screens/user/all_services.dart';
-import '../../screens/user/booking_user.dart';
-import '../../screens/user/home_page_user.dart';
-import '../../screens/user/profile_user.dart';
 
 class NavigationBarHomepage extends StatelessWidget {
   final int currentPageIndex;

@@ -4,7 +4,6 @@ import 'package:project_new/presentation/widgets/user/navigation_bar_homepage.da
 import 'package:project_new/providers/user/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/textfiled.dart';
 import 'package:project_new/presentation/widgets/validators.dart';
 
