@@ -32,12 +32,13 @@ class BookingCard extends StatelessWidget {
                 children: [
                   Text(title, style: TextStyle(fontSize: 20)),
                   Container(
-                    height: 32,
                     decoration: BoxDecoration(
                       color: Color(0xffD6D4CA),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(service, style: TextStyle(fontSize: 20)),
+                    child: Column(
+                      children: [Text(service, style: TextStyle(fontSize: 20))],
+                    ),
                   ),
                 ],
               ),

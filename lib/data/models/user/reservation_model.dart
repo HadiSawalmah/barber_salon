@@ -1,4 +1,3 @@
-
 class ReservationModel {
   final String id;
   final String userId;
@@ -10,6 +9,7 @@ class ReservationModel {
   final String barberName;
   final String date;
   final String time;
+  final String? status;
 
   ReservationModel({
     required this.id,
@@ -22,6 +22,7 @@ class ReservationModel {
     required this.barberName,
     required this.date,
     required this.time,
+    this.status,
   });
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +36,7 @@ class ReservationModel {
       'barberName': barberName,
       'date': date,
       'time': time,
+      'status': status,
     };
   }
 
@@ -50,6 +52,7 @@ class ReservationModel {
       barberName: map['barberName'],
       date: map['date'],
       time: map['time'],
+      status: map['status'] ?? 'pending',
     );
   }
 }

@@ -29,7 +29,7 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
-      await reservationProvider.fetchReservations(userId);
+      await reservationProvider.fetchAllReservationsByBarber(userId);
     }
 
     setState(() {
@@ -40,7 +40,7 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ReservationProviderUser>(context);
-    final reservation = provider.upcomingReservation;
+    final reservation = provider.allReservationsByBarber;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,12 +61,19 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
         SizedBox(height: 20),
         if (_isLoading)
           const Center(child: CircularProgressIndicator())
-        else if (reservation != null)
-          UpcomingDefinision(
-            image: reservation.imageUser,
-            service: reservation.serviceTitle,
-            date: reservation.date,
-            time: reservation.time,
+        else if (reservation.isNotEmpty)
+          Column(
+            children:
+                reservation
+                    .map(
+                      (reservation) => UpcomingDefinision(
+                        image: reservation.imageUser,
+                        service: reservation.serviceTitle,
+                        date: reservation.date,
+                        time: reservation.time,
+                      ),
+                    )
+                    .toList(),
           )
         else
           const Text(

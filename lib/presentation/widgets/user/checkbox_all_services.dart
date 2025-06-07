@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/models/admin/services_admin.dart';
 import '../../../providers/admin/add_services_provider.dart';
 
 class ServiceItem {
@@ -12,7 +13,9 @@ class ServiceItem {
 }
 
 class CheckboxAllServices extends StatefulWidget {
-  const CheckboxAllServices({super.key});
+  final Function(List<ServicesAdmin>) onSelectionChanged;
+
+  const CheckboxAllServices({super.key, required this.onSelectionChanged});
 
   @override
   State<CheckboxAllServices> createState() => _CheckboxAllServicesState();
@@ -70,6 +73,15 @@ class _CheckboxAllServicesState extends State<CheckboxAllServices> {
                             (s) => s.name == service.title,
                           );
                         }
+                        widget.onSelectionChanged(
+                          services
+                              .where(
+                                (s) => selectedServices.any(
+                                  (sel) => sel.name == s.title,
+                                ),
+                              )
+                              .toList(),
+                        );
                       });
                     },
                     checkColor: Colors.black,

@@ -7,6 +7,9 @@ class ReservationProviderUser with ChangeNotifier {
   ReservationModel? get upcomingReservation => _upcomingReservation;
   List<ReservationModel> _lastFiveReservations = [];
   List<ReservationModel> get lastFiveReservations => _lastFiveReservations;
+  List<ReservationModel> _allReservationsByBarber = [];
+  List<ReservationModel> get allReservationsByBarber =>
+      _allReservationsByBarber;
   final _firestore = FirebaseFirestore.instance;
 
   Future<void> addReservation(
@@ -63,6 +66,77 @@ class ReservationProviderUser with ChangeNotifier {
       _upcomingReservation = null;
       notifyListeners();
       rethrow;
+    }
+  }
+
+  Future<void> fetchAllReservationsByBarber(String barberId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('reservations')
+              .where('barberId', isEqualTo: barberId)
+              .get();
+
+      _allReservationsByBarber =
+          snapshot.docs
+              .map((doc) => ReservationModel.fromMap(doc.data()))
+              .toList();
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching all barber reservations: $e');
+    }
+  }
+
+  Future<double> calculateTotalRevenueForBarber(String barberId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('reservations')
+              .where('barberId', isEqualTo: barberId)
+              .get();
+
+      double totalRevenue = 0.0;
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        totalRevenue += (data['price'] ?? 0).toDouble();
+      }
+
+      return totalRevenue;
+    } catch (e) {
+      print("Error calculating total revenue: $e");
+      return 0.0;
+    }
+  }
+
+  Future<void> completeAndRemoveReservationsForBarber(String barberId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('reservations')
+              .where('barberId', isEqualTo: barberId)
+              .get();
+
+      double totalRevenue = 0.0;
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        totalRevenue += (data['price'] ?? 0).toDouble();
+
+        // حذف الحجز من reservations
+        await _firestore.collection('reservations').doc(doc.id).delete();
+      }
+
+      // بعد الحذف — سجل الإيراد عند الأدمن
+      await _firestore.collection('revenues').add({
+        'barberId': barberId,
+        'totalRevenue': totalRevenue,
+        'date': DateTime.now(),
+      });
+
+      notifyListeners();
+    } catch (e) {
+      print("Error completing and removing reservations: $e");
     }
   }
 

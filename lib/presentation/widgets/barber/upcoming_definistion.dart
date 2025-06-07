@@ -56,12 +56,12 @@ class UpcomingDefinision extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.edit, size: 30, color: Colors.blue),
+                  icon: Icon(Icons.check_box, size: 30, color: Colors.green),
                   visualDensity: VisualDensity(horizontal: -4),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.delete, size: 30, color: Colors.red),
+                  icon: Icon(Icons.edit, size: 30, color: Colors.blue),
                   visualDensity: VisualDensity(horizontal: -4),
                 ),
               ],
