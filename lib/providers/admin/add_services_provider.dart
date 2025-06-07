@@ -7,6 +7,33 @@ import '../../presentation/widgets/alert_dialog.dart';
 
 class AddServicesProvider extends ChangeNotifier {
   bool isLoading = false;
+  List<ServicesAdmin> _services = [];
+
+  List<ServicesAdmin> get services => _services;
+
+  Future<void> fetchServicesFromFirestore() async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final querySnapshot =
+          await FirebaseFirestore.instance.collection('services').get();
+
+      _services =
+          querySnapshot.docs.map((doc) {
+            return ServicesAdmin(
+              title: doc['title'] ?? '',
+              price: double.parse(doc['price'].toString()),
+              imageUrl: doc['imageUrl'] ?? '',
+            );
+          }).toList();
+    } catch (e) {
+      print('Error fetching services: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> updateService({
     required BuildContext context,
@@ -43,6 +70,7 @@ class AddServicesProvider extends ChangeNotifier {
           ),
         ),
       );
+      await fetchServicesFromFirestore();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -96,6 +124,7 @@ class AddServicesProvider extends ChangeNotifier {
                 onButtonPressed: () => Navigator.of(context).pop(),
               ),
         );
+        await fetchServicesFromFirestore();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
