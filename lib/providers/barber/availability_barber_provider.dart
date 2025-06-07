@@ -24,6 +24,11 @@ class BarberAvailabilityProvider with ChangeNotifier {
     );
   }
 
+  Future<List<String>> fetchAvailableDates({required String barberId}) async {
+    final dates = await _barberService.getAvailableDates(barberId: barberId);
+    return dates;
+  }
+
   Future<void> fetchAvailability({
     required String barberId,
     required String date,

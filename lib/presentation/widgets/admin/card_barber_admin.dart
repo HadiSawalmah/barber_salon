@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_new/data/models/barber/barber_model.dart';
@@ -79,6 +80,9 @@ class CardBarber extends StatelessWidget {
                                     .collection('users')
                                     .doc(barber.id)
                                     .delete();
+
+                                await FirebaseAuth.instance.currentUser
+                                    ?.delete();
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
