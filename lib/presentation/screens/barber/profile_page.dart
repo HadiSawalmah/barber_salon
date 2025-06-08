@@ -95,13 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 validator: Validators.email,
               ),
-              CustomTextField(
-                label: "Photo :",
-                hint: "your photo",
-                color: Colors.white,
-                textColor: Colors.white,
-                controller:provider.image,
-              ),
+
               CustomTextField(
                 label: " Facebook Account:",
                 hint: "facebook",

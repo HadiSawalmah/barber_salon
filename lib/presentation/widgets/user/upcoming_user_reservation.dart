@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user/reservation_provider_user.dart';
-import 'upcoming_definistion.dart';
+import 'upcoming_definision_user.dart';
 
 class UpcomingBookingSection extends StatefulWidget {
   const UpcomingBookingSection({super.key});
@@ -66,7 +66,7 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
             children:
                 reservation
                     .map(
-                      (reservation) => UpcomingDefinision(
+                      (reservation) => UpcomingDefinisionUser(
                         image: reservation.imageUser,
                         service: reservation.serviceTitle,
                         date: reservation.date,

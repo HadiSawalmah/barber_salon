@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class DefinitionProcess extends StatelessWidget {
-  const DefinitionProcess({super.key});
+  final String startTime;
+  final String services;
+  final String clientName;
+  final String employeeName;
+
+  const DefinitionProcess({
+    super.key,
+    required this.startTime,
+    required this.services,
+    required this.clientName,
+    required this.employeeName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -9,20 +20,20 @@ class DefinitionProcess extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Text(
-          "10:29 AM",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          startTime,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         Text(
-          "Hair Cut",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          services,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         Text(
-          "Hadi",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          clientName,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         Text(
-          "ahmad",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          employeeName,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
       ],
     );

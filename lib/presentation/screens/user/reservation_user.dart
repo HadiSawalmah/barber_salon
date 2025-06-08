@@ -87,11 +87,17 @@ class _ReservationUserState extends State<ReservationUser> {
                           children: [
                             CircleAvatar(
                               radius: 55,
-                              backgroundImage: NetworkImage(
-                                //كخكخ
-                                barbers[index].barberImage ?? '',
-                              ),
+                              backgroundImage:
+                                  (barbers[index].barberImage != null &&
+                                          barbers[index].barberImage!
+                                              .startsWith('http'))
+                                      ? NetworkImage(
+                                        barbers[index].barberImage!,
+                                      )
+                                      : AssetImage('assets/images/image 4.png')
+                                          as ImageProvider,
                             ),
+
                             SizedBox(height: 4),
                             Text(
                               barbers[index].name,

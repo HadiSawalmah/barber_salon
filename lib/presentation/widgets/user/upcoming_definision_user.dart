@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class UpcomingDefinision extends StatelessWidget {
+class UpcomingDefinisionUser extends StatelessWidget {
   final String? image;
   final String? service;
   final String? date;
   final String? time;
   final VoidCallback onConfirm;
-  const UpcomingDefinision({
+  const UpcomingDefinisionUser({
     super.key,
     this.image,
     required this.service,
@@ -56,11 +56,6 @@ class UpcomingDefinision extends StatelessWidget {
             ),
             Row(
               children: [
-                IconButton(
-                  onPressed: onConfirm,
-                  icon: Icon(Icons.check_box, size: 30, color: Colors.green),
-                  visualDensity: VisualDensity(horizontal: -4),
-                ),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.edit, size: 30, color: Colors.blue),

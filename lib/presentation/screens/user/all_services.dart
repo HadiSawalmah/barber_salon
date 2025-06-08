@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:project_new/presentation/widgets/user/appbar_user.dart';
 import 'package:provider/provider.dart';
@@ -213,6 +214,7 @@ class _AllServicesState extends State<AllServices> {
                         ),
                       ),
                     );
+                    context.pop();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -225,6 +227,7 @@ class _AllServicesState extends State<AllServices> {
                   }
                 },
               ),
+              SizedBox(height: 30),
             ],
           ],
         ),

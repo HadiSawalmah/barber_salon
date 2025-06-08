@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user/reservation_provider_user.dart';
 import 'definition_process.dart';
 
 class BookingTableSection extends StatelessWidget {
@@ -7,6 +9,8 @@ class BookingTableSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reservationProvider = Provider.of<ReservationProviderUser>(context);
+
     return Card(
       elevation: 10,
       child: SizedBox(
@@ -17,9 +21,7 @@ class BookingTableSection extends StatelessWidget {
               height: 70,
               child: Row(
                 children: [
-                  TextButton(onPressed: () {}, child: Text("Upcoming Booking")),
-                  TextButton(onPressed: () {}, child: Text("All")),
-                  TextButton(onPressed: () {}, child: Text("canceled")),
+                  TextButton(onPressed: () {}, child: Text("All Booking")),
                 ],
               ),
             ),
@@ -42,15 +44,22 @@ class BookingTableSection extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Column(
-                  children: [
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                  ],
+                  children:
+                      reservationProvider.lastFiveReservations
+                          .map(
+                            (res) => Column(
+                              children: [
+                                DefinitionProcess(
+                                  startTime: res.date.toString(),
+                                  services: res.serviceTitle,
+                                  clientName: res.userName,
+                                  employeeName: res.barberName,
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                            ),
+                          )
+                          .toList(),
                 ),
               ],
             ),

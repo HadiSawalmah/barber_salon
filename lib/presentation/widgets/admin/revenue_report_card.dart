@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/dashboard_admin_provider.dart';
 import '../textbutton.dart';
 
 class RevenueReportSection extends StatelessWidget {
@@ -33,6 +35,8 @@ class RevenueReportSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dashboardprovider = Provider.of<DashboardAdminProvider>(context);
+
     return Card(
       elevation: 8,
       child: Column(
@@ -75,7 +79,7 @@ class RevenueReportSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "250  \$",
+                  "${dashboardprovider.totalRevenue} \$",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(

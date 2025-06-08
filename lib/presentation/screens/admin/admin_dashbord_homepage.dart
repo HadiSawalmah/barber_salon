@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/dashboard_admin_provider.dart';
+import '../../../providers/user/reservation_provider_user.dart';
 import '../../widgets/admin/dashboard_booking_table.dart';
 import '../../widgets/admin/dashboard_card_one.dart';
 import '../../widgets/admin/drawer_admin.dart';
@@ -16,21 +18,29 @@ class AdminDashbordHomepage extends StatefulWidget {
 class _AdminDashbordHomepageState extends State<AdminDashbordHomepage> {
   int selected = 0;
 
+  double _totalRevenue = 0;
+  double get totalRevenue => _totalRevenue;
+
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration.zero, () {
       final dashboardprovider = Provider.of<DashboardAdminProvider>(
         context,
         listen: false,
       );
+
       dashboardprovider.fetchTotalExpences();
       dashboardprovider.fetchNoOfUser();
+      dashboardprovider.fetchTotalRevenue();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final dashboardprovider = Provider.of<DashboardAdminProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Finance Report"),
@@ -51,9 +61,18 @@ class _AdminDashbordHomepageState extends State<AdminDashbordHomepage> {
               ),
               RevenueReportSection(
                 selected: selected,
-                todayData: {"Expences": 40, "Income": 20},
-                monthData: {"Expences": 300, "Income": 150},
-                yearData: {"Expences": 2000, "Income": 1000},
+                todayData: {
+                  "Expences": dashboardprovider.totalExpences,
+                  "Income": dashboardprovider.totalRevenue,
+                },
+                monthData: {
+                  "Expences": dashboardprovider.totalExpences,
+                  "Income": dashboardprovider.totalRevenue,
+                },
+                yearData: {
+                  "Expences": dashboardprovider.totalExpences,
+                  "Income": dashboardprovider.totalRevenue,
+                },
                 onChangeSelected: (index) {
                   setState(() {
                     selected = index;

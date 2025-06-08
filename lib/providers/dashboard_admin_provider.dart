@@ -15,12 +15,14 @@ class DashboardAdminProvider with ChangeNotifier {
   Future<void> fetchTotalRevenue() async {
     double total = 0;
     final snapshot =
-        await FirebaseFirestore.instance.collection('revenue').get();
+        await FirebaseFirestore.instance.collection('revenues').get();
 
-    for (var rev in snapshot.docs) {
-      var revenue = ExpencesAdminModel.fromMap(rev.data(), rev.id);
-      total += revenue.price;
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final price = (data['price'] ?? data['totalRevenue'])?.toDouble() ?? 0.0;
+      total += price;
     }
+
     _totalRevenue = total;
     notifyListeners();
   }

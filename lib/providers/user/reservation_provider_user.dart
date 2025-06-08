@@ -10,6 +10,11 @@ class ReservationProviderUser with ChangeNotifier {
   List<ReservationModel> _allReservationsByBarber = [];
   List<ReservationModel> get allReservationsByBarber =>
       _allReservationsByBarber;
+  List<Map<String, dynamic>> _last4CompletedReservations = [];
+
+  List<Map<String, dynamic>> get last4CompletedReservations =>
+      _last4CompletedReservations;
+
   final _firestore = FirebaseFirestore.instance;
 
   Future<void> addReservation(
@@ -21,15 +26,16 @@ class ReservationProviderUser with ChangeNotifier {
           await _firestore
               .collection('reservations')
               .where('userId', isEqualTo: reservation.userId)
+              .where('status', isEqualTo: 'pending')
               .get();
 
       if (existing.docs.isNotEmpty) {
         throw Exception("User already has an active reservation.");
       }
-      await _firestore
-          .collection('reservations')
-          .doc(reservation.id)
-          .set(reservation.toMap());
+      await _firestore.collection('reservations').doc(reservation.id).set({
+        ...reservation.toMap(),
+        'status': 'pending',
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -42,6 +48,64 @@ class ReservationProviderUser with ChangeNotifier {
     }
   }
 
+  Future<void> fetchLast4CompletedReservations() async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('reservations')
+              .where('status', isEqualTo: 'completed')
+              .orderBy('date', descending: true)
+              .limit(4)
+              .get();
+
+      _lastFiveReservations =
+          snapshot.docs
+              .map((doc) => ReservationModel.fromMap(doc.data()))
+              .toList();
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching last 4 completed reservations: $e');
+    }
+  }
+
+  Future<void> deleteReservation(
+    String reservationId,
+    double price,
+    String barberId,
+    String date,
+    String time,
+  ) async {
+    try {
+      // حذف الحجز من Firestore
+      await FirebaseFirestore.instance
+          .collection('reservations')
+          .doc(reservationId)
+          .delete();
+
+      // تحديث الريفينيو
+      await _firestore.collection('revenues').add({
+        'barberId': barberId,
+        'price': price,
+        'date': DateTime.now(),
+      });
+
+      // إرجاع الموعد المتاح
+      final barberRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(barberId);
+      await barberRef.update({
+        'availability.$date': FieldValue.arrayUnion([time]),
+      });
+
+      // حذف الحجز من مزود البيانات
+      allReservationsByBarber.removeWhere((res) => res.id == reservationId);
+      notifyListeners();
+    } catch (e) {
+      print("Error deleting reservation: $e");
+    }
+  }
+
   Future<void> fetchReservations(String userId) async {
     try {
       final snapshot =
@@ -49,6 +113,7 @@ class ReservationProviderUser with ChangeNotifier {
               .collection('reservations')
               .where('userId', isEqualTo: userId)
               // .orderBy('date')
+              .where('status', isEqualTo: 'pending')
               .limit(1)
               .get();
 
@@ -75,6 +140,7 @@ class ReservationProviderUser with ChangeNotifier {
           await _firestore
               .collection('reservations')
               .where('barberId', isEqualTo: barberId)
+              .where('status', isEqualTo: 'pending')
               .get();
 
       _allReservationsByBarber =
@@ -94,12 +160,13 @@ class ReservationProviderUser with ChangeNotifier {
           await _firestore
               .collection('reservations')
               .where('barberId', isEqualTo: barberId)
+              .where('status', isEqualTo: 'completed')
               .get();
 
       double totalRevenue = 0.0;
       for (var doc in snapshot.docs) {
         final data = doc.data();
-        totalRevenue += (data['price'] ?? 0).toDouble();
+        totalRevenue += (data['price'] ?? data['totalRevenue'] ?? 0).toDouble();
       }
 
       return totalRevenue;
@@ -109,12 +176,13 @@ class ReservationProviderUser with ChangeNotifier {
     }
   }
 
-  Future<void> completeAndRemoveReservationsForBarber(String barberId) async {
+  Future<void> completeReservationsForBarber(String barberId) async {
     try {
       final snapshot =
           await _firestore
               .collection('reservations')
               .where('barberId', isEqualTo: barberId)
+              .where('status', isEqualTo: 'pending')
               .get();
 
       double totalRevenue = 0.0;
@@ -124,7 +192,10 @@ class ReservationProviderUser with ChangeNotifier {
         totalRevenue += (data['price'] ?? 0).toDouble();
 
         // حذف الحجز من reservations
-        await _firestore.collection('reservations').doc(doc.id).delete();
+        await _firestore.collection('reservations').doc(doc.id).update({
+          'status': 'completed',
+          'completedAt': DateTime.now(),
+        });
       }
 
       // بعد الحذف — سجل الإيراد عند الأدمن
@@ -137,6 +208,34 @@ class ReservationProviderUser with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print("Error completing and removing reservations: $e");
+    }
+  }
+
+  Future<void> completeSingleReservation(
+    String reservationId,
+    double price,
+    String barberId,
+  ) async {
+    try {
+      await _firestore.collection('reservations').doc(reservationId).update({
+        'status': 'completed',
+        'completedAt': DateTime.now(),
+      });
+
+      await _firestore.collection('revenues').add({
+        'barberId': barberId,
+        'price': price,
+        'date': DateTime.now(),
+      });
+      final adminDoc = _firestore.collection('admin').doc('adminDocId');
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(adminDoc);
+        final currentRevenue = snapshot['revenue'] ?? 0;
+        transaction.update(adminDoc, {'revenue': currentRevenue + price});
+      });
+      notifyListeners();
+    } catch (e) {
+      print("Error completing reservation: $e");
     }
   }
 
@@ -158,6 +257,26 @@ class ReservationProviderUser with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error fetching barber reservations: $e');
+    }
+  }
+
+  Future<void> fetchCompletedReservationsByBarber(String barberId) async {
+    try {
+      final snapshot =
+          await _firestore
+              .collection('reservations')
+              .where('barberId', isEqualTo: barberId)
+              .where('status', isEqualTo: 'completed')
+              .get();
+
+      _lastFiveReservations =
+          snapshot.docs
+              .map((doc) => ReservationModel.fromMap(doc.data()))
+              .toList();
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching completed barber reservations: $e');
     }
   }
 }

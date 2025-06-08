@@ -88,6 +88,7 @@ class CardBarber extends StatelessWidget {
                                   SnackBar(
                                     content: Text(
                                       "Barber deleted successfully ✅",
+                                      style: TextStyle(color: Colors.green),
                                     ),
                                   ),
                                 );
@@ -95,7 +96,10 @@ class CardBarber extends StatelessWidget {
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text("Failed to delete barber ❌"),
+                                    content: Text(
+                                      "Failed to delete barber ❌",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 );
                               }

@@ -8,7 +8,6 @@ class ImageHomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 305,
       height: 150,
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Stack(
@@ -27,17 +26,17 @@ class ImageHomepage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(12),
+              color: Colors.black.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Positioned(
+            bottom: 10,
             child: Text(
               text,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: Color.fromARGB(255, 243, 227, 227),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
