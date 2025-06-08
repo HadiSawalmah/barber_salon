@@ -76,7 +76,7 @@ class ExpencesAdmin extends StatelessWidget {
                           snapshot.data!.docs[index].id,
                         );
 
-                        DateFormat.yMMMd().format(exp.created);
+                        DateFormat.yMMMd().format(exp.created!);
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey[200],

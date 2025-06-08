@@ -43,7 +43,8 @@ class _ReservationUserState extends State<ReservationUser> {
     );
 
     setState(() {
-      availableTimes = data != null ? List<String>.from(data['times']) : [];
+      availableTimes =
+          data != null ? List<String>.from(data['availableTimes']) : [];
       isLoadingTimes = false;
     });
   }
