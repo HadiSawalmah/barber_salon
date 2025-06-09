@@ -49,6 +49,10 @@ dependencies:
   firebase_messaging: ^15.2.6
   provider: ^6.1.5
   flutter_local_notifications: ^19.2.1
+  http: ^1.4.0
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.4.0
+  firebase_analytics: ^11.4.6
 
 
 

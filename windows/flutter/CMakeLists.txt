@@ -100,6 +100,8 @@ add_custom_command(
       ${FLUTTER_TARGET_PLATFORM} $<CONFIG>
   VERBATIM
 )
+# Disable unsafe function warnings (strncpy warning from Firebase SDK)
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 add_custom_target(flutter_assemble DEPENDS
   "${FLUTTER_LIBRARY}"
   ${FLUTTER_LIBRARY_HEADERS}

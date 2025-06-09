@@ -17,7 +17,7 @@ class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
         children: [
           IconButton(
             onPressed: () {
-              context.push('/AllNotificationBarber');
+              context.push('/NotificationBarber');
             },
             icon: Icon(Icons.notifications_none, size: 35, color: Colors.white),
           ),
