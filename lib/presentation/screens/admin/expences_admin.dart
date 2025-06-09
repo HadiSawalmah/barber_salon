@@ -132,11 +132,59 @@ class ExpencesAdmin extends StatelessWidget {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('expences')
-                                            .doc(exp.id)
-                                            .delete();
+                                      onPressed: () async {
+                                        final confirm = await showDialog<bool>(
+                                          context: context,
+                                          builder:
+                                              (ctx) => AlertDialog(
+                                                title: Text('Confirm Delete'),
+                                                content: Text(
+                                                  'Are you sure you want to delete this expense ?',
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed:
+                                                        () => Navigator.of(
+                                                          ctx,
+                                                        ).pop(false),
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed:
+                                                        () => Navigator.of(
+                                                          ctx,
+                                                        ).pop(true),
+                                                    child: Text(
+                                                      'Delete',
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                        );
+
+                                        if (confirm == true) {
+                                          await FirebaseFirestore.instance
+                                              .collection('expences')
+                                              .doc(exp.id)
+                                              .delete();
+
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'The expense has been successfully deleted.',
+                                                style: TextStyle(
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
                                       },
                                       icon: Icon(
                                         Icons.delete,

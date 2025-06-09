@@ -60,9 +60,33 @@ class DrawerAdmin extends StatelessWidget {
               context.go("/ExpencesAdmin");
             }),
             SizedBox(height: 30),
-            textdrawer("Log out", () {
-              FirebaseAuth.instance.signOut();
-              context.go('/Loginuser');
+            textdrawer("Log out", () async {
+              final shouldLogout = await showDialog<bool>(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text("Confirm Log Out"),
+                      content: Text("Are you sure you want to log out ?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text(
+                            "Log Out",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+
+              if (shouldLogout == true) {
+                FirebaseAuth.instance.signOut();
+                context.go('/Loginuser');
+              }
             }),
           ],
         ),

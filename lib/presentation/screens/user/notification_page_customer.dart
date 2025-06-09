@@ -5,6 +5,7 @@ import '../../../providers/user/user_provider.dart';
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/confirm_delete_dialog.dart';
 import '../../widgets/notification_item.dart';
+import '../../widgets/user/appbar_witharrowback.dart';
 
 class CustomerNotificationsPage extends StatelessWidget {
   const CustomerNotificationsPage({super.key});
@@ -39,8 +40,10 @@ class CustomerNotificationsPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xff1F1F1F),
-      appBar: AppBarAdmin(title: "Customer Notification"),
+      backgroundColor: Colors.black,
+      appBar: AppbarWitharrowback(title: "Customer Notification"),
+     
+
       body: Column(
         children: [
           Align(

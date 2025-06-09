@@ -71,10 +71,37 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       return ServicesCardAdmin(
                         servicesAdmin: service,
                         onDelete: () {
-                          FirebaseFirestore.instance
-                              .collection('services')
-                              .doc(service.id)
-                              .delete();
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => AlertDialog(
+                                  title: Text("Confirm deletion"),
+                                  content: Text(
+                                    "Are you sure you want to delete this service ?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        FirebaseFirestore.instance
+                                            .collection('services')
+                                            .doc(service.id)
+                                            .delete();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          );
                         },
                         onEdit: () {
                           context.push("/EditServicesAdmin/${service.id}");

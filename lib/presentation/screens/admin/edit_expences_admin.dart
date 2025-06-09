@@ -9,7 +9,6 @@ import '../../widgets/textfiled.dart';
 
 import 'package:project_new/presentation/widgets/validators.dart';
 
-
 class EditExpenseAdmin extends StatefulWidget {
   const EditExpenseAdmin({super.key, required this.expenseId});
   final String expenseId;
@@ -87,7 +86,7 @@ class _EditExpenseAdminState extends State<EditExpenseAdmin> {
                   });
                 },
               ),
-              SizedBox(height: 237),
+              SizedBox(height: 100),
               Consumer<AddExpensesProvider>(
                 builder: (context, prov, child) {
                   return ButtonAdd(

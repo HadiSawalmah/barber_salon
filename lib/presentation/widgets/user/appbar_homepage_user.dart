@@ -32,10 +32,35 @@ class AppbarHomepageUser extends StatelessWidget
             },
           ),
           IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              context.go('/Loginuser');
+            onPressed: () async {
+              final shouldLogout = await showDialog<bool>(
+                context: context,
+                builder:
+                    (ctx) => AlertDialog(
+                      title: Text('Confirm Delete '),
+                      content: Text('Are you sure you want to log out ?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          child: Text(
+                            'Log Out ',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+
+              if (shouldLogout == true) {
+                FirebaseAuth.instance.signOut();
+                context.go('/Loginuser');
+              }
             },
+
             icon: Icon(Icons.logout, size: 30, color: Colors.white),
           ),
         ],
