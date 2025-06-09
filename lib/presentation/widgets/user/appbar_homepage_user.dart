@@ -18,7 +18,7 @@ class AppbarHomepageUser extends StatelessWidget
         children: [
           IconButton(
             onPressed: () {
-              context.push('/AllNotificationBarber');
+              context.push('/CustomerNotificationsPage');
             },
             icon: Icon(Icons.notifications_none, size: 35, color: Colors.white),
           ),

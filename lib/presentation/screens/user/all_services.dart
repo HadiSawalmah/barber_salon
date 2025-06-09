@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:project_new/presentation/widgets/user/appbar_user.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/models/admin/services_admin.dart';
-import '../../../data/models/barber/barber_model.dart';
 import '../../../data/models/user/reservation_model.dart';
 import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
@@ -180,9 +178,6 @@ class _AllServicesState extends State<AllServices> {
                       selectedDate != null &&
                       selectedTime != null) {
                     final selectedBarber = barbers[selectedIndex!];
-                    //final id = DateTime.now().millisecondsSinceEpoch.toString();
-                    // This is the same
-                    //But this is not 100% guaranteed if two reservations are made at the same time, while Uuid().v4() generates a unique global ID.
                     final id = const Uuid().v4();
                     if (user == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
