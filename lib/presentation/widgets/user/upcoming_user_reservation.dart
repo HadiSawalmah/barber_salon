@@ -1,8 +1,12 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/user/reservation_provider_user.dart';
+import '../../../services/send_notification_service.dart';
 import 'upcoming_definision_user.dart';
 
 class UpcomingUserReservation extends StatefulWidget {
@@ -73,6 +77,7 @@ class _UpcomingBookingSectionState extends State<UpcomingUserReservation> {
                 context,
                 listen: false,
               );
+
               await provider.cancelReservation(
                 reservation.id,
                 reservation.price,
@@ -80,7 +85,42 @@ class _UpcomingBookingSectionState extends State<UpcomingUserReservation> {
                 reservation.date,
                 reservation.time,
               );
+
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(reservation.barberId)
+                  .collection('notifications')
+                  .add({
+                    'title': 'Delete Booking ',
+                    'body':
+                        'booking is deleted in${reservation.date} time ${reservation.time}',
+                    'timestamp': FieldValue.serverTimestamp(),
+                    'userId': FirebaseAuth.instance.currentUser?.uid,
+                    'reservationId': reservation.id,
+                  });
+
+              log("delet reservation");
+              final barberDoc =
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(reservation.barberId)
+                      .get();
+
+              final fcmToken = barberDoc.data()?['fcmToken'];
+
+              if (fcmToken != null) {
+                await sendNotification(
+                  fcmToken,
+                  'Delete Booking',
+                  'canceled reservation on ${reservation.date} at ${reservation.time}',
+                );
+                log("Notification sent to barber");
+              } else {
+                log("FCM token not found for barber");
+              }
+
               await _loadReservation();
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(

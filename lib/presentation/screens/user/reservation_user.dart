@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_new/data/models/admin/services_admin.dart';
@@ -10,6 +12,7 @@ import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
 import '../../../providers/user/user_provider.dart';
 import '../../../services/barber_service.dart';
+import '../../../services/send_notification_service.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_witharrowback.dart';
 import '../../widgets/user/calender_daily.dart';
@@ -82,6 +85,8 @@ class _ReservationUserState extends State<ReservationUser> {
                           selectedIndex = index;
                           selectedDate = null;
                           availableTimes = [];
+                          selectedTime =
+                              null; 
                         });
                       },
                       child: Opacity(
@@ -124,6 +129,7 @@ class _ReservationUserState extends State<ReservationUser> {
                   onDateSelected: (date) async {
                     setState(() {
                       selectedDate = date;
+                      selectedTime = null; 
                     });
 
                     final selectedBarber = barbers[selectedIndex!];
@@ -173,15 +179,64 @@ class _ReservationUserState extends State<ReservationUser> {
                         selectedDate != null &&
                         selectedTime != null) {
                       final selectedBarber = barbers[selectedIndex!];
-                      //final id = DateTime.now().millisecondsSinceEpoch.toString();
-                      // This is the same
-                      //But this is not 100% guaranteed if two reservations are made at the same time, while Uuid().v4() generates a unique global ID.
                       final id = const Uuid().v4();
+
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("User not found")),
                         );
                         return;
+                      }
+                      if (selectedBarber.fcmToken != null &&
+                          selectedBarber.fcmToken!.isNotEmpty) {
+                        final barberNotification = {
+                          'receiverId': selectedBarber.id,
+                          'role': 'barber',
+                          'title': 'New Appointment',
+                          'body':
+                              'Appointment with ${user.name} at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(selectedBarber.id)
+                            .collection('notifications')
+                            .add(barberNotification);
+
+                        await sendNotification(
+                          selectedBarber.fcmToken!,
+                          'New Appointment',
+                          'Appointment with ${user.name} at $selectedTime',
+                        );
+                      }
+
+                      log(
+                        "New Appointment : Appointment with ${user.name} at $selectedTime",
+                      );
+                      log("barber in reservation: ${selectedBarber.id}");
+
+                      if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
+                        final userNotification = {
+                          'receiverId': user.id,
+                          'role': 'user',
+                          'title': 'Booking Confirmed',
+                          'body':
+                              'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.id)
+                            .collection('notifications')
+                            .add(userNotification);
+
+                        await sendNotification(
+                          user.fcmToken!,
+                          'Booking Confirmed',
+                          'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                        );
                       }
 
                       final reservation = ReservationModel(
@@ -197,13 +252,11 @@ class _ReservationUserState extends State<ReservationUser> {
                         time: selectedTime!,
                         barberImage: selectedBarber.barberImage,
                       );
-
                       final isAdded =
                           await Provider.of<ReservationProviderUser>(
                             context,
                             listen: false,
                           ).addReservation(reservation, context);
-
                       if (isAdded) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -214,15 +267,7 @@ class _ReservationUserState extends State<ReservationUser> {
                           ),
                         );
                         Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "You already have an active reservation",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        );
+                      } else { 
                         Navigator.pop(context);
                       }
                     } else {
