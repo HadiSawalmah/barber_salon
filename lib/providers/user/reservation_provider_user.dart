@@ -10,9 +10,9 @@ class ReservationProviderUser with ChangeNotifier {
   List<ReservationModel> _allReservationsByBarber = [];
   List<ReservationModel> get allReservationsByBarber =>
       _allReservationsByBarber;
-  List<Map<String, dynamic>> _last4CompletedReservations = [];
+  List<ReservationModel> _last4CompletedReservations = [];
 
-  List<Map<String, dynamic>> get last4CompletedReservations =>
+  List<ReservationModel> get last4CompletedReservations =>
       _last4CompletedReservations;
 
   final _firestore = FirebaseFirestore.instance;
@@ -59,7 +59,6 @@ class ReservationProviderUser with ChangeNotifier {
           await _firestore
               .collection('reservations')
               .where('status', isEqualTo: 'completed')
-              .orderBy('date', descending: true)
               .limit(4)
               .get();
 
@@ -114,20 +113,20 @@ class ReservationProviderUser with ChangeNotifier {
     String time,
   ) async {
     try {
-      // حذف الحجز من Firestore
+      // Delete reservation from Firestore
       await FirebaseFirestore.instance
           .collection('reservations')
           .doc(reservationId)
           .update({'status': 'completed'});
 
-      // تحديث الريفينيو
+      // Update the review
       await _firestore.collection('revenues').add({
         'barberId': barberId,
         'price': price,
         'date': DateTime.now(),
       });
 
-      // إرجاع الموعد المتاح
+      // Return available date
       final availabilityRef = FirebaseFirestore.instance
           .collection('users')
           .doc(barberId)
@@ -138,7 +137,7 @@ class ReservationProviderUser with ChangeNotifier {
         'availableTimes': FieldValue.arrayUnion([time]),
         'unavailableTimes': FieldValue.arrayRemove([time]),
       });
-      // حذف الحجز من مزود البيانات
+      // Delete reservation from data provider
       allReservationsByBarber.removeWhere((res) => res.id == reservationId);
       notifyListeners();
     } catch (e) {
@@ -231,14 +230,13 @@ class ReservationProviderUser with ChangeNotifier {
         final data = doc.data();
         totalRevenue += (data['price'] ?? 0).toDouble();
 
-        // حذف الحجز من reservations
         await _firestore.collection('reservations').doc(doc.id).update({
           'status': 'completed',
           'completedAt': DateTime.now(),
         });
       }
 
-      // بعد الحذف — سجل الإيراد عند الأدمن
+      // After deletion - Record the revenue with the admin
       await _firestore.collection('revenues').add({
         'barberId': barberId,
         'totalRevenue': totalRevenue,
@@ -285,7 +283,6 @@ class ReservationProviderUser with ChangeNotifier {
           await _firestore
               .collection('reservations')
               .where('barberId', isEqualTo: barberId)
-              // .orderBy('date', descending: true)
               .limit(5)
               .get();
 

@@ -43,7 +43,7 @@ class DrawerAdmin extends StatelessWidget {
             SizedBox(height: 30),
 
             textdrawer("Users (client)", () {
-              // context.pushReplacementNamed("");
+              context.go("/UsersAccount");
             }),
             SizedBox(height: 30),
 

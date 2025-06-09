@@ -42,11 +42,15 @@ class UpcomingDefinisionUser extends StatelessWidget {
                       color: Colors.amber,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Text(
-                      service!,
-                      style: TextStyle(color: Colors.black, fontSize: 22),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        service!,
+                        style: TextStyle(color: Colors.black, fontSize: 22),
+                      ),
                     ),
                   ),
+                  SizedBox(height: 10),
                   Text(
                     "$date     $time",
                     style: TextStyle(color: Colors.white, fontSize: 20),

@@ -26,6 +26,10 @@ class _BarberDashboardHomeState extends State<BarberDashboardHome> {
         context,
         listen: false,
       ).fetchReservationsByBarber(barberId);
+      Provider.of<ReservationProviderUser>(
+        context,
+        listen: false,
+      ).fetchCompletedReservationsByBarber(barberId);
       Provider.of<ProfileBarberProvider>(
         context,
         listen: false,
@@ -41,9 +45,6 @@ class _BarberDashboardHomeState extends State<BarberDashboardHome> {
     return Scaffold(
       backgroundColor: Colors.black,
 
-
-
-      
       appBar: AppbarHomepage(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
