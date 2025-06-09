@@ -8,6 +8,8 @@ import 'dart:async';
 
 import 'package:project_new/main.dart';
 
+import 'send_notification_service.dart';
+
 class MessagingConfig {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -80,6 +82,7 @@ class MessagingConfig {
   static Future<void> getDeviceToken() async {
     try {
       final token = await FirebaseMessaging.instance.getToken();
+      log("token : $token");
       if (token != null) {
         final uid = FirebaseAuth.instance.currentUser?.uid;
         if (uid != null) {

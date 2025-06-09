@@ -48,7 +48,7 @@ class Openingpage extends StatelessWidget {
                       SizedBox(height: 93),
                       ButtonOpeningpage(
                         width: 207,
-                        text: "User",
+                        text: "Log in ",
                         onPressed: () {
                           context.go("/Loginuser");
                         },

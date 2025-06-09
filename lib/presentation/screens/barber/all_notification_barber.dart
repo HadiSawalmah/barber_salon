@@ -22,10 +22,16 @@ class AllNotificationBarber extends StatelessWidget {
     for (var doc in snapshot.docs) {
       await doc.reference.delete();
     }
+    // final notifsRef = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(barberId)
+    //     .collection('notifications');
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('All notifications deleted')));
+    // final snapshot = await notifsRef.get();
+
+    // for (var doc in snapshot.docs) {
+    //   await doc.reference.delete();
+    // }
   }
 
   @override
@@ -69,7 +75,9 @@ class AllNotificationBarber extends StatelessWidget {
                           message:
                               "Are you sure you want to delete all notifications?",
                           onConfirm: () async {
+                            Navigator.of(context).pop();
                             await _deleteAllNotifications(context, barberId);
+                          
                           },
                         ),
                   );

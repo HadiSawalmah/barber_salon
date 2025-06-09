@@ -24,9 +24,7 @@ class CustomerNotificationsPage extends StatelessWidget {
       await doc.reference.delete();
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('All notifications deleted')));
+   
   }
 
   @override
@@ -67,7 +65,9 @@ class CustomerNotificationsPage extends StatelessWidget {
                           message:
                               "Are you sure you want to delete all notifications?",
                           onConfirm: () async {
+                          
                             await _deleteAllNotifications(context, user.id);
+                          
                           },
                         ),
                   );
