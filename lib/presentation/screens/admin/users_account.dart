@@ -46,6 +46,7 @@ class _UsersAccountState extends State<UsersAccount> {
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 color: const Color.fromARGB(221, 220, 216, 216),
+
                 child: ListTile(
                   title: Text(user.name, style: TextStyle(color: Colors.black)),
                   subtitle: Column(
@@ -63,7 +64,7 @@ class _UsersAccountState extends State<UsersAccount> {
                         SnackBar(
                           content: Text(
                             'This user has been successfully deleted',
-                            style: TextStyle(color: Colors.green, fontSize: 16),
+                            style: TextStyle(color: Colors.green, fontSize: 15),
                           ),
                           duration: Duration(seconds: 2),
                         ),
