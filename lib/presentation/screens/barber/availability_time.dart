@@ -78,7 +78,7 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
       context,
       listen: false,
     );
-    availabilityProvider.clearAvailability();
+    availabilityProvider.clearAvailability(allTimes);
   }
 
   @override

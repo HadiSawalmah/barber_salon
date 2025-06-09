@@ -44,202 +44,218 @@ class CardBarber extends StatelessWidget {
               ),
             ),
             elevation: 10,
-            child: SizedBox(
-              height: 300,
-              child: Row(
-                children: [
-                  // Left Side: User Info
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xffFFBB4E),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 300),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    // Left Side: User Info
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFBB4E),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                              ),
+                            ),
+                            padding: EdgeInsets.only(
+                              top: 4,
+                              bottom: 4,
+                              left: 4,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  barber.name,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    iconbutton(Icon(Icons.edit, size: 26), () {
+                                      context
+                                          .push("/EditBarber", extra: barber)
+                                          .then((value) {
+                                            if (value == true) {
+                                              onDeleted();
+                                            }
+                                          });
+                                    }),
+                                    iconbutton(
+                                      Icon(Icons.delete, size: 26),
+                                      () async {
+                                        showDialog(
+                                          context: context,
+                                          builder:
+                                              (context) => AlertDialog(
+                                                title: Text("Confirm Delete"),
+                                                content: Text(
+                                                  "Are you sure you want to delete this barber?",
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                    child: Text("Cancle"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                      try {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('users')
+                                                            .doc(barber.id)
+                                                            .delete();
+
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              "تم حذف الحلاق بنجاح ✅",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors
+                                                                        .green,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      } catch (e) {
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              "فشل في حذف الحلاق ❌",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      onDeleted();
+                                                    },
+                                                    child: Text(
+                                                      "Delete",
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          padding: EdgeInsets.only(top: 4, bottom: 4, left: 4),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                barber.name,
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                definition(barber.phone),
+                                SizedBox(height: 25),
+                                definition(barber.barberCountry),
+                                SizedBox(height: 25),
+                                definition("${barber.barberAge} years"),
+                                SizedBox(height: 25),
+                                definition(barber.email),
+                                SizedBox(height: 25),
+                                definition(barber.barberFacebook),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: double.infinity,
+                      width: 5,
+                      color: Colors.grey[300],
+                    ),
+                    // Right Side: Booking Info
+                    Expanded(
+                      flex: 4,
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFBB4E),
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(12),
+                              ),
+                            ),
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 13.5,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Booking",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  iconbutton(Icon(Icons.edit, size: 26), () {
-                                    context
-                                        .push("/EditBarber", extra: barber)
-                                        .then((value) {
-                                          if (value == true) {
-                                            onDeleted();
-                                          }
-                                        });
-                                  }),
-                                  iconbutton(Icon(Icons.delete, size: 26), () async {
-                                    showDialog(
-                                      context: context,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            title: Text("Confirm Delete"),
-                                            content: Text(
-                                              "Are you sure you want to delete this barber?",
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text("Cancle"),
-                                              ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  Navigator.of(context).pop();
-                                                  try {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('users')
-                                                        .doc(barber.id)
-                                                        .delete();
-
-                                                    ScaffoldMessenger.of(
-                                                      context,
-                                                    ).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          "تم حذف الحلاق بنجاح ✅",
-                                                          style: TextStyle(
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  } catch (e) {
-                                                    ScaffoldMessenger.of(
-                                                      context,
-                                                    ).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          "فشل في حذف الحلاق ❌",
-                                                          style: TextStyle(
-                                                            color: Colors.red,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  onDeleted();
-                                                },
-                                                child: Text(
-                                                  "Delete",
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                    );
-                                  }),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              definition(barber.phone),
-                              SizedBox(height: 25),
-                              definition(barber.barberCountry),
-                              SizedBox(height: 25),
-                              definition("${barber.barberAge} years"),
-                              SizedBox(height: 25),
-                              definition(barber.email),
-                              SizedBox(height: 25),
-                              definition(barber.barberFacebook),
+                              Padding(padding: EdgeInsets.only(top: 20)),
+                              percentages("Month", monthRevenue),
+                              Divider(),
+                              percentages("Year", yearRevenue),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: double.infinity,
-                    width: 5,
-                    color: Colors.grey[300],
-                  ),
-                  // Right Side: Booking Info
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xffFFBB4E),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(12),
+                          Container(
+                            height: 1,
+                            width: double.infinity,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            "No. of Booking",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 13.5,
-                          ),
-                          child: Center(
+                          SizedBox(height: 10),
+                          CircleAvatar(
+                            backgroundColor: Color(0xffFFBB4E),
                             child: Text(
-                              "Booking",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              completedBookings.toString(),
+                              style: TextStyle(color: Colors.black),
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Padding(padding: EdgeInsets.only(top: 20)),
-                            percentages("Month", monthRevenue),
-                            Divider(),
-                            percentages("Year", yearRevenue),
-                          ],
-                        ),
-                        Container(
-                          height: 1,
-                          width: double.infinity,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "No. of Booking",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        CircleAvatar(
-                          backgroundColor: Color(0xffFFBB4E),
-                          child: Text(
-                            completedBookings.toString(),
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

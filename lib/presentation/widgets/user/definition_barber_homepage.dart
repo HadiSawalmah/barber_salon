@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../data/models/barber/barber_model.dart';
 
 class DefinitionBarberHomepage extends StatelessWidget {
   final BarberModel barber;
 
   const DefinitionBarberHomepage({super.key, required this.barber});
+  Future<void> _launchFacebook(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +47,17 @@ class DefinitionBarberHomepage extends StatelessWidget {
               barber.phone,
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            Icon(
-              Icons.facebook,
-              size: 40,
-              color: const Color.fromARGB(255, 5, 90, 160),
+            GestureDetector(
+              onTap: () {
+                if (barber.barberFacebook.isNotEmpty) {
+                  _launchFacebook(barber.barberFacebook);
+                }
+              },
+              child: Icon(
+                Icons.facebook,
+                size: 40,
+                color: const Color.fromARGB(255, 5, 90, 160),
+              ),
             ),
           ],
         ),

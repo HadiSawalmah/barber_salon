@@ -31,9 +31,9 @@ class BarberAvailabilityProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAvailability() {
+  void clearAvailability(List<String> time) {
+    _unavailableTimes.addAll(_availableTimes);
     _availableTimes.clear();
-    _unavailableTimes.clear();
     notifyListeners();
   }
 

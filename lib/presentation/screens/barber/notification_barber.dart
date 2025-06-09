@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:project_new/presentation/widgets/user/appbar_witharrowback.dart';
 
 import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/barber/notification_header.dart';
@@ -28,7 +29,7 @@ class NotificationBarber extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppbarBarber(title: "Notification"),
+      appBar: AppbarWitharrowback(title: "Notification"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

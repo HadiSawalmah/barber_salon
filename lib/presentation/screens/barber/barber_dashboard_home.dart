@@ -26,14 +26,12 @@ class _BarberDashboardHomeState extends State<BarberDashboardHome> {
         context,
         listen: false,
       ).fetchReservationsByBarber(barberId);
-      Provider.of<ReservationProviderUser>(
-        context,
-        listen: false,
-      ).fetchCompletedReservationsByBarber(barberId);
-      Provider.of<ProfileBarberProvider>(
-        context,
-        listen: false,
-      ).fetchBarberData();
+      Future.microtask(() {
+        Provider.of<ProfileBarberProvider>(
+          context,
+          listen: false,
+        ).fetchBarberData();
+      });
     });
   }
 

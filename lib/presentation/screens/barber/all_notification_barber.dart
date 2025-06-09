@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_new/presentation/widgets/user/appbar_witharrowback.dart';
 import '../../widgets/barber/appbar_barber.dart';
 import '../../widgets/confirm_delete_dialog.dart';
 import '../../widgets/notification_item.dart';
@@ -42,7 +43,7 @@ class AllNotificationBarber extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xff1F1F1F),
-      appBar: AppbarBarber(title: "All Notification"),
+      appBar: AppbarWitharrowback(title: "All Notification"),
       body: Column(
         children: [
           Align(
