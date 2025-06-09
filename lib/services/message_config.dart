@@ -106,7 +106,7 @@ class MessagingConfig {
 }
 
 @pragma('vm:entry-point')
-void onBackgroundTap(NotificationResponse notificationResponse) async{
+void onBackgroundTap(NotificationResponse notificationResponse) async {
   log('Notification tapped in background');
   await LocalNotificationService._navigateBasedOnRole();
 }
@@ -117,18 +117,17 @@ class LocalNotificationService {
   static onTap(NotificationResponse notificationResponse) async {
     if (notificationResponse.payload != null) {
       log("Tapped payload: ${notificationResponse.payload}");
-    await _navigateBasedOnRole();
+      await _navigateBasedOnRole();
     }
   }
-    static Future<void> _navigateBasedOnRole() async {
+
+  static Future<void> _navigateBasedOnRole() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         final uid = user.uid;
-        final docSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final docSnapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         final role = docSnapshot.data()?['role'];
         if (role == 'user') {
