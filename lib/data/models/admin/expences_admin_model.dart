@@ -20,7 +20,7 @@ class ExpencesAdminModel {
       'name': name,
       'price': price,
       'category': category,
-      'created': created,
+      'created': created != null ? Timestamp.fromDate(created!) : null,
     };
   }
 
@@ -30,11 +30,13 @@ class ExpencesAdminModel {
       name: map['name'],
       price:
           map['price'] is String
-              ? double.parse(map['price'])
+              ? double.tryParse(map['price']) ?? 0.0
               : (map['price'] ?? 0).toDouble(),
       category: map['category'] ?? '',
       created:
-          map['created'] is Timestamp
+          map['created'] == null
+              ? null
+              : map['created'] is Timestamp
               ? (map['created'] as Timestamp).toDate()
               : map['created'] is String
               ? DateTime.tryParse(map['created'])

@@ -17,23 +17,33 @@ class DefinitionProcess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          startTime,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Text(
+            startTime,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ),
-        Text(
-          services,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        SizedBox(width: 30),
+        Expanded(
+          child: Text(
+            services,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ),
-        Text(
-          clientName,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        SizedBox(width: 14),
+        Expanded(
+          child: Text(
+            clientName,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ),
-        Text(
-          employeeName,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Text(
+            employeeName,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );

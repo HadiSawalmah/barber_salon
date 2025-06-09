@@ -28,7 +28,6 @@ class ReservationProviderUser with ChangeNotifier {
               .where('userId', isEqualTo: reservation.userId)
               .where('status', isEqualTo: 'pending')
               .get();
-
       if (existing.docs.isNotEmpty) {
         return false;
       }
@@ -36,6 +35,17 @@ class ReservationProviderUser with ChangeNotifier {
         ...reservation.toMap(),
         'status': 'pending',
       });
+      final availabilityRef = _firestore
+          .collection('users')
+          .doc(reservation.barberId)
+          .collection('availability')
+          .doc(reservation.date);
+
+      await availabilityRef.update({
+        'availableTimes': FieldValue.arrayRemove([reservation.time]),
+        'unavailableTimes': FieldValue.arrayUnion([reservation.time]),
+      });
+
       return true;
     } catch (e) {
       notifyListeners();
@@ -64,6 +74,38 @@ class ReservationProviderUser with ChangeNotifier {
     }
   }
 
+  Future<void> cancelReservation(
+    String reservationId,
+    double price,
+    String barberId,
+    String date,
+    String time,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('reservations')
+          .doc(reservationId)
+          .delete();
+
+      // إعادة الوقت المتاح
+      final availabilityRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(barberId)
+          .collection('availability')
+          .doc(date);
+
+      await availabilityRef.update({
+        'availableTimes': FieldValue.arrayUnion([time]),
+        'unavailableTimes': FieldValue.arrayRemove([time]),
+      });
+
+      allReservationsByBarber.removeWhere((res) => res.id == reservationId);
+      notifyListeners();
+    } catch (e) {
+      print("Error canceling reservation: $e");
+    }
+  }
+
   Future<void> deleteReservation(
     String reservationId,
     double price,
@@ -76,7 +118,7 @@ class ReservationProviderUser with ChangeNotifier {
       await FirebaseFirestore.instance
           .collection('reservations')
           .doc(reservationId)
-          .delete();
+          .update({'status': 'completed'});
 
       // تحديث الريفينيو
       await _firestore.collection('revenues').add({
@@ -86,13 +128,16 @@ class ReservationProviderUser with ChangeNotifier {
       });
 
       // إرجاع الموعد المتاح
-      final barberRef = FirebaseFirestore.instance
+      final availabilityRef = FirebaseFirestore.instance
           .collection('users')
-          .doc(barberId);
-      await barberRef.update({
-        'availability.$date': FieldValue.arrayUnion([time]),
-      });
+          .doc(barberId)
+          .collection('availability')
+          .doc(date);
 
+      await availabilityRef.update({
+        'availableTimes': FieldValue.arrayUnion([time]),
+        'unavailableTimes': FieldValue.arrayRemove([time]),
+      });
       // حذف الحجز من مزود البيانات
       allReservationsByBarber.removeWhere((res) => res.id == reservationId);
       notifyListeners();

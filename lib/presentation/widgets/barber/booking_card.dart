@@ -19,7 +19,6 @@ class BookingCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 77,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -29,9 +28,12 @@ class BookingCard extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
                   Text(title, style: TextStyle(fontSize: 20)),
                   Container(
+                    constraints: BoxConstraints(maxWidth: 150),
                     decoration: BoxDecoration(
                       color: Color(0xffD6D4CA),
                       borderRadius: BorderRadius.circular(10),
@@ -42,6 +44,7 @@ class BookingCard extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

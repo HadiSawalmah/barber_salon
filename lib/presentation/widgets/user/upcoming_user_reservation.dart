@@ -73,7 +73,7 @@ class _UpcomingBookingSectionState extends State<UpcomingUserReservation> {
                 context,
                 listen: false,
               );
-              await provider.deleteReservation(
+              await provider.cancelReservation(
                 reservation.id,
                 reservation.price,
                 reservation.barberId,

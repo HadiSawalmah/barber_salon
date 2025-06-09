@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/dashboard_admin_provider.dart';
-import '../../../providers/user/reservation_provider_user.dart';
 import '../../widgets/admin/dashboard_booking_table.dart';
 import '../../widgets/admin/dashboard_card_one.dart';
 import '../../widgets/admin/drawer_admin.dart';
@@ -31,10 +29,15 @@ class _AdminDashbordHomepageState extends State<AdminDashbordHomepage> {
         listen: false,
       );
 
-      dashboardprovider.fetchTotalExpences();
-      dashboardprovider.fetchNoOfUser();
-      dashboardprovider.fetchTotalRevenue();
+      dashboardprovider.fetchDashboardData();
     });
+  }
+
+  Map<String, double> safeData(Map<String, double> data) {
+    if (data.values.every((value) => value == 0.0)) {
+      return {"No Data": 0.01};
+    }
+    return data;
   }
 
   @override
@@ -47,44 +50,52 @@ class _AdminDashbordHomepageState extends State<AdminDashbordHomepage> {
         backgroundColor: Colors.grey[300],
       ),
       drawer: DrawerAdmin(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DashboardCardOne(),
-              SizedBox(height: 16),
-              Text(
-                "Revinue report",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body:
+          dashboardprovider.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DashboardCardOne(),
+                      SizedBox(height: 16),
+                      Text(
+                        "Revinue report",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      RevenueReportSection(
+                        selected: selected,
+                        todayData: safeData({
+                          "Expences": dashboardprovider.todayExpences,
+                          "Income": dashboardprovider.todayRevenue,
+                        }),
+                        monthData: safeData({
+                          "Expences": dashboardprovider.monthExpences,
+                          "Income": dashboardprovider.monthRevenue,
+                        }),
+                        yearData: safeData({
+                          "Expences": dashboardprovider.yearExpences,
+                          "Income": dashboardprovider.yearRevenue,
+                        }),
+                        onChangeSelected: (index) async {
+                          setState(() {
+                            selected = index;
+                          });
+                          await dashboardprovider.fetchDashboardData();
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      BookingTableSection(),
+                    ],
+                  ),
+                ),
               ),
-              RevenueReportSection(
-                selected: selected,
-                todayData: {
-                  "Expences": dashboardprovider.totalExpences,
-                  "Income": dashboardprovider.totalRevenue,
-                },
-                monthData: {
-                  "Expences": dashboardprovider.totalExpences,
-                  "Income": dashboardprovider.totalRevenue,
-                },
-                yearData: {
-                  "Expences": dashboardprovider.totalExpences,
-                  "Income": dashboardprovider.totalRevenue,
-                },
-                onChangeSelected: (index) {
-                  setState(() {
-                    selected = index;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              BookingTableSection(),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

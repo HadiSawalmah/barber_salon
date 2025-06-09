@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/models/admin/services_admin.dart';
+import '../../../data/models/barber/barber_model.dart';
 import '../../../data/models/user/reservation_model.dart';
 import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
@@ -44,7 +45,8 @@ class _AllServicesState extends State<AllServices> {
     );
 
     setState(() {
-      availableTimes = data != null ? List<String>.from(data['times']) : [];
+      availableTimes =
+          data != null ? List<String>.from(data['availableTimes']) : [];
       isLoadingTimes = false;
     });
   }
@@ -98,11 +100,17 @@ class _AllServicesState extends State<AllServices> {
                           children: [
                             CircleAvatar(
                               radius: 55,
-                              backgroundImage: NetworkImage(
-                                //كخكخ
-                                barbers[index].barberImage ?? '',
-                              ),
+                              backgroundImage:
+                                  (barbers[index].barberImage != null &&
+                                          barbers[index].barberImage!
+                                              .startsWith('http'))
+                                      ? NetworkImage(
+                                        barbers[index].barberImage!,
+                                      )
+                                      : AssetImage('assets/images/image 4.png')
+                                          as ImageProvider,
                             ),
+
                             SizedBox(height: 4),
                             Text(
                               barbers[index].name,
@@ -190,31 +198,44 @@ class _AllServicesState extends State<AllServices> {
                       imageUser: user.userimage ?? '',
                       serviceTitle: selectedServices
                           .map((s) => s.title)
-                          .join(', '),
+                          .join(", "),
                       price: selectedServices.fold(
                         0,
                         (sum, s) => sum + s.price,
                       ),
+
                       barberId: selectedBarber.id,
                       barberName: selectedBarber.name,
                       date: DateFormat('d-M-yyyy').format(selectedDate!),
                       time: selectedTime!,
+                      barberImage: selectedBarber.barberImage,
                     );
 
-                    await Provider.of<ReservationProviderUser>(
+                    final isAdded = await Provider.of<ReservationProviderUser>(
                       context,
                       listen: false,
                     ).addReservation(reservation, context);
+                    if (!mounted) return;
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          "Reservation added successfully",
-                          style: TextStyle(color: Colors.green),
+                    if (isAdded) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Reservation added successfully",
+                            style: TextStyle(color: Colors.green),
+                          ),
                         ),
-                      ),
-                    );
-                    context.pop();
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "You already have an active reservation",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
