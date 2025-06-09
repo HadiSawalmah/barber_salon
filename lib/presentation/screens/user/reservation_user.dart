@@ -4,6 +4,7 @@ import 'package:project_new/data/models/admin/services_admin.dart';
 import 'package:project_new/presentation/widgets/user/time_select.dart';
 import 'package:project_new/presentation/widgets/admin/button_add_admin.dart';
 import 'package:provider/provider.dart';
+import '../../../data/models/barber/barber_model.dart';
 import '../../../data/models/user/reservation_model.dart';
 import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
@@ -16,7 +17,8 @@ import 'package:uuid/uuid.dart';
 
 class ReservationUser extends StatefulWidget {
   final ServicesAdmin services;
-  const ReservationUser({super.key, required this.services});
+  final BarberModel? barberModel;
+  const ReservationUser({super.key, required this.services, this.barberModel});
 
   @override
   State<ReservationUser> createState() => _ReservationUserState();
@@ -193,23 +195,36 @@ class _ReservationUserState extends State<ReservationUser> {
                         barberName: selectedBarber.name,
                         date: DateFormat('d-M-yyyy').format(selectedDate!),
                         time: selectedTime!,
+                        barberImage: selectedBarber.barberImage,
                       );
 
-                      await Provider.of<ReservationProviderUser>(
-                        context,
-                        listen: false,
-                      ).addReservation(reservation, context);
+                      final isAdded =
+                          await Provider.of<ReservationProviderUser>(
+                            context,
+                            listen: false,
+                          ).addReservation(reservation, context);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Reservation added successfully",
-                            style: TextStyle(color: Colors.green),
+                      if (isAdded) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Reservation added successfully",
+                              style: TextStyle(color: Colors.green),
+                            ),
                           ),
-                        ),
-                      );
-
-                      Navigator.pop(context);
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "You already have an active reservation",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

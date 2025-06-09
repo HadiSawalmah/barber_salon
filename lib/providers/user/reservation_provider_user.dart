@@ -17,7 +17,7 @@ class ReservationProviderUser with ChangeNotifier {
 
   final _firestore = FirebaseFirestore.instance;
 
-  Future<void> addReservation(
+  Future<bool> addReservation(
     ReservationModel reservation,
     BuildContext context,
   ) async {
@@ -30,21 +30,16 @@ class ReservationProviderUser with ChangeNotifier {
               .get();
 
       if (existing.docs.isNotEmpty) {
-        throw Exception("User already has an active reservation.");
+        return false;
       }
       await _firestore.collection('reservations').doc(reservation.id).set({
         ...reservation.toMap(),
         'status': 'pending',
       });
+      return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'User already has an active reservation ',
-            style: TextStyle(color: Colors.red),
-          ),
-        ),
-      );
+      notifyListeners();
+      return false;
     }
   }
 

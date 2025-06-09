@@ -7,6 +7,8 @@ class ReservationModel {
   final double price;
   final String barberId;
   final String barberName;
+  final String? barberImage;
+
   final String date;
   final String time;
   final String? status;
@@ -20,6 +22,8 @@ class ReservationModel {
     required this.price,
     required this.barberId,
     required this.barberName,
+    this.barberImage,
+
     required this.date,
     required this.time,
     this.status,
@@ -34,6 +38,7 @@ class ReservationModel {
       'imageUser': imageUser,
       'barberId': barberId,
       'barberName': barberName,
+      'barberImage': barberImage,
       'date': date,
       'time': time,
       'status': status,
@@ -50,6 +55,8 @@ class ReservationModel {
       price: map['price'],
       barberId: map['barberId'],
       barberName: map['barberName'],
+      barberImage: map['barberImage'],
+
       date: map['date'],
       time: map['time'],
       status: map['status'] ?? 'pending',

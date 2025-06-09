@@ -57,8 +57,8 @@ class UpcomingDefinisionUser extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit, size: 30, color: Colors.blue),
+                  onPressed: onConfirm,
+                  icon: Icon(Icons.delete, size: 30, color: Colors.red),
                   visualDensity: VisualDensity(horizontal: -4),
                 ),
               ],

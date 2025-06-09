@@ -5,14 +5,15 @@ import 'package:provider/provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
 import 'upcoming_definision_user.dart';
 
-class UpcomingBookingSection extends StatefulWidget {
-  const UpcomingBookingSection({super.key});
+class UpcomingUserReservation extends StatefulWidget {
+  const UpcomingUserReservation({super.key});
 
   @override
-  State<UpcomingBookingSection> createState() => _UpcomingBookingSectionState();
+  State<UpcomingUserReservation> createState() =>
+      _UpcomingBookingSectionState();
 }
 
-class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
+class _UpcomingBookingSectionState extends State<UpcomingUserReservation> {
   bool _isLoading = true;
 
   @override
@@ -29,7 +30,7 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
-      await reservationProvider.fetchAllReservationsByBarber(userId);
+      await reservationProvider.fetchReservations(userId);
     }
 
     setState(() {
@@ -40,7 +41,7 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ReservationProviderUser>(context);
-    final reservation = provider.allReservationsByBarber;
+    final reservation = provider.upcomingReservation;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,28 +62,34 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
         SizedBox(height: 20),
         if (_isLoading)
           const Center(child: CircularProgressIndicator())
-        else if (reservation.isNotEmpty)
-          Column(
-            children:
-                reservation
-                    .map(
-                      (reservation) => UpcomingDefinisionUser(
-                        image: reservation.imageUser,
-                        service: reservation.serviceTitle,
-                        date: reservation.date,
-                        time: reservation.time,
-                        onConfirm: () async {
-                          await provider.deleteReservation(
-                            reservation.id,
-                            reservation.price,
-                            reservation.barberId,
-                            reservation.date,
-                            reservation.time,
-                          );
-                        },
-                      ),
-                    )
-                    .toList(),
+        else if (reservation != null)
+          UpcomingDefinisionUser(
+            image: reservation.barberImage,
+            service: reservation.serviceTitle,
+            date: reservation.date,
+            time: reservation.time,
+            onConfirm: () async {
+              final provider = Provider.of<ReservationProviderUser>(
+                context,
+                listen: false,
+              );
+              await provider.deleteReservation(
+                reservation.id,
+                reservation.price,
+                reservation.barberId,
+                reservation.date,
+                reservation.time,
+              );
+              await _loadReservation();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Reservation deleted successfully',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+              );
+            },
           )
         else
           const Text(
