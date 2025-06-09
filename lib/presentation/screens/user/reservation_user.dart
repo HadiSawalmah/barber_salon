@@ -12,7 +12,7 @@ import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
 import '../../../providers/user/user_provider.dart';
 import '../../../services/barber_service.dart';
-import '../../../services/send_notification_service.dart';  // <-- إضافة هنا
+import '../../../services/send_notification_service.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_witharrowback.dart';
 import '../../widgets/user/calender_daily.dart';
@@ -85,7 +85,8 @@ class _ReservationUserState extends State<ReservationUser> {
                           selectedIndex = index;
                           selectedDate = null;
                           availableTimes = [];
-                          selectedTime = null;  // إضافة لضمان تفريغ الوقت المختار عند اختيار باربر جديد
+                          selectedTime =
+                              null; 
                         });
                       },
                       child: Opacity(
@@ -128,7 +129,7 @@ class _ReservationUserState extends State<ReservationUser> {
                   onDateSelected: (date) async {
                     setState(() {
                       selectedDate = date;
-                      selectedTime = null; // تفريغ الوقت عند تغيير التاريخ
+                      selectedTime = null; 
                     });
 
                     final selectedBarber = barbers[selectedIndex!];
@@ -186,6 +187,57 @@ class _ReservationUserState extends State<ReservationUser> {
                         );
                         return;
                       }
+                      if (selectedBarber.fcmToken != null &&
+                          selectedBarber.fcmToken!.isNotEmpty) {
+                        final barberNotification = {
+                          'receiverId': selectedBarber.id,
+                          'role': 'barber',
+                          'title': 'New Appointment',
+                          'body':
+                              'Appointment with ${user.name} at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(selectedBarber.id)
+                            .collection('notifications')
+                            .add(barberNotification);
+
+                        await sendNotification(
+                          selectedBarber.fcmToken!,
+                          'New Appointment',
+                          'Appointment with ${user.name} at $selectedTime',
+                        );
+                      }
+
+                      log(
+                        "New Appointment : Appointment with ${user.name} at $selectedTime",
+                      );
+                      log("barber in reservation: ${selectedBarber.id}");
+
+                      if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
+                        final userNotification = {
+                          'receiverId': user.id,
+                          'role': 'user',
+                          'title': 'Booking Confirmed',
+                          'body':
+                              'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.id)
+                            .collection('notifications')
+                            .add(userNotification);
+
+                        await sendNotification(
+                          user.fcmToken!,
+                          'Booking Confirmed',
+                          'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                        );
+                      }
 
                       final reservation = ReservationModel(
                         id: id,
@@ -200,66 +252,12 @@ class _ReservationUserState extends State<ReservationUser> {
                         time: selectedTime!,
                         barberImage: selectedBarber.barberImage,
                       );
-
                       final isAdded =
                           await Provider.of<ReservationProviderUser>(
                             context,
                             listen: false,
                           ).addReservation(reservation, context);
-
                       if (isAdded) {
-                        // إرسال إشعار للباربر
-                        if (selectedBarber.fcmToken != null &&
-                            selectedBarber.fcmToken!.isNotEmpty) {
-                          final barberNotification = {
-                            'receiverId': selectedBarber.id,
-                            'role': 'barber',
-                            'title': 'New Appointment',
-                            'body':
-                                'Appointment with ${user.name} at $selectedTime',
-                            'timestamp': FieldValue.serverTimestamp(),
-                          };
-
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(selectedBarber.id)
-                              .collection('notifications')
-                              .add(barberNotification);
-
-                          await sendNotification(
-                            selectedBarber.fcmToken!,
-                            'New Appointment',
-                            'Appointment with ${user.name} at $selectedTime',
-                          );
-                        }
-
-                        log("New Appointment : Appointment with ${user.name} at $selectedTime");
-                        log("barber in reservation: ${selectedBarber.id}");
-
-                        // إرسال إشعار للمستخدم
-                        if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
-                          final userNotification = {
-                            'receiverId': user.id,
-                            'role': 'user',
-                            'title': 'Booking Confirmed',
-                            'body':
-                                'Your appointment with ${selectedBarber.name} is at $selectedTime',
-                            'timestamp': FieldValue.serverTimestamp(),
-                          };
-
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user.id)
-                              .collection('notifications')
-                              .add(userNotification);
-
-                          await sendNotification(
-                            user.fcmToken!,
-                            'Booking Confirmed',
-                            'Your appointment with ${selectedBarber.name} is at $selectedTime',
-                          );
-                        }
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -269,15 +267,7 @@ class _ReservationUserState extends State<ReservationUser> {
                           ),
                         );
                         Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "You already have an active reservation",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        );
+                      } else { 
                         Navigator.pop(context);
                       }
                     } else {

@@ -31,9 +31,6 @@ Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
   log('Background Message Title: ${message.data['title']}');
   log('Background Message Body: ${message.data['body']}');
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
         'high_importance_channel',
@@ -48,7 +45,7 @@ Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
     iOS: DarwinNotificationDetails(),
   );
 
-  await flutterLocalNotificationsPlugin.show(
+  await MessagingConfig.flutterLocalNotificationsPlugin.show(
     0,
     message.data['title'] ?? 'No Title',
     message.data['body'] ?? 'No Body',

@@ -17,6 +17,8 @@ class EditBarber extends StatefulWidget {
 }
 
 class _EditBarberState extends State<EditBarber> {
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController _username;
   late TextEditingController _email;
   late TextEditingController _phoneNumber;
@@ -47,80 +49,79 @@ class _EditBarberState extends State<EditBarber> {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CustomTextField(
-                label: "User Name :",
-                hint: "User Name",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _username,
-
-                validator: Validators.text,
-              ),
-              CustomTextField(
-                label: "Email :",
-                hint: "Email ",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _email,
-
-                validator: Validators.email,
-              ),
-              CustomTextField(
-                label: "Phone Number :",
-                hint: "Phone Number ",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _phoneNumber,
-
-                validator: Validators.phone,
-              ),
-              CustomTextField(
-                label: "City :",
-                hint: "City ",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _country,
-
-                validator: Validators.text,
-              ),
-
-              CustomTextField(
-                label: " Facebook Account:",
-                hint: "facebook",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _facebookAccount,
-                validator: Validators.facebookUrl,
-              ),
-
-              CustomTextField(
-                label: " Age :",
-                hint: "Age",
-                color: Colors.white,
-                textColor: Colors.black,
-                controller: _age,
-                validator: Validators.phone,
-              ),
-
-              SizedBox(height: 56),
-              ButtonAdd(
-                text: provider.isLoading ? "Saving..." : "Save Changes",
-                onPressed: () async {
-                  await provider.editBarber(
-                    context: context,
-                    barberId: widget.barber.id,
-                    username: _username,
-                    email: _email,
-                    phoneNumber: _phoneNumber,
-                    country: _country,
-                    facebookAccount: _facebookAccount,
-                    age: _age,
-                  );
-                },
-              ),
-            ],
+          child: Form(
+            key: _formKey, // 🔑 استخدم مفتاح الفورم هنا
+            child: Column(
+              children: [
+                CustomTextField(
+                  label: "User Name :",
+                  hint: "User Name",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _username,
+                  validator: Validators.text,
+                ),
+                CustomTextField(
+                  label: "Email :",
+                  hint: "Email ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _email,
+                  validator: Validators.email,
+                ),
+                CustomTextField(
+                  label: "Phone Number :",
+                  hint: "Phone Number ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _phoneNumber,
+                  validator: Validators.phone,
+                ),
+                CustomTextField(
+                  label: "City :",
+                  hint: "City ",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _country,
+                  validator: Validators.text,
+                ),
+                CustomTextField(
+                  label: "Facebook Account:",
+                  hint: "facebook",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _facebookAccount,
+                  validator: Validators.facebookUrl,
+                ),
+                CustomTextField(
+                  label: "Age :",
+                  hint: "Age",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  controller: _age,
+                  validator: Validators.phone, // قد تضع Validator خاص بالعمر
+                ),
+                SizedBox(height: 56),
+                ButtonAdd(
+                  text: provider.isLoading ? "Saving..." : "Save Changes",
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      // ✅ فقط نفذ إذا كل الفاليديشن مرّ
+                      await provider.editBarber(
+                        context: context,
+                        barberId: widget.barber.id,
+                        username: _username,
+                        email: _email,
+                        phoneNumber: _phoneNumber,
+                        country: _country,
+                        facebookAccount: _facebookAccount,
+                        age: _age,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
