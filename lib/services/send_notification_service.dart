@@ -34,9 +34,7 @@ Future<String> getAccessToken() async {
 Future<void> sendNotification(String token, String title, String body) async {
   log("send Notification -reservation is confirm");
   final String accessToken = await getAccessToken();
-  final String fcmUrl =
-      'https://fcm.googleapis.com/v1/projects/salon-albasha/messages:send';
-
+  final String fcmUrl;
   final response = await http.post(
     Uri.parse(fcmUrl),
     headers: <String, String>{
