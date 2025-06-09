@@ -17,6 +17,7 @@ import '../screens/admin/notification_admin.dart';
 import '../screens/admin/notification_page_barber.dart';
 import '../screens/admin/profile_admin.dart';
 import '../screens/admin/services_page_admin.dart';
+import '../screens/admin/users_account.dart';
 import '../screens/barber/all_notification_barber.dart';
 import '../screens/barber/availability_time.dart';
 import '../screens/barber/barber_dashboard_home.dart';
@@ -55,6 +56,7 @@ final GoRouter appRouter = GoRouter(
       path: '/AddServicesAdmin',
       builder: (context, state) => AddServicesAdmin(),
     ),
+    GoRoute(path: '/UsersAccount', builder: (context, state) => UsersAccount()),
     GoRoute(
       path: '/AdminDashbordHomepage',
       builder: (context, state) => AdminDashbordHomepage(),

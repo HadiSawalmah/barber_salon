@@ -15,7 +15,6 @@ class AddBarberProvider with ChangeNotifier {
     required TextEditingController email,
     required TextEditingController phoneNumber,
     required TextEditingController country,
-    required TextEditingController uploadImage,
     required TextEditingController facebookAccount,
     required TextEditingController age,
   }) async {
@@ -26,7 +25,6 @@ class AddBarberProvider with ChangeNotifier {
         email.text.isNotEmpty &&
         phoneNumber.text.isNotEmpty &&
         country.text.isNotEmpty &&
-        uploadImage.text.isNotEmpty &&
         facebookAccount.text.isNotEmpty &&
         age.text.isNotEmpty) {
       try {
@@ -36,7 +34,6 @@ class AddBarberProvider with ChangeNotifier {
           email: email.text,
           phone: phoneNumber.text,
           barberCountry: country.text,
-          barberImage: uploadImage.text,
           barberFacebook: facebookAccount.text,
           barberAge: age.text,
           role: "barber",

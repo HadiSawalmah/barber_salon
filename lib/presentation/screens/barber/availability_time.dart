@@ -21,8 +21,7 @@ class AvailabilityTime extends StatefulWidget {
 
 class _BarberDashboardHomeState extends State<AvailabilityTime> {
   DateTime selectedDate = DateTime.now();
-  List<String> availableTimes = [];
-  List<String> unavailableTimes = [];
+
   List<String> allTimes = [
     "3:00",
     "3:30",
@@ -43,50 +42,43 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
     "11:00",
   ];
   List<DateTime> daysOfWeek = [];
-  @override
   void initState() {
     super.initState();
-    availableTimes = List.from(allTimes);
+    selectedDate = DateTime.now();
     daysOfWeek = List.generate(
       30,
-      (index) => DateTime.now().add(Duration(days: index - 0)),
+      (index) => DateTime.now().add(Duration(days: index)),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchTimes());
+  }
+
+  void _fetchTimes() async {
+    final availabilityProvider = Provider.of<BarberAvailabilityProvider>(
+      context,
+      listen: false,
+    );
+    final barberId = FirebaseAuth.instance.currentUser!.uid;
+    await availabilityProvider.fetchAvailability(
+      barberId: barberId,
+      date: DateFormat('yyyy-MM-dd').format(selectedDate),
+      allTimes: allTimes,
     );
   }
 
-  void selectDate(DateTime date) {
+  void selectDate(DateTime date) async {
     setState(() {
       selectedDate = date;
-      availableTimes = List.from(allTimes);
-      unavailableTimes.clear();
     });
-  }
-
-  void moveToUnavailabilityTime(String time) {
-    setState(() {
-      availableTimes.remove(time);
-      unavailableTimes.add(time);
-    });
-  }
-
-  void moveToAvailabilityTime(String time) {
-    setState(() {
-      unavailableTimes.remove(time);
-      availableTimes.add(time);
-    });
-  }
-
-  void clearAvailabilityTime() {
-    setState(() {
-      availableTimes = List.from(allTimes);
-      unavailableTimes.clear();
-    });
+    _fetchTimes();
   }
 
   void clearAll() {
-    setState(() {
-      availableTimes.clear();
-      unavailableTimes = allTimes;
-    });
+    final availabilityProvider = Provider.of<BarberAvailabilityProvider>(
+      context,
+      listen: false,
+    );
+    availabilityProvider.clearAvailability();
   }
 
   @override
@@ -168,8 +160,10 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
               ),
               SizedBox(height: 10),
               ChooseTime(
-                times: availableTimes,
-                onTimePressed: moveToUnavailabilityTime,
+                times: availabilityProvider.availableTimes,
+                onTimePressed: (time) {
+                  availabilityProvider.moveToUnavailable(time);
+                },
                 color: Colors.white,
                 textColor: Colors.black,
               ),
@@ -181,8 +175,10 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
               ),
               SizedBox(height: 10),
               ChooseTime(
-                times: unavailableTimes,
-                onTimePressed: moveToAvailabilityTime,
+                times: availabilityProvider.unavailableTimes,
+                onTimePressed: (time) {
+                  availabilityProvider.moveToAvailable(time);
+                },
                 color: Color.fromARGB(255, 164, 36, 27),
                 textColor: Colors.white,
               ),
@@ -190,7 +186,6 @@ class _BarberDashboardHomeState extends State<AvailabilityTime> {
               ButtonLoginUser(
                 text: "Confirm",
                 onPressed: () async {
-                  availabilityProvider.setAvailableTimes(availableTimes);
                   await availabilityProvider.saveAvailability(
                     barberId: barberId,
                     date: DateFormat('yyyy-MM-dd').format(selectedDate),

@@ -20,17 +20,6 @@ class BarberServiceAvailability {
         });
   }
 
-  Future<List<String>> getAvailableDates({required String barberId}) async {
-    final snapshot =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(barberId)
-            .collection('availability')
-            .get();
-
-    return snapshot.docs.map((doc) => doc.id).toList();
-  }
-
   Future<Map<String, dynamic>?> getAvailability({
     required String barberId,
     required String date,

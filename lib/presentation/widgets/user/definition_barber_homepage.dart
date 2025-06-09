@@ -19,15 +19,17 @@ class DefinitionBarberHomepage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.network(
-              barber.barberImage ?? '',
-              height: 70,
-              width: 70,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Image.asset("assets/images/image 4.png", height: 70);
-              },
-            ),
+            barber.barberImage != null && barber.barberImage!.startsWith('http')
+                ? Image.network(
+                  barber.barberImage!,
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset("assets/images/image 4.png", height: 70);
+                  },
+                )
+                : Image.asset("assets/images/image 4.png", height: 70),
             Text(
               barber.name,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

@@ -1,36 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user/reservation_provider_user.dart';
 import 'definition_process.dart';
 
-class BookingTableSection extends StatelessWidget {
+class BookingTableSection extends StatefulWidget {
   const BookingTableSection({super.key});
 
   @override
+  State<BookingTableSection> createState() => _BookingTableSectionState();
+}
+
+class _BookingTableSectionState extends State<BookingTableSection> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<ReservationProviderUser>(
+        context,
+        listen: false,
+      ).fetchLast4CompletedReservations();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final reservationProvider = Provider.of<ReservationProviderUser>(context);
+
     return Card(
       elevation: 10,
-      child: SizedBox(
-        height: 250,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 230),
+
         child: Column(
           children: [
             SizedBox(
-              height: 70,
+              height: 60,
               child: Row(
                 children: [
-                  TextButton(onPressed: () {}, child: Text("Upcoming Booking")),
-                  TextButton(onPressed: () {}, child: Text("All")),
-                  TextButton(onPressed: () {}, child: Text("canceled")),
+                  TextButton(onPressed: () {}, child: Text("All Booking")),
                 ],
               ),
             ),
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text("Start time", style: _titleStyle()),
-                    Text("Book Services", style: _titleStyle()),
+                    SizedBox(width: 35),
+                    Text("Services", style: _titleStyle()),
+                    SizedBox(width: 25),
                     Text("Client", style: _titleStyle()),
+                    SizedBox(width: 40),
                     Text("Employee", style: _titleStyle()),
                   ],
                 ),
@@ -41,16 +62,34 @@ class BookingTableSection extends StatelessWidget {
                   color: Colors.black,
                 ),
                 SizedBox(height: 10),
+
                 Column(
-                  children: [
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                    SizedBox(height: 12),
-                    DefinitionProcess(),
-                  ],
+                  children:
+                      reservationProvider.lastFiveReservations.isNotEmpty
+                          ? reservationProvider.lastFiveReservations
+                              .map(
+                                (res) => Column(
+                                  children: [
+                                    DefinitionProcess(
+                                      startTime: res.date.toString(),
+                                      services: res.serviceTitle,
+                                      clientName: res.userName,
+                                      employeeName: res.barberName,
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                ),
+                              )
+                              .toList()
+                          : [
+                            const Text(
+                              "There are no completed reservations",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(255, 117, 115, 115),
+                              ),
+                            ),
+                          ],
                 ),
               ],
             ),

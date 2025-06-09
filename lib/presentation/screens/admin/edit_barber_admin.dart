@@ -23,7 +23,6 @@ class _EditBarberState extends State<EditBarber> {
   late TextEditingController _country;
   late TextEditingController _facebookAccount;
   late TextEditingController _age;
-  late TextEditingController _uploadImage;
 
   @override
   void initState() {
@@ -36,7 +35,6 @@ class _EditBarberState extends State<EditBarber> {
       text: widget.barber.barberFacebook,
     );
     _age = TextEditingController(text: widget.barber.barberAge);
-    _uploadImage = TextEditingController(text: widget.barber.barberImage);
   }
 
   @override
@@ -51,70 +49,60 @@ class _EditBarberState extends State<EditBarber> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              CustomTextField(
+                label: "User Name :",
+                hint: "User Name",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _username,
 
-             CustomTextField(
-                  label: "User Name :",
-                  hint: "User Name",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _username,
+                validator: Validators.text,
+              ),
+              CustomTextField(
+                label: "Email :",
+                hint: "Email ",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _email,
 
-                  validator: Validators.text,
-                ),
-                CustomTextField(
-                  label: "Email :",
-                  hint: "Email ",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _email,
+                validator: Validators.email,
+              ),
+              CustomTextField(
+                label: "Phone Number :",
+                hint: "Phone Number ",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _phoneNumber,
 
-                  validator: Validators.email,
-                ),
-                CustomTextField(
-                  label: "Phone Number :",
-                  hint: "Phone Number ",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _phoneNumber,
+                validator: Validators.phone,
+              ),
+              CustomTextField(
+                label: "City :",
+                hint: "City ",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _country,
 
-                  validator: Validators.phone,
-                ),
-                CustomTextField(
-                  label: "City :",
-                  hint: "City ",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _country,
+                validator: Validators.text,
+              ),
 
-                  validator: Validators.text,
-                ),
+              CustomTextField(
+                label: " Facebook Account:",
+                hint: "facebook",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _facebookAccount,
+                validator: Validators.facebookUrl,
+              ),
 
-                CustomTextField(
-                  label: " Facebook Account:",
-                  hint: "facebook",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _facebookAccount,
-                  validator: Validators.facebookUrl,
-                ),
-
-                CustomTextField(
-                  label: " Age :",
-                  hint: "Age",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _age,
-                  validator: Validators.phone,
-                ),
-              
-
-                CustomTextField(
-                  label: "Photo :",
-                  hint: "your photo",
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  controller: _uploadImage,
-                ),
+              CustomTextField(
+                label: " Age :",
+                hint: "Age",
+                color: Colors.white,
+                textColor: Colors.black,
+                controller: _age,
+                validator: Validators.phone,
+              ),
 
               SizedBox(height: 56),
               ButtonAdd(
@@ -127,7 +115,6 @@ class _EditBarberState extends State<EditBarber> {
                     email: _email,
                     phoneNumber: _phoneNumber,
                     country: _country,
-                    uploadImage: _uploadImage,
                     facebookAccount: _facebookAccount,
                     age: _age,
                   );

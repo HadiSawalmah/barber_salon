@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/dashboard_admin_provider.dart';
 import '../textbutton.dart';
 
 class RevenueReportSection extends StatelessWidget {
@@ -31,8 +33,37 @@ class RevenueReportSection extends StatelessWidget {
     }
   }
 
+  double getSelectedTotal(DashboardAdminProvider dashboardprovider) {
+    switch (selected) {
+      case 0:
+        return dashboardprovider.todayRevenue;
+      case 1:
+        return dashboardprovider.monthRevenue;
+      case 2:
+        return dashboardprovider.yearRevenue;
+      default:
+        return dashboardprovider.totalRevenue;
+    }
+  }
+
+  double getSelectedTotalexpences(DashboardAdminProvider dashboardprovider) {
+    switch (selected) {
+      case 0:
+        return dashboardprovider.todayExpences;
+      case 1:
+        return dashboardprovider.monthExpences;
+      case 2:
+        return dashboardprovider.yearExpences;
+      default:
+        return dashboardprovider.totalExpences;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dashboardprovider = Provider.of<DashboardAdminProvider>(context);
+    final selectedData = getSelectedData();
+    final total = selectedData.values.fold(0.0, (sum, value) => sum + value);
     return Card(
       elevation: 8,
       child: Column(
@@ -74,15 +105,44 @@ class RevenueReportSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "250  \$",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "${getSelectedTotal(dashboardprovider)} \$",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Overall Revenue ",
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "${getSelectedTotalexpences(dashboardprovider)} \$",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Overall Expences ",
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  "Overall Revenue ",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
+
                 SizedBox(height: 10),
+
                 PieChart(
                   dataMap: getSelectedData(),
                   chartType: ChartType.ring,

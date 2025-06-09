@@ -16,56 +16,86 @@ class AdminDashbordHomepage extends StatefulWidget {
 class _AdminDashbordHomepageState extends State<AdminDashbordHomepage> {
   int selected = 0;
 
+  double _totalRevenue = 0;
+  double get totalRevenue => _totalRevenue;
+
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration.zero, () {
       final dashboardprovider = Provider.of<DashboardAdminProvider>(
         context,
         listen: false,
       );
-      dashboardprovider.fetchTotalExpences();
-      dashboardprovider.fetchNoOfUser();
+
+      dashboardprovider.fetchDashboardData();
     });
+  }
+
+  Map<String, double> safeData(Map<String, double> data) {
+    if (data.values.every((value) => value == 0.0)) {
+      return {"No Data": 0.01};
+    }
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
+    final dashboardprovider = Provider.of<DashboardAdminProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Finance Report"),
         backgroundColor: Colors.grey[300],
       ),
       drawer: DrawerAdmin(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DashboardCardOne(),
-              SizedBox(height: 16),
-              Text(
-                "Revinue report",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body:
+          dashboardprovider.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DashboardCardOne(),
+                      SizedBox(height: 16),
+                      Text(
+                        "Revinue report",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      RevenueReportSection(
+                        selected: selected,
+                        todayData: safeData({
+                          "Expences": dashboardprovider.todayExpences,
+                          "Income": dashboardprovider.todayRevenue,
+                        }),
+                        monthData: safeData({
+                          "Expences": dashboardprovider.monthExpences,
+                          "Income": dashboardprovider.monthRevenue,
+                        }),
+                        yearData: safeData({
+                          "Expences": dashboardprovider.yearExpences,
+                          "Income": dashboardprovider.yearRevenue,
+                        }),
+                        onChangeSelected: (index) async {
+                          setState(() {
+                            selected = index;
+                          });
+                          await dashboardprovider.fetchDashboardData();
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      BookingTableSection(),
+                    ],
+                  ),
+                ),
               ),
-              RevenueReportSection(
-                selected: selected,
-                todayData: {"Expences": 40, "Income": 20},
-                monthData: {"Expences": 300, "Income": 150},
-                yearData: {"Expences": 2000, "Income": 1000},
-                onChangeSelected: (index) {
-                  setState(() {
-                    selected = index;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              BookingTableSection(),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

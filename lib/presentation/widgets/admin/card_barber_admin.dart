@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_new/data/models/barber/barber_model.dart';
@@ -80,10 +81,14 @@ class CardBarber extends StatelessWidget {
                                     .doc(barber.id)
                                     .delete();
 
+                                await FirebaseAuth.instance.currentUser
+                                    ?.delete();
+
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
                                       "Barber deleted successfully ✅",
+                                      style: TextStyle(color: Colors.green),
                                     ),
                                   ),
                                 );
@@ -91,7 +96,10 @@ class CardBarber extends StatelessWidget {
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text("Failed to delete barber ❌"),
+                                    content: Text(
+                                      "Failed to delete barber ❌",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 );
                               }

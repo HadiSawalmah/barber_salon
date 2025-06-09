@@ -39,6 +39,14 @@ class _HomePageUserState extends State<HomePageUser> {
     });
   }
 
+  final List<String> images = [
+    "assets/images/salonimage.jpeg",
+    "assets/images/salonimage.jpeg",
+    "assets/images/salonimage.jpeg",
+  ];
+
+  final List<String> texts = ["", "Opening Salon \n 3:00 - 11:00", ""];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,17 +61,20 @@ class _HomePageUserState extends State<HomePageUser> {
               const SizedBox(height: 10),
               SizedBox(
                 height: 140,
-                width: 500,
                 child: PageView.builder(
-                  controller: PageController(viewportFraction: 0.85),
+                  controller: PageController(
+                    viewportFraction: 0.85,
+                    initialPage: 1,
+                  ),
                   scrollDirection: Axis.horizontal,
                   itemCount: 3,
+
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: ImageHomepage(
-                        imagePath: "assets/images/image 4.png",
-                        text: "asdsada",
+                        imagePath: images[index],
+                        text: texts[index],
                       ),
                     );
                   },
@@ -88,7 +99,7 @@ class _HomePageUserState extends State<HomePageUser> {
                 },
                 child: const ServicesHomepage(),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 25),
               const Text(
                 "Hair Styling Expert",
                 style: TextStyle(
@@ -97,6 +108,7 @@ class _HomePageUserState extends State<HomePageUser> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(height: 10),
               Consumer<BarberProvider>(
                 builder: (context, provider, _) {
                   if (provider.barbers.isEmpty) {
