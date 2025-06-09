@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project_new/data/models/admin/services_admin.dart';
 import 'package:project_new/presentation/widgets/user/time_select.dart';
@@ -7,6 +9,7 @@ import '../../../data/models/user/reservation_model.dart';
 import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
 import '../../../providers/user/user_provider.dart';
+import '../../../services/send_notification_service.dart';
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_witharrowback.dart';
 import '../../widgets/user/calender_daily.dart';
@@ -24,6 +27,7 @@ class _ReservationUserState extends State<ReservationUser> {
   int? selectedIndex;
   int? selectedDate;
   String? selectedTime;
+  final firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +54,7 @@ class _ReservationUserState extends State<ReservationUser> {
                   runSpacing: 10,
                   children: List.generate(barbers.length, (index) {
                     final isSelected = selectedIndex == index;
+                    final barberImage = barbers[index].barberImage;
                     return GestureDetector(
                       onTap: () {
                         setState(() {
@@ -62,11 +67,19 @@ class _ReservationUserState extends State<ReservationUser> {
                           children: [
                             CircleAvatar(
                               radius: 55,
-                              backgroundImage: NetworkImage(
-                                //كخكخ
-                                barbers[index].barberImage ?? '',
-                              ),
+                              backgroundImage:
+                                  (barberImage != null &&
+                                          barberImage.isNotEmpty)
+                                      ? NetworkImage(barberImage)
+                                      : AssetImage('assets/images/image 4.png')
+                                          as ImageProvider,
                             ),
+                            //  CircleAvatar(
+                            //                             radius: 55,
+                            //                             backgroundImage: NetworkImage(
+                            //                               barbers[index].barberImage ?? '',
+                            //                             ),
+                            //                           ),
                             SizedBox(height: 4),
                             Text(
                               barbers[index].name,
@@ -142,9 +155,6 @@ class _ReservationUserState extends State<ReservationUser> {
                         selectedDate != null &&
                         selectedTime != null) {
                       final selectedBarber = barbers[selectedIndex!];
-                      //final id = DateTime.now().millisecondsSinceEpoch.toString();
-                      // This is the same
-                      //But this is not 100% guaranteed if two reservations are made at the same time, while Uuid().v4() generates a unique global ID.
                       final id = const Uuid().v4();
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -170,6 +180,55 @@ class _ReservationUserState extends State<ReservationUser> {
                         context,
                         listen: false,
                       ).addReservation(reservation, context);
+                      if (selectedBarber.fcmToken != null &&
+                          selectedBarber.fcmToken!.isNotEmpty) {
+                        final barberNotification = {
+                          'receiverId': selectedBarber.id,
+                          'role': 'barber',
+                          'title': 'New Appointment',
+                          'body':
+                              'Appointment with ${user.name} at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(selectedBarber.id)
+                            .collection('notifications')
+                            .add(barberNotification);
+
+                        await sendNotification(
+                          selectedBarber.fcmToken!,
+                          'New Appointment',
+                          'Appointment with ${user.name} at $selectedTime',
+                        );
+                      }
+                      log(
+                        " New Appointment : Appointment with ${user.name} at $selectedTime",
+                      );
+                      log("barber in reservation: ${selectedBarber.id}");
+
+                      if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
+                        final userNotification = {
+                          'receiverId': user.id,
+                          'role': 'user',
+                          'title': 'Booking Confirmed',
+                          'body':
+                              'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
+
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.id)
+                            .collection('notifications')
+                            .add(userNotification);
+                        await sendNotification(
+                          user.fcmToken!,
+                          'Booking Confirmed',
+                          'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                        );
+                      }
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -179,8 +238,6 @@ class _ReservationUserState extends State<ReservationUser> {
                           ),
                         ),
                       );
-
-                      Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

@@ -8,6 +8,7 @@ import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
 import '../../widgets/textfiled_password.dart';
 import '../../widgets/validators.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Loginuser extends StatefulWidget {
   const Loginuser({super.key});
@@ -36,13 +37,29 @@ class _LoginState extends State<Loginuser> {
         email: _email.text.trim(),
         password: _password.text.trim(),
       );
+
       final uid = credential.user!.uid;
       final doc =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (doc.exists) {
         final role = doc.data()?['role'];
-
+        String? fcmToken = await FirebaseMessaging.instance.getToken();
+        if (role == 'barber') {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .update({'fcmToken': fcmToken});
+        }  if (role == 'admin') {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .update({'fcmToken': fcmToken});
+        } else {
+          await FirebaseFirestore.instance.collection('users').doc(uid).update({
+            'fcmToken': fcmToken,
+          });
+        }
         switch (role) {
           case 'admin':
             context.go('/AdminDashbordHomepage');

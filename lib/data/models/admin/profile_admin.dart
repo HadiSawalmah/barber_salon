@@ -3,6 +3,7 @@ import 'package:project_new/data/models/user/user_model.dart';
 class Admin extends UserModel {
   final String dateOfBirth;
   final String? imageUrl;
+  String? fcmToken;
 
   Admin({
     required super.id,
@@ -13,6 +14,7 @@ class Admin extends UserModel {
     super.userimage,
     required this.dateOfBirth,
     this.imageUrl,
+    this.fcmToken,
   });
   @override
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Admin extends UserModel {
       'role': role,
       'dateOfBirth': dateOfBirth,
       'imageUrl': imageUrl,
+      'fcmToken': fcmToken,
     };
   }
 
@@ -36,6 +39,7 @@ class Admin extends UserModel {
       role: map['role'],
       dateOfBirth: map['dateOfBirth'],
       imageUrl: map['imageUrl'],
+      fcmToken: map['fcmToken'],
     );
   }
 }

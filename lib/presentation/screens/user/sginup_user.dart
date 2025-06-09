@@ -8,6 +8,7 @@ import '../../widgets/auth_layout.dart';
 import '../../widgets/login/button_login_user.dart';
 import '../../widgets/textfiled.dart';
 import '../../widgets/textfiled_password.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SginupUser extends StatefulWidget {
   const SginupUser({super.key});
@@ -33,12 +34,14 @@ class _SginupUserState extends State<SginupUser> {
             email: _email.text.trim(),
             password: _password.text.trim(),
           );
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
       final userModel = UserModel(
         id: credential.user!.uid,
         name: _username.text.trim(),
         email: _email.text.trim(),
         phone: _phone.text.trim(),
         role: 'user',
+        fcmToken: fcmToken,
       );
       await FirebaseFirestore.instance
           .collection('users')
@@ -76,6 +79,7 @@ class _SginupUserState extends State<SginupUser> {
       });
     }
   }
+ 
 
   String? _validateConfirmPassword(String? value) {
     if (value == null || value.trim().isEmpty) {

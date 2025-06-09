@@ -5,6 +5,7 @@ class UserModel {
   String phone;
   String? userimage;
   String role;
+   String? fcmToken;
   UserModel({
     required this.id,
     required this.name,
@@ -12,6 +13,7 @@ class UserModel {
     required this.phone,
     this.userimage,
     this.role = 'user',
+     this.fcmToken, 
   });
   Map<String, dynamic> toMap() {
     return {
@@ -21,6 +23,7 @@ class UserModel {
       'userPhone': phone,
       'userImage': userimage ?? '',
       'role': role,
+      'fcmToken': fcmToken, 
     };
   }
 
@@ -32,6 +35,7 @@ class UserModel {
       phone: map['userPhone'],
       userimage: map['userimage'] ?? '',
       role: map['role'] ?? 'user',
+       fcmToken: map['fcmToken'],
     );
   }
 }

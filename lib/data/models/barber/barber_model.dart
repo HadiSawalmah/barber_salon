@@ -8,6 +8,7 @@ class BarberModel extends UserModel {
   double? monthRevenue;
   double? yearRevenue;
   int? bookingCount;
+  String? fcmToken;
 
   BarberModel({
     required super.id,
@@ -23,6 +24,7 @@ class BarberModel extends UserModel {
     this.monthRevenue,
     this.yearRevenue,
     this.bookingCount,
+    this.fcmToken,
   });
 
   @override
@@ -40,6 +42,7 @@ class BarberModel extends UserModel {
       'monthRevenue': monthRevenue,
       'yearRevenue': yearRevenue,
       'bookingCount': bookingCount,
+      'fcmToken': fcmToken,
     };
   }
 
@@ -57,6 +60,7 @@ class BarberModel extends UserModel {
       yearRevenue: (map['yearRevenue'] ?? 0).toDouble(),
       bookingCount: (map['bookingCount'] ?? 0),
       role: map['role'] ?? 'barber',
+      fcmToken: map['fcmToken'],
     );
   }
 }

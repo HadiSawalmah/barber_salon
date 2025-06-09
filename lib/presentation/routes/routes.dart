@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:project_new/main.dart';
 import 'package:provider/provider.dart';
 import '../../auth.dart';
 import '../../data/models/admin/services_admin.dart';
@@ -21,6 +22,7 @@ import '../screens/barber/all_notification_barber.dart';
 import '../screens/barber/availability_time.dart';
 import '../screens/barber/barber_dashboard_home.dart';
 import '../screens/barber/login_barber.dart';
+import '../screens/barber/notification_barber.dart';
 import '../screens/barber/profile_page.dart';
 import '../screens/barber/upcoming_barber.dart';
 import '../screens/user/all_services.dart';
@@ -33,11 +35,14 @@ import '../screens/user/opening_page.dart';
 import '../screens/user/profile_user.dart';
 import '../screens/user/reservation_user.dart';
 import '../screens/user/sginup_user.dart';
+
 import '../widgets/waiting_load_project.dart';
 
 final GoRouter appRouter = GoRouter(
+    navigatorKey: navigatorKey,
+
   initialLocation: "/Auth",
-  routes: [
+  routes: <RouteBase>[
     GoRoute(path: '/AddBarber', builder: (context, state) => AddBarber()),
     GoRoute(path: '/Auth', builder: (context, state) => Auth()),
 
@@ -111,7 +116,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/CustomerNotificationsPage',
-      builder: (context, state) => CustomerNotificationsPage(notifications: []),
+      builder: (context, state) => CustomerNotificationsPage(),
     ),
     GoRoute(
       path: '/ServicesScreen',
@@ -137,7 +142,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/ProfilePage', builder: (context, state) => ProfilePage()),
     GoRoute(
       path: '/AllNotificationBarber',
-      builder: (context, state) => AllNotificationBarber(notifications: []),
+      builder: (context, state) => AllNotificationBarber(),
+    ),
+     GoRoute(
+      path: '/NotificationBarber',
+      builder: (context, state) => NotificationBarber(),
     ),
     // ************user
     GoRoute(path: '/Openingpage', builder: (context, state) => Openingpage()),
