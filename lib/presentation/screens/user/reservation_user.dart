@@ -1,15 +1,18 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:project_new/data/models/admin/services_admin.dart';
 import 'package:project_new/presentation/widgets/user/time_select.dart';
 import 'package:project_new/presentation/widgets/admin/button_add_admin.dart';
 import 'package:provider/provider.dart';
+import '../../../data/models/barber/barber_model.dart';
 import '../../../data/models/user/reservation_model.dart';
 import '../../../providers/barber/barber_provider.dart';
 import '../../../providers/user/reservation_provider_user.dart';
 import '../../../providers/user/user_provider.dart';
-import '../../../services/send_notification_service.dart';
+import '../../../services/barber_service.dart';
+import '../../../services/send_notification_service.dart';  // <-- إضافة هنا
 import '../../widgets/barber/title_with_underline.dart';
 import '../../widgets/user/appbar_witharrowback.dart';
 import '../../widgets/user/calender_daily.dart';
@@ -17,7 +20,8 @@ import 'package:uuid/uuid.dart';
 
 class ReservationUser extends StatefulWidget {
   final ServicesAdmin services;
-  const ReservationUser({super.key, required this.services});
+  final BarberModel? barberModel;
+  const ReservationUser({super.key, required this.services, this.barberModel});
 
   @override
   State<ReservationUser> createState() => _ReservationUserState();
@@ -25,9 +29,30 @@ class ReservationUser extends StatefulWidget {
 
 class _ReservationUserState extends State<ReservationUser> {
   int? selectedIndex;
-  int? selectedDate;
+  DateTime? selectedDate;
   String? selectedTime;
-  final firestore = FirebaseFirestore.instance;
+
+  final _barberServiceAvailability = BarberServiceAvailability();
+
+  List<String> availableTimes = [];
+  bool isLoadingTimes = false;
+
+  Future<void> fetchAvailableTimes(String barberId, String date) async {
+    setState(() {
+      isLoadingTimes = true;
+    });
+
+    final data = await _barberServiceAvailability.getAvailability(
+      barberId: barberId,
+      date: date,
+    );
+
+    setState(() {
+      availableTimes =
+          data != null ? List<String>.from(data['availableTimes']) : [];
+      isLoadingTimes = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +79,13 @@ class _ReservationUserState extends State<ReservationUser> {
                   runSpacing: 10,
                   children: List.generate(barbers.length, (index) {
                     final isSelected = selectedIndex == index;
-                    final barberImage = barbers[index].barberImage;
                     return GestureDetector(
                       onTap: () {
                         setState(() {
                           selectedIndex = index;
+                          selectedDate = null;
+                          availableTimes = [];
+                          selectedTime = null;  // إضافة لضمان تفريغ الوقت المختار عند اختيار باربر جديد
                         });
                       },
                       child: Opacity(
@@ -68,18 +95,16 @@ class _ReservationUserState extends State<ReservationUser> {
                             CircleAvatar(
                               radius: 55,
                               backgroundImage:
-                                  (barberImage != null &&
-                                          barberImage.isNotEmpty)
-                                      ? NetworkImage(barberImage)
+                                  (barbers[index].barberImage != null &&
+                                          barbers[index].barberImage!
+                                              .startsWith('http'))
+                                      ? NetworkImage(
+                                        barbers[index].barberImage!,
+                                      )
                                       : AssetImage('assets/images/image 4.png')
                                           as ImageProvider,
                             ),
-                            //  CircleAvatar(
-                            //                             radius: 55,
-                            //                             backgroundImage: NetworkImage(
-                            //                               barbers[index].barberImage ?? '',
-                            //                             ),
-                            //                           ),
+
                             SizedBox(height: 4),
                             Text(
                               barbers[index].name,
@@ -100,11 +125,17 @@ class _ReservationUserState extends State<ReservationUser> {
                   width: 120,
                 ),
                 CalenderDaily(
-                  onDateSelected: (date) {
+                  onDateSelected: (date) async {
                     setState(() {
-                      //كخكخ
-                      selectedDate = 1;
+                      selectedDate = date;
+                      selectedTime = null; // تفريغ الوقت عند تغيير التاريخ
                     });
+
+                    final selectedBarber = barbers[selectedIndex!];
+                    await fetchAvailableTimes(
+                      selectedBarber.id,
+                      DateFormat('yyyy-MM-dd').format(date),
+                    );
                   },
                 ),
                 SizedBox(height: 10),
@@ -115,35 +146,27 @@ class _ReservationUserState extends State<ReservationUser> {
                     width: 120,
                   ),
                   SizedBox(height: 12),
-                  ChooseTime(
-                    times: [
-                      "3:00",
-                      "3:30",
-                      "4:00",
-                      "4:30",
-                      "5:00",
-                      "5:30",
-                      "6:00",
-                      "6:30",
-                      "7:00",
-                      "7:30",
-                      "8:00",
-                      "8:30",
-                      "9:00",
-                      "9:30",
-                      "10:00",
-                      "10:30",
-                      "11:00",
-                    ],
-                    onTimePressed: (time) {
-                      setState(() {
-                        selectedTime = time;
-                      });
-                    },
-                    color: Colors.white,
-                    textColor: Colors.black,
-                    selectedTime: selectedTime,
-                  ),
+                  if (isLoadingTimes)
+                    Center(child: CircularProgressIndicator())
+                  else if (availableTimes.isEmpty)
+                    Center(
+                      child: Text(
+                        "No available times for this day.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  else
+                    ChooseTime(
+                      times: availableTimes,
+                      onTimePressed: (time) {
+                        setState(() {
+                          selectedTime = time;
+                        });
+                      },
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      selectedTime: selectedTime,
+                    ),
                 ],
               ],
               SizedBox(height: 20),
@@ -156,6 +179,7 @@ class _ReservationUserState extends State<ReservationUser> {
                         selectedTime != null) {
                       final selectedBarber = barbers[selectedIndex!];
                       final id = const Uuid().v4();
+
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("User not found")),
@@ -172,71 +196,90 @@ class _ReservationUserState extends State<ReservationUser> {
                         price: widget.services.price,
                         barberId: selectedBarber.id,
                         barberName: selectedBarber.name,
-                        date: selectedDate.toString(),
+                        date: DateFormat('d-M-yyyy').format(selectedDate!),
                         time: selectedTime!,
+                        barberImage: selectedBarber.barberImage,
                       );
 
-                      await Provider.of<ReservationProviderUser>(
-                        context,
-                        listen: false,
-                      ).addReservation(reservation, context);
-                      if (selectedBarber.fcmToken != null &&
-                          selectedBarber.fcmToken!.isNotEmpty) {
-                        final barberNotification = {
-                          'receiverId': selectedBarber.id,
-                          'role': 'barber',
-                          'title': 'New Appointment',
-                          'body':
-                              'Appointment with ${user.name} at $selectedTime',
-                          'timestamp': FieldValue.serverTimestamp(),
-                        };
+                      final isAdded =
+                          await Provider.of<ReservationProviderUser>(
+                            context,
+                            listen: false,
+                          ).addReservation(reservation, context);
 
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(selectedBarber.id)
-                            .collection('notifications')
-                            .add(barberNotification);
+                      if (isAdded) {
+                        // إرسال إشعار للباربر
+                        if (selectedBarber.fcmToken != null &&
+                            selectedBarber.fcmToken!.isNotEmpty) {
+                          final barberNotification = {
+                            'receiverId': selectedBarber.id,
+                            'role': 'barber',
+                            'title': 'New Appointment',
+                            'body':
+                                'Appointment with ${user.name} at $selectedTime',
+                            'timestamp': FieldValue.serverTimestamp(),
+                          };
 
-                        await sendNotification(
-                          selectedBarber.fcmToken!,
-                          'New Appointment',
-                          'Appointment with ${user.name} at $selectedTime',
-                        );
-                      }
-                      log(
-                        " New Appointment : Appointment with ${user.name} at $selectedTime",
-                      );
-                      log("barber in reservation: ${selectedBarber.id}");
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(selectedBarber.id)
+                              .collection('notifications')
+                              .add(barberNotification);
 
-                      if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
-                        final userNotification = {
-                          'receiverId': user.id,
-                          'role': 'user',
-                          'title': 'Booking Confirmed',
-                          'body':
-                              'Your appointment with ${selectedBarber.name} is at $selectedTime',
-                          'timestamp': FieldValue.serverTimestamp(),
-                        };
+                          await sendNotification(
+                            selectedBarber.fcmToken!,
+                            'New Appointment',
+                            'Appointment with ${user.name} at $selectedTime',
+                          );
+                        }
 
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.id)
-                            .collection('notifications')
-                            .add(userNotification);
-                        await sendNotification(
-                          user.fcmToken!,
-                          'Booking Confirmed',
-                          'Your appointment with ${selectedBarber.name} is at $selectedTime',
-                        );
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Reservation added successfully",
-                            style: TextStyle(color: Colors.green),
+                        log("New Appointment : Appointment with ${user.name} at $selectedTime");
+                        log("barber in reservation: ${selectedBarber.id}");
+
+                        // إرسال إشعار للمستخدم
+                        if (user.fcmToken != null && user.fcmToken!.isNotEmpty) {
+                          final userNotification = {
+                            'receiverId': user.id,
+                            'role': 'user',
+                            'title': 'Booking Confirmed',
+                            'body':
+                                'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                            'timestamp': FieldValue.serverTimestamp(),
+                          };
+
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.id)
+                              .collection('notifications')
+                              .add(userNotification);
+
+                          await sendNotification(
+                            user.fcmToken!,
+                            'Booking Confirmed',
+                            'Your appointment with ${selectedBarber.name} is at $selectedTime',
+                          );
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Reservation added successfully",
+                              style: TextStyle(color: Colors.green),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "You already have an active reservation",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
