@@ -61,7 +61,35 @@ class UpcomingDefinisionUser extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: onConfirm,
+                  onPressed: () async {
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder:
+                          (ctx) => AlertDialog(
+                            title: Text('Confirm delete'),
+                            content: Text(
+                              'Do you want to delete this appointment ?',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(false),
+                                child: Text('Cancle'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(true),
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                    );
+
+                    if (confirm == true) {
+                      onConfirm();
+                    }
+                  },
                   icon: Icon(Icons.delete, size: 30, color: Colors.red),
                   visualDensity: VisualDensity(horizontal: -4),
                 ),

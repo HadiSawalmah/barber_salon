@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/admin/appbar_admin.dart';
 import '../../widgets/notification_item.dart';
+import '../../widgets/user/appbar_witharrowback.dart';
 
 class CustomerNotificationsPage extends StatelessWidget {
   final List<String> notifications;
@@ -10,7 +11,8 @@ class CustomerNotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarAdmin(title: "Customer Notification"),
+      backgroundColor: Colors.black,
+      appBar: AppbarWitharrowback(title: "Customer Notification"),
       body:
           notifications.isEmpty
               ? const Center(

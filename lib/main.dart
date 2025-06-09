@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_new/data/firebase/firebase_options.dart';
 import 'package:project_new/presentation/routes/routes.dart';
+import 'package:project_new/providers/admin/barber_booking_provider.dart';
 import 'package:project_new/providers/admin/users_acount_provider.dart';
+import 'package:project_new/providers/user/reservation_user.dart';
 import 'package:project_new/services/local_norification_service.dart';
 import 'package:project_new/services/push_notification_service.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ServicesFetchProvider()),
         ChangeNotifierProvider(create: (context) => ReservationProviderUser()),
         ChangeNotifierProvider(create: (context) => UsersAcountProvider()),
+        ChangeNotifierProvider(create: (_) => BarberBookingProvider(barberId)),
 
         ChangeNotifierProvider(
           create: (context) => BarberAvailabilityProvider(),
