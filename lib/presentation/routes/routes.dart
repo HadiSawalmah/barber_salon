@@ -18,6 +18,7 @@ import '../screens/admin/notification_admin.dart';
 import '../screens/admin/notification_page_barber.dart';
 import '../screens/admin/profile_admin.dart';
 import '../screens/admin/services_page_admin.dart';
+import '../screens/admin/users_account.dart';
 import '../screens/barber/all_notification_barber.dart';
 import '../screens/barber/availability_time.dart';
 import '../screens/barber/barber_dashboard_home.dart';
@@ -39,7 +40,7 @@ import '../screens/user/sginup_user.dart';
 import '../widgets/waiting_load_project.dart';
 
 final GoRouter appRouter = GoRouter(
-    navigatorKey: navigatorKey,
+  navigatorKey: navigatorKey,
 
   initialLocation: "/Auth",
   routes: <RouteBase>[
@@ -64,6 +65,8 @@ final GoRouter appRouter = GoRouter(
       path: '/AdminDashbordHomepage',
       builder: (context, state) => AdminDashbordHomepage(),
     ),
+
+    GoRoute(path: '/UsersAccount', builder: (context, state) => UsersAccount()),
     GoRoute(
       path: '/AddExpencesAdmin',
       builder: (context, state) => AddExpencesAdmin(),
@@ -144,7 +147,7 @@ final GoRouter appRouter = GoRouter(
       path: '/AllNotificationBarber',
       builder: (context, state) => AllNotificationBarber(),
     ),
-     GoRoute(
+    GoRoute(
       path: '/NotificationBarber',
       builder: (context, state) => NotificationBarber(),
     ),

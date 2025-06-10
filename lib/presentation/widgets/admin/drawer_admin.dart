@@ -47,11 +47,6 @@ class DrawerAdmin extends StatelessWidget {
             }),
             SizedBox(height: 30),
 
-            textdrawer("Notification", () {
-              context.go("/NotificationAdmin");
-            }),
-            SizedBox(height: 30),
-
             textdrawer("Profile", () {
               context.go("/ProfileAdmin");
             }),

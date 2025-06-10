@@ -79,6 +79,15 @@ class _UpcomingBookingSectionState extends State<UpcomingBookingSection> {
                             reservation.date,
                             reservation.time,
                           );
+                          await _loadReservation();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Reservation deleted successfully!',
+                              ),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
                         },
                       ),
                     )

@@ -23,7 +23,7 @@ class AppbarHomepage extends StatelessWidget implements PreferredSizeWidget {
           ),
           Consumer<ProfileBarberProvider>(
             builder: (context, prov, child) {
-              final username = prov.barber?.name ?? 'Welcome';
+              final username = prov.barber?.name ?? 'Home Page';
               return Text(
                 username,
                 style: TextStyle(color: Colors.white, fontSize: 24),

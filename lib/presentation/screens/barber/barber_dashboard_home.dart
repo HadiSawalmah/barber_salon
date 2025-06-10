@@ -21,16 +21,20 @@ class _BarberDashboardHomeState extends State<BarberDashboardHome> {
   @override
   void initState() {
     super.initState();
-    final barberId = FirebaseAuth.instance.currentUser?.uid;
-    if (barberId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          Provider.of<ReservationProviderUser>(context, listen: false).fetchReservationsByBarber(barberId);
-          Provider.of<ReservationProviderUser>(context, listen: false).fetchCompletedReservationsByBarber(barberId);
-          Provider.of<ProfileBarberProvider>(context, listen: false).fetchBarberData();
-        }
+    final barberId = FirebaseAuth.instance.currentUser!.uid;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ReservationProviderUser>(
+        context,
+        listen: false,
+      ).fetchReservationsByBarber(barberId);
+      Future.microtask(() {
+        Provider.of<ProfileBarberProvider>(
+          context,
+          listen: false,
+        ).fetchBarberData();
       });
-    }
+    });
+
   }
 
   @override

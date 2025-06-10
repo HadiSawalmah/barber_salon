@@ -11,6 +11,15 @@ class StatisticsAdminDashboard extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    String displayValue;
+
+    if (value is double) {
+      displayValue =
+          value % 1 == 0 ? value.toInt().toString() : value.toStringAsFixed(2);
+    } else {
+      displayValue = value.toString();
+    }
+
     return Container(
       width: 101,
       height: 121,
@@ -35,7 +44,7 @@ class StatisticsAdminDashboard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "$value",
+                    displayValue,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),

@@ -50,7 +50,7 @@ class _EditBarberState extends State<EditBarber> {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey, // 🔑 استخدم مفتاح الفورم هنا
+            key: _formKey,
             child: Column(
               children: [
                 CustomTextField(
@@ -99,14 +99,12 @@ class _EditBarberState extends State<EditBarber> {
                   color: Colors.white,
                   textColor: Colors.black,
                   controller: _age,
-                  validator: Validators.phone, // قد تضع Validator خاص بالعمر
                 ),
                 SizedBox(height: 56),
                 ButtonAdd(
                   text: provider.isLoading ? "Saving..." : "Save Changes",
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // ✅ فقط نفذ إذا كل الفاليديشن مرّ
                       await provider.editBarber(
                         context: context,
                         barberId: widget.barber.id,
