@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,7 +45,13 @@ class _LoginState extends State<Loginuser> {
 
       if (doc.exists) {
         final role = doc.data()?['role'];
-        String? fcmToken = await FirebaseMessaging.instance.getToken();
+        String? fcmToken;
+        if (kIsWeb) {
+          print("Skip FCM token on web");
+        } else {
+          String? fcmToken = await FirebaseMessaging.instance.getToken();
+          print("FCM Token: $fcmToken");
+        }
         if (role == 'barber') {
           await FirebaseFirestore.instance.collection('users').doc(uid).update({
             'fcmToken': fcmToken,
@@ -95,7 +102,7 @@ class _LoginState extends State<Loginuser> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ).showSnackBar(SnackBar(content: Text(message) , backgroundColor: Colors.red,));
     } finally {
       setState(() {
         _isLoading = false;
