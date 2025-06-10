@@ -7,6 +7,7 @@ import 'package:project_new/presentation/routes/routes.dart';
 import 'package:project_new/providers/admin/barber_booking_provider.dart';
 import 'package:project_new/providers/admin/users_acount_provider.dart';
 import 'package:project_new/providers/user/reservation_user.dart';
+
 import 'package:provider/provider.dart';
 import 'providers/admin/add_barber_provider.dart';
 import 'providers/admin/add_expences_provider.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ReservationProviderUser()),
         ChangeNotifierProvider(create: (context) => UsersAcountProvider()),
         ChangeNotifierProvider(create: (_) => BarberBookingProvider(barberId)),
+
 
         ChangeNotifierProvider(
           create: (context) => BarberAvailabilityProvider(),
