@@ -36,6 +36,7 @@ class _ReservationUserState extends State<ReservationUser> {
 
   List<String> availableTimes = [];
   bool isLoadingTimes = false;
+  bool isConfirming = false;
 
   Future<void> fetchAvailableTimes(String barberId, String date) async {
     setState(() {
@@ -85,8 +86,7 @@ class _ReservationUserState extends State<ReservationUser> {
                           selectedIndex = index;
                           selectedDate = null;
                           availableTimes = [];
-                          selectedTime =
-                              null; 
+                          selectedTime = null;
                         });
                       },
                       child: Opacity(
@@ -129,7 +129,7 @@ class _ReservationUserState extends State<ReservationUser> {
                   onDateSelected: (date) async {
                     setState(() {
                       selectedDate = date;
-                      selectedTime = null; 
+                      selectedTime = null;
                     });
 
                     final selectedBarber = barbers[selectedIndex!];
@@ -173,11 +173,14 @@ class _ReservationUserState extends State<ReservationUser> {
               SizedBox(height: 20),
               if (selectedDate != null) ...[
                 ButtonAdd(
-                  text: "Confirm",
+                  text: isConfirming ? "Loading..." : "Confirm",
                   onPressed: () async {
                     if (selectedIndex != null &&
                         selectedDate != null &&
                         selectedTime != null) {
+                      setState(() {
+                        isConfirming = true;
+                      });
                       final selectedBarber = barbers[selectedIndex!];
                       final id = const Uuid().v4();
 
@@ -257,17 +260,33 @@ class _ReservationUserState extends State<ReservationUser> {
                             context,
                             listen: false,
                           ).addReservation(reservation, context);
-                      if (isAdded) {
+                      setState(() {
+                        isConfirming = false;
+                      });
+                      if (isAdded == true) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
                               "Reservation added successfully",
+
                               style: TextStyle(color: Colors.green),
                             ),
                           ),
                         );
+                        setState(() {
+                          isConfirming = false;
+                        });
                         Navigator.pop(context);
-                      } else { 
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "you already added reservation",
+
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        );
                         Navigator.pop(context);
                       }
                     } else {

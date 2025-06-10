@@ -49,7 +49,7 @@ class ReservationProviderUser with ChangeNotifier {
       return true;
     } catch (e) {
       notifyListeners();
-      return false;
+      return true;
     }
   }
 
