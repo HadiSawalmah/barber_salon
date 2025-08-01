@@ -41,5 +41,5 @@ Barbers and salon owners can:
 - Firebase Auth integration
 - Role-based access (Admin, Barber, Customer)
 
-###🎥 Video Demo: [https://drive.google.com/file/d/1JRvmge9PMODxHnrZ5taojpq6ttOjJSnN/view?usp=sharing]
+### 🎥 Video Demo: [https://drive.google.com/file/d/1JRvmge9PMODxHnrZ5taojpq6ttOjJSnN/view?usp=sharing]
 
